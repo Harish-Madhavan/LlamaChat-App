@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "FYKyIhKzujE=",
+  "dgSpecHash": "89qXujIH48I=",
   "success": true,
-  "projectFilePath": "E:\\project\\chat\\chat_app\\chat_app.csproj",
+  "projectFilePath": "E:\\Git Repo\\LlamaChat-App\\chat_app\\chat_app.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Harish\\.nuget\\packages\\communitytoolkit.highperformance\\8.4.0\\communitytoolkit.highperformance.8.4.0.nupkg.sha512",
     "C:\\Users\\Harish\\.nuget\\packages\\llamasharp\\0.24.0\\llamasharp.0.24.0.nupkg.sha512",

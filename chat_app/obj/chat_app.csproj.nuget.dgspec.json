@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "E:\\project\\chat\\chat_app\\chat_app.csproj": {}
+    "E:\\Git Repo\\LlamaChat-App\\chat_app\\chat_app.csproj": {}
   },
   "projects": {
-    "E:\\project\\chat\\chat_app\\chat_app.csproj": {
+    "E:\\Git Repo\\LlamaChat-App\\chat_app\\chat_app.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "E:\\project\\chat\\chat_app\\chat_app.csproj",
+        "projectUniqueName": "E:\\Git Repo\\LlamaChat-App\\chat_app\\chat_app.csproj",
         "projectName": "chat_app",
-        "projectPath": "E:\\project\\chat\\chat_app\\chat_app.csproj",
+        "projectPath": "E:\\Git Repo\\LlamaChat-App\\chat_app\\chat_app.csproj",
         "packagesPath": "C:\\Users\\Harish\\.nuget\\packages\\",
-        "outputPath": "E:\\project\\chat\\chat_app\\obj\\",
+        "outputPath": "E:\\Git Repo\\LlamaChat-App\\chat_app\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "E:\\IDE\\Visual studio IDE\\Shared\\NuGetPackages"
