@@ -4,15 +4,15 @@
 winexe
 C#
 .cs
-E:\project\chat\chat_app\obj\x64\Release\net8.0-windows\
+E:\Git Repo\LlamaChat-App\chat_app\obj\x64\Release\net8.0-windows\
 chat_app
 none
 false
 TRACE;RELEASE;NET;NET8_0;NETCOREAPP;WINDOWS;WINDOWS7_0;NET5_0_OR_GREATER;NET6_0_OR_GREATER;NET7_0_OR_GREATER;NET8_0_OR_GREATER;NETCOREAPP3_0_OR_GREATER;NETCOREAPP3_1_OR_GREATER;WINDOWS7_0_OR_GREATER
-E:\project\chat\chat_app\App.xaml
+E:\Git Repo\LlamaChat-App\chat_app\App.xaml
 11407045341
 
-6831076917
+91500537895
 207-866756804
 MainWindow.xaml;
 

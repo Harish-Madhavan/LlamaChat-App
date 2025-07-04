@@ -4,11 +4,19 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:LlamaChatApp"
+        xmlns:viewmodels="clr-namespace:LlamaChatApp.ViewModels"
         xmlns:md="clr-namespace:Markdig.Wpf;assembly=Markdig.Wpf"
         mc:Ignorable="d"
-        Title="LlamaChat on Windows" Height="750" Width="850">
+        Title="LlamaChat on Windows" Height="800" Width="950">
+
+    <!-- Set the DataContext to our ViewModel -->
+    <Window.DataContext>
+        <viewmodels:MainViewModel />
+    </Window.DataContext>
+
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
@@ -18,15 +26,22 @@
         <!-- Menu Bar -->
         <Menu Grid.Row="0" Padding="5">
             <MenuItem Header="_File">
-                <MenuItem x:Name="OpenModelMenuItem" Header="_Open Model..." Click="OpenModelMenuItem_Click" />
-                <MenuItem x:Name="ClearChatMenuItem" Header="_Clear Chat" Click="ClearChatMenuItem_Click"/>
+                <MenuItem Header="_Open Model..." Command="{Binding LoadModelCommand}" IsEnabled="{Binding IsIdle}" />
+                <MenuItem Header="_Clear Chat" Command="{Binding ClearChatCommand}" />
                 <Separator />
-                <MenuItem Header="E_xit" Click="ExitMenuItem_Click" />
+                <MenuItem Header="E_xit" Command="{Binding ExitCommand}" />
             </MenuItem>
         </Menu>
 
+        <!-- System Prompt Area -->
+        <GroupBox Grid.Row="1" Header="System Prompt" Margin="15,5,15,5" IsEnabled="{Binding IsIdle}">
+            <TextBox Text="{Binding SystemPrompt, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                     MinLines="2" MaxLines="4" TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Auto"/>
+        </GroupBox>
+
         <!-- Rich Chat Display Area -->
-        <ListView x:Name="ChatListView" Grid.Row="1" Margin="15,5,15,10"
+        <ListView x:Name="ChatListView" Grid.Row="2" Margin="15,5,15,10"
+                  ItemsSource="{Binding ChatMessages}"
                   BorderThickness="0"
                   HorizontalContentAlignment="Stretch"
                   ScrollViewer.CanContentScroll="False"
@@ -40,15 +55,12 @@
             <ListView.ItemTemplate>
                 <DataTemplate DataType="{x:Type local:ChatMessage}">
                     <Grid Margin="0,6">
-                        <StackPanel HorizontalAlignment="{Binding Alignment}" MaxWidth="600">
-                            <!-- Author Name -->
+                        <StackPanel HorizontalAlignment="{Binding Alignment}" MaxWidth="650">
                             <TextBlock Text="{Binding Author}" 
                                        Foreground="{Binding AuthorBrush}" 
                                        FontWeight="Bold"
                                        Margin="8,0,8,3"/>
-                            <!-- Message Bubble -->
                             <Border Background="{Binding BubbleBackground}" CornerRadius="10">
-                                <!-- USE MARKDOWNVIEWER FOR RICH FORMATTING -->
                                 <md:MarkdownViewer Markdown="{Binding Text}" 
                                                    Padding="10" 
                                                    Background="Transparent"/>
@@ -60,37 +72,54 @@
         </ListView>
 
         <!-- The input area at the bottom -->
-        <Grid Grid.Row="2" Margin="15,0,15,10">
+        <Grid Grid.Row="3" Margin="15,0,15,10" IsEnabled="{Binding IsModelLoaded}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
 
-            <TextBox x:Name="UserInputTextBox" 
+            <TextBox Text="{Binding UserInputText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
                      Grid.Column="0" 
                      VerticalContentAlignment="Center" 
                      FontSize="14"
                      Padding="8"
                      KeyDown="UserInputTextBox_KeyDown"
-                     AcceptsReturn="True"/>
+                     AcceptsReturn="True"
+                     IsEnabled="{Binding IsIdle}"/>
 
-            <Button x:Name="StopButton" Grid.Column="1" Content="Stop" Margin="10,0,0,0" Padding="20,8" FontSize="14" Click="StopButton_Click" Background="#FFF7A2A2" IsEnabled="False"/>
-            <Button x:Name="SendButton" Grid.Column="2" Content="Send" Margin="10,0,0,0" Padding="25,8" FontSize="14" Click="SendButton_Click" IsDefault="True"/>
+            <Button Grid.Column="1" Content="Stop" Margin="10,0,0,0" Padding="20,8" FontSize="14" 
+                    Background="#FFF7A2A2" IsEnabled="{Binding IsGenerating}"
+                    Command="{Binding StopGenerationCommand}"/>
+            <Button Grid.Column="2" Content="Send" Margin="10,0,0,0" Padding="25,8" FontSize="14" 
+                    Command="{Binding SendMessageCommand}" IsDefault="True"/>
         </Grid>
 
         <!-- Inference Settings Panel -->
-        <Border Grid.Row="3" Background="#F0F0F0" BorderBrush="#D0D0D0" BorderThickness="0,1,0,0">
-            <StackPanel x:Name="SettingsPanel" Orientation="Horizontal" Margin="15,5">
-                <TextBlock Text="Temperature:" VerticalAlignment="Center" FontWeight="SemiBold"/>
-                <Slider x:Name="TemperatureSlider" Width="100" Minimum="0" Maximum="2.0" Value="0.7" SmallChange="0.1" IsSnapToTickEnabled="True" TickFrequency="0.1" Margin="5,0,15,0"/>
+        <Border Grid.Row="4" Background="#F0F0F0" BorderBrush="#D0D0D0" BorderThickness="0,1,0,0" IsEnabled="{Binding IsIdle}">
+            <StackPanel Orientation="Horizontal" Margin="15,5" HorizontalAlignment="Center">
+                <TextBlock Text="Temp:" VerticalAlignment="Center" FontWeight="SemiBold"/>
+                <Slider Width="80" Minimum="0" Maximum="2.0" SmallChange="0.1" TickFrequency="0.1" Margin="5,0,10,0"
+                        Value="{Binding Temperature, Mode=TwoWay}"/>
+                <TextBlock Text="{Binding ElementName=TemperatureSlider, Path=Value, StringFormat={}{0:F1}}" VerticalAlignment="Center" Width="25"/>
+
 
                 <TextBlock Text="Top P:" VerticalAlignment="Center" FontWeight="SemiBold"/>
-                <Slider x:Name="TopPSlider" Width="100" Minimum="0" Maximum="1.0" Value="0.9" SmallChange="0.05" IsSnapToTickEnabled="True" TickFrequency="0.05" Margin="5,0,15,0"/>
+                <Slider Width="80" Minimum="0" Maximum="1.0" SmallChange="0.05" TickFrequency="0.05" Margin="5,0,10,0"
+                        Value="{Binding TopP, Mode=TwoWay}"/>
 
                 <TextBlock Text="Max Tokens:" VerticalAlignment="Center" FontWeight="SemiBold"/>
-                <TextBox x:Name="MaxTokensTextBox" Width="50" Text="512" VerticalContentAlignment="Center" Margin="5,0,15,0"/>
+                <TextBox Width="50" VerticalContentAlignment="Center" Margin="5,0,10,0"
+                         Text="{Binding MaxTokens, Mode=TwoWay}"/>
+
+                <TextBlock Text="GPU Layers:" VerticalAlignment="Center" FontWeight="SemiBold"/>
+                <TextBox Width="40" VerticalContentAlignment="Center" Margin="5,0,10,0"
+                         Text="{Binding GpuLayerCount, Mode=TwoWay}"/>
+
+                <TextBlock Text="Ctx Size:" VerticalAlignment="Center" FontWeight="SemiBold"/>
+                <TextBox Width="50" VerticalContentAlignment="Center" Margin="5,0,0,0"
+                         Text="{Binding ContextSize, Mode=TwoWay}"/>
             </StackPanel>
         </Border>
     </Grid>
-</Window>
+    </Window>

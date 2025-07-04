@@ -1,32 +1,38 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "E:\\project\\chat\\chat_app\\",
+  "WorkspaceRootPath": "E:\\Git Repo\\LlamaChat-App\\chat_app\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{46D9805F-1239-4C7D-A4F9-7F83D61A2450}|chat_app.csproj|e:\\project\\chat\\chat_app\\mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{46D9805F-1239-4C7D-A4F9-7F83D61A2450}|chat_app.csproj|solutionrelative:mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{46D9805F-1239-4C7D-A4F9-7F83D61A2450}|chat_app.csproj|e:\\git repo\\llamachat-app\\chat_app\\viewmodels\\mainviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{46D9805F-1239-4C7D-A4F9-7F83D61A2450}|chat_app.csproj|solutionrelative:viewmodels\\mainviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{46D9805F-1239-4C7D-A4F9-7F83D61A2450}|chat_app.csproj|e:\\project\\chat\\chat_app\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "AbsoluteMoniker": "D:0:0:{46D9805F-1239-4C7D-A4F9-7F83D61A2450}|chat_app.csproj|e:\\git repo\\llamachat-app\\chat_app\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
       "RelativeMoniker": "D:0:0:{46D9805F-1239-4C7D-A4F9-7F83D61A2450}|chat_app.csproj|solutionrelative:mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{46D9805F-1239-4C7D-A4F9-7F83D61A2450}|chat_app.csproj|e:\\project\\chat\\chat_app\\chatmessage.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{46D9805F-1239-4C7D-A4F9-7F83D61A2450}|chat_app.csproj|solutionrelative:chatmessage.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{46D9805F-1239-4C7D-A4F9-7F83D61A2450}|chat_app.csproj|e:\\git repo\\llamachat-app\\chat_app\\mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{46D9805F-1239-4C7D-A4F9-7F83D61A2450}|chat_app.csproj|solutionrelative:mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{46D9805F-1239-4C7D-A4F9-7F83D61A2450}|chat_app.csproj|e:\\project\\chat\\chat_app\\appsettings.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{46D9805F-1239-4C7D-A4F9-7F83D61A2450}|chat_app.csproj|e:\\git repo\\llamachat-app\\chat_app\\viewmodels\\viewmodelbase.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{46D9805F-1239-4C7D-A4F9-7F83D61A2450}|chat_app.csproj|solutionrelative:viewmodels\\viewmodelbase.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{46D9805F-1239-4C7D-A4F9-7F83D61A2450}|chat_app.csproj|e:\\git repo\\llamachat-app\\chat_app\\commands\\relaycommand.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{46D9805F-1239-4C7D-A4F9-7F83D61A2450}|chat_app.csproj|solutionrelative:commands\\relaycommand.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{46D9805F-1239-4C7D-A4F9-7F83D61A2450}|chat_app.csproj|e:\\git repo\\llamachat-app\\chat_app\\chat_app.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{46D9805F-1239-4C7D-A4F9-7F83D61A2450}|chat_app.csproj|solutionrelative:chat_app.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{46D9805F-1239-4C7D-A4F9-7F83D61A2450}|chat_app.csproj|e:\\git repo\\llamachat-app\\chat_app\\appsettings.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{46D9805F-1239-4C7D-A4F9-7F83D61A2450}|chat_app.csproj|solutionrelative:appsettings.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Harish\\AppData\\Local\\Temp\\.vsdbgsrc\\aad6be2495d0a786b94b3514a5b6903407fe2d6a75ad7e505df6a9d895927867\\XamlReader.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Harish\\AppData\\Local\\Temp\\.vsdbgsrc\\ced412997d18be4a64e3cfd47a13ade7fb9157a0630c2b5c4f78999459dfbcca\\Application.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{46D9805F-1239-4C7D-A4F9-7F83D61A2450}|chat_app.csproj|e:\\project\\chat\\chat_app\\app.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{46D9805F-1239-4C7D-A4F9-7F83D61A2450}|chat_app.csproj|solutionrelative:app.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{46D9805F-1239-4C7D-A4F9-7F83D61A2450}|chat_app.csproj|e:\\git repo\\llamachat-app\\chat_app\\chatmessage.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{46D9805F-1239-4C7D-A4F9-7F83D61A2450}|chat_app.csproj|solutionrelative:chatmessage.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -41,88 +47,99 @@
             {
               "$type": "Document",
               "DocumentIndex": 3,
-              "Title": "AppSettings.cs",
-              "DocumentMoniker": "E:\\project\\chat\\chat_app\\AppSettings.cs",
-              "RelativeDocumentMoniker": "AppSettings.cs",
-              "ToolTip": "E:\\project\\chat\\chat_app\\AppSettings.cs",
-              "RelativeToolTip": "AppSettings.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAABAAAAAAAAAA==",
+              "Title": "ViewModelBase.cs",
+              "DocumentMoniker": "E:\\Git Repo\\LlamaChat-App\\chat_app\\ViewModels\\ViewModelBase.cs",
+              "RelativeDocumentMoniker": "ViewModels\\ViewModelBase.cs",
+              "ToolTip": "E:\\Git Repo\\LlamaChat-App\\chat_app\\ViewModels\\ViewModelBase.cs",
+              "RelativeToolTip": "ViewModels\\ViewModelBase.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-20T11:52:47.986Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "ChatMessage.cs",
-              "DocumentMoniker": "E:\\project\\chat\\chat_app\\ChatMessage.cs",
-              "RelativeDocumentMoniker": "ChatMessage.cs",
-              "ToolTip": "E:\\project\\chat\\chat_app\\ChatMessage.cs",
-              "RelativeToolTip": "ChatMessage.cs",
-              "ViewState": "AgIAAAkAAAAAAAAAAAAQwCUAAAABAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-20T11:14:33.975Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "MainWindow.xaml.cs",
-              "DocumentMoniker": "E:\\project\\chat\\chat_app\\MainWindow.xaml.cs",
-              "RelativeDocumentMoniker": "MainWindow.xaml.cs",
-              "ToolTip": "E:\\project\\chat\\chat_app\\MainWindow.xaml.cs",
-              "RelativeToolTip": "MainWindow.xaml.cs",
-              "ViewState": "AgIAAP8AAAAAAAAAAAAQwBsBAAABAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-20T08:41:17.577Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-07-04T05:56:51.159Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 4,
-              "Title": "XamlReader.cs",
-              "DocumentMoniker": "C:\\Users\\Harish\\AppData\\Local\\Temp\\.vsdbgsrc\\aad6be2495d0a786b94b3514a5b6903407fe2d6a75ad7e505df6a9d895927867\\XamlReader.cs",
-              "ToolTip": "C:\\Users\\Harish\\AppData\\Local\\Temp\\.vsdbgsrc\\aad6be2495d0a786b94b3514a5b6903407fe2d6a75ad7e505df6a9d895927867\\XamlReader.cs [Read Only]",
-              "ViewState": "AgIAAKkBAAAAAAAAAAAgwLUBAAACAAAAAQAAAA==",
+              "Title": "RelayCommand.cs",
+              "DocumentMoniker": "E:\\Git Repo\\LlamaChat-App\\chat_app\\Commands\\RelayCommand.cs",
+              "RelativeDocumentMoniker": "Commands\\RelayCommand.cs",
+              "ToolTip": "E:\\Git Repo\\LlamaChat-App\\chat_app\\Commands\\RelayCommand.cs",
+              "RelativeToolTip": "Commands\\RelayCommand.cs",
+              "ViewState": "AgIAABgAAAAAAAAAAAAYwCEAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-20T11:23:11.904Z",
-              "EditorCaption": " [Read Only]"
+              "WhenOpened": "2025-07-04T05:56:05.973Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "MainViewModel.cs",
+              "DocumentMoniker": "E:\\Git Repo\\LlamaChat-App\\chat_app\\ViewModels\\MainViewModel.cs",
+              "RelativeDocumentMoniker": "ViewModels\\MainViewModel.cs",
+              "ToolTip": "E:\\Git Repo\\LlamaChat-App\\chat_app\\ViewModels\\MainViewModel.cs",
+              "RelativeToolTip": "ViewModels\\MainViewModel.cs",
+              "ViewState": "AgIAACUBAAAAAAAAAAAqwEABAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-04T05:52:35.948Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 5,
-              "Title": "Application.cs",
-              "DocumentMoniker": "C:\\Users\\Harish\\AppData\\Local\\Temp\\.vsdbgsrc\\ced412997d18be4a64e3cfd47a13ade7fb9157a0630c2b5c4f78999459dfbcca\\Application.cs",
-              "ToolTip": "C:\\Users\\Harish\\AppData\\Local\\Temp\\.vsdbgsrc\\ced412997d18be4a64e3cfd47a13ade7fb9157a0630c2b5c4f78999459dfbcca\\Application.cs [Read Only]",
-              "ViewState": "AgIAAPQFAAAAAAAAAAAuwAIGAAACAAAAAAAAAA==",
+              "Title": "chat_app.csproj",
+              "DocumentMoniker": "E:\\Git Repo\\LlamaChat-App\\chat_app\\chat_app.csproj",
+              "RelativeDocumentMoniker": "chat_app.csproj",
+              "ToolTip": "E:\\Git Repo\\LlamaChat-App\\chat_app\\chat_app.csproj",
+              "RelativeToolTip": "chat_app.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2025-07-04T05:46:28.713Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "MainWindow.xaml.cs",
+              "DocumentMoniker": "E:\\Git Repo\\LlamaChat-App\\chat_app\\MainWindow.xaml.cs",
+              "RelativeDocumentMoniker": "MainWindow.xaml.cs",
+              "ToolTip": "E:\\Git Repo\\LlamaChat-App\\chat_app\\MainWindow.xaml.cs",
+              "RelativeToolTip": "MainWindow.xaml.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAFUAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-20T11:23:32.298Z",
-              "EditorCaption": " [Read Only]"
+              "WhenOpened": "2025-07-04T05:14:30.197Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 1,
               "Title": "MainWindow.xaml",
-              "DocumentMoniker": "E:\\project\\chat\\chat_app\\MainWindow.xaml",
+              "DocumentMoniker": "E:\\Git Repo\\LlamaChat-App\\chat_app\\MainWindow.xaml",
               "RelativeDocumentMoniker": "MainWindow.xaml",
-              "ToolTip": "E:\\project\\chat\\chat_app\\MainWindow.xaml",
+              "ToolTip": "E:\\Git Repo\\LlamaChat-App\\chat_app\\MainWindow.xaml",
               "RelativeToolTip": "MainWindow.xaml",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2025-06-20T08:41:22.224Z",
+              "WhenOpened": "2025-07-04T05:22:37.521Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 6,
-              "Title": "App.xaml.cs",
-              "DocumentMoniker": "E:\\project\\chat\\chat_app\\App.xaml.cs",
-              "RelativeDocumentMoniker": "App.xaml.cs",
-              "ToolTip": "E:\\project\\chat\\chat_app\\App.xaml.cs",
-              "RelativeToolTip": "App.xaml.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Title": "AppSettings.cs",
+              "DocumentMoniker": "E:\\Git Repo\\LlamaChat-App\\chat_app\\AppSettings.cs",
+              "RelativeDocumentMoniker": "AppSettings.cs",
+              "ToolTip": "E:\\Git Repo\\LlamaChat-App\\chat_app\\AppSettings.cs",
+              "RelativeToolTip": "AppSettings.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-20T11:09:37.857Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-07-04T05:24:03.603Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "ChatMessage.cs",
+              "DocumentMoniker": "E:\\Git Repo\\LlamaChat-App\\chat_app\\ChatMessage.cs",
+              "RelativeDocumentMoniker": "ChatMessage.cs",
+              "ToolTip": "E:\\Git Repo\\LlamaChat-App\\chat_app\\ChatMessage.cs",
+              "RelativeToolTip": "ChatMessage.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-04T05:23:48.383Z"
             }
           ]
         }
