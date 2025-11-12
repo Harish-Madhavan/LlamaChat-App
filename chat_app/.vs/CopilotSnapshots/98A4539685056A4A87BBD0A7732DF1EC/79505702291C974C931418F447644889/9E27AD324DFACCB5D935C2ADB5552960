@@ -1,0 +1,21 @@
+﻿using System.Configuration;
+using System.Data;
+using System.Windows;
+using LLama;
+using LLama.Backend.Vulkan;
+
+namespace chat_app
+{
+    /// <summary>
+    /// Interaction logic for App.xaml
+    /// </summary>
+    public partial class App : Application
+    {
+        protected override void OnStartup(StartupEventArgs e)
+        {
+            // Set LlamaSharp to use the Vulkan backend
+            LLamaBackend.SetBackend(new VulkanBackend());
+            base.OnStartup(e);
+        }
+    }
+}
