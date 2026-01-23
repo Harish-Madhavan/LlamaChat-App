@@ -1,12 +1,12 @@
 ﻿// ChatMessage.cs
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
+using LlamaChatApp.ViewModels;
+using System;
 using System.Windows;
 using System.Windows.Media;
 
 namespace LlamaChatApp
 {
-    public class ChatMessage : INotifyPropertyChanged
+    public class ChatMessage : ViewModelBase
     {
         private string _text = string.Empty;
         private bool _isEditing;
@@ -73,21 +73,24 @@ namespace LlamaChatApp
             }
         }
 
-        public void CancelEdit()
-        {
-            if (IsEditing)
-            {
-                Text = OriginalText ?? Text;
-                OriginalText = null;
-                IsEditing = false;
+                public void CancelEdit()
+
+                {
+
+                    if (IsEditing)
+
+                    {
+
+                        Text = OriginalText ?? Text;
+
+                        OriginalText = null;
+
+                        IsEditing = false;
+
+                    }
+
+                }
+
             }
-        }
 
-        public event PropertyChangedEventHandler? PropertyChanged;
-
-        protected void OnPropertyChanged([CallerMemberName] string? propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-    }
-}

@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "E:\\Git Repo\\LlamaChat-App\\chat_app\\chat_app.csproj": {}
+    "E:\\Git Repo\\LlamaChat-App1\\chat_app\\chat_app.csproj": {}
   },
   "projects": {
-    "E:\\Git Repo\\LlamaChat-App\\chat_app\\chat_app.csproj": {
+    "E:\\Git Repo\\LlamaChat-App1\\chat_app\\chat_app.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "E:\\Git Repo\\LlamaChat-App\\chat_app\\chat_app.csproj",
+        "projectUniqueName": "E:\\Git Repo\\LlamaChat-App1\\chat_app\\chat_app.csproj",
         "projectName": "chat_app",
-        "projectPath": "E:\\Git Repo\\LlamaChat-App\\chat_app\\chat_app.csproj",
+        "projectPath": "E:\\Git Repo\\LlamaChat-App1\\chat_app\\chat_app.csproj",
         "packagesPath": "C:\\Users\\Harish\\.nuget\\packages\\",
-        "outputPath": "E:\\Git Repo\\LlamaChat-App\\chat_app\\obj\\",
+        "outputPath": "E:\\Git Repo\\LlamaChat-App1\\chat_app\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Harish\\AppData\\Roaming\\NuGet\\NuGet.Config",

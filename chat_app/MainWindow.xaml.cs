@@ -123,35 +123,23 @@ namespace LlamaChatApp
             }
         }
 
-        private void CopyMessage_Click(object sender, RoutedEventArgs e)
-        {
-            if (sender is MenuItem mi && mi.CommandParameter is ChatMessage msg)
-            {
-                Clipboard.SetText(msg.Text ?? string.Empty);
-            }
-        }
+                private void EditMessage_Click(object sender, RoutedEventArgs e)
 
-        private void EditMessage_Click(object sender, RoutedEventArgs e)
-        {
-            if (sender is MenuItem mi && mi.CommandParameter is ChatMessage msg)
-            {
-                msg.BeginEdit();
-            }
-        }
-
-        private void DeleteMessage_Click(object sender, RoutedEventArgs e)
-        {
-            if (sender is MenuItem mi && mi.CommandParameter is ChatMessage msg)
-            {
-                _viewModel.ChatMessages.Remove(msg);
-                if (_viewModel.MessageEditedCommand.CanExecute(null))
                 {
-                    _viewModel.MessageEditedCommand.Execute(null);
-                }
-            }
-        }
 
-        private void SaveEdit_Click(object sender, RoutedEventArgs e)
+                    if (sender is MenuItem mi && mi.CommandParameter is ChatMessage msg)
+
+                    {
+
+                        msg.BeginEdit();
+
+                    }
+
+                }
+
+        
+
+                private void SaveEdit_Click(object sender, RoutedEventArgs e)
         {
             if (sender is Button b && b.CommandParameter is ChatMessage msg)
             {
@@ -163,27 +151,60 @@ namespace LlamaChatApp
             }
         }
 
-        private void CancelEdit_Click(object sender, RoutedEventArgs e)
-        {
-            if (sender is Button b && b.CommandParameter is ChatMessage msg)
-            {
-                msg.CancelEdit();
-            }
-        }
+                        private void CancelEdit_Click(object sender, RoutedEventArgs e)
 
-        private void ChatBubble_PreviewMouseRightButtonUp(object sender, MouseButtonEventArgs e)
-        {
-            if (sender is Border border && border.ContextMenu != null)
-            {
-                // Set the DataContext of the ContextMenu to match the Border's DataContext (the ChatMessage)
-                // This ensures commands like Copy/Edit/Delete work correctly
-                border.ContextMenu.DataContext = border.DataContext;
+                        {
+
+                            if (sender is Button b && b.CommandParameter is ChatMessage msg)
+
+                            {
+
+                                msg.CancelEdit();
+
+                            }
+
+                        }
+
                 
-                border.ContextMenu.PlacementTarget = border;
-                border.ContextMenu.IsOpen = true;
-                e.Handled = true;
-            }
-        }
 
-    }
-}
+                        private void ChatBubble_PreviewMouseRightButtonUp(object sender, MouseButtonEventArgs e)
+
+                        {
+
+                            if (sender is FrameworkElement fe)
+
+                            {
+
+                                // Find the context menu resource. Try finding in window resources first.
+
+                                var menu = (ContextMenu)this.Resources["MessageContextMenu"];
+
+                                if (menu != null)
+
+                                {
+
+                                    // Set the placement target to the element that was clicked (the Border)
+
+                                    menu.PlacementTarget = fe;
+
+                                    
+
+                                    // Important: Ensure the menu's DataContext is properly resolving relative to the target
+
+                                    // Our XAML binding uses PlacementTarget.Tag, so setting PlacementTarget is crucial.
+
+                                    
+
+                                    menu.IsOpen = true;
+
+                                    e.Handled = true; // Prevent the MarkdownViewer from showing its default menu
+
+                                }
+
+                            }
+
+                        }
+
+                    }
+
+                }

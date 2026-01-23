@@ -14,20 +14,71 @@
         <viewmodels:MainViewModel />
     </Window.DataContext>
 
-    <Window.Resources>
-        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
-        <local:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter" />
-        <Style x:Key="InverseVisibilityBasedOnIsEditing" TargetType="md:MarkdownViewer">
-            <Style.Triggers>
-                <DataTrigger Binding="{Binding IsEditing}" Value="True">
-                    <Setter Property="Visibility" Value="Collapsed" />
-                </DataTrigger>
-                <DataTrigger Binding="{Binding IsEditing}" Value="False">
-                    <Setter Property="Visibility" Value="Visible" />
-                </DataTrigger>
-            </Style.Triggers>
-        </Style>
-    </Window.Resources>
+        <Window.Resources>
+
+            <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+
+            <local:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter" />
+
+            <Style x:Key="InverseVisibilityBasedOnIsEditing" TargetType="md:MarkdownViewer">
+
+                <Style.Triggers>
+
+                    <DataTrigger Binding="{Binding IsEditing}" Value="True">
+
+                        <Setter Property="Visibility" Value="Collapsed" />
+
+                    </DataTrigger>
+
+                    <DataTrigger Binding="{Binding IsEditing}" Value="False">
+
+                        <Setter Property="Visibility" Value="Visible" />
+
+                    </DataTrigger>
+
+                </Style.Triggers>
+
+            </Style>
+
+    
+
+            <ContextMenu x:Key="MessageContextMenu" DataContext="{Binding Path=PlacementTarget.Tag, RelativeSource={RelativeSource Self}}">
+
+                <MenuItem Header="Regenerate"
+
+                          Visibility="Visible"
+
+                          Command="{Binding RegenerateResponseCommand}"
+
+                          CommandParameter="{Binding Path=PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType=ContextMenu}}" />
+
+                <MenuItem Header="Copy"
+
+                          Visibility="Visible"
+
+                          Command="{Binding CopyMessageCommand}"
+
+                          CommandParameter="{Binding Path=PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType=ContextMenu}}" />
+
+                <MenuItem Header="Edit"
+
+                          Visibility="Visible"
+
+                          Click="EditMessage_Click"
+
+                          CommandParameter="{Binding Path=PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType=ContextMenu}}" />
+
+                <MenuItem Header="Delete"
+
+                          Visibility="Visible"
+
+                          Command="{Binding DeleteMessageCommand}"
+
+                          CommandParameter="{Binding Path=PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType=ContextMenu}}" />
+
+            </ContextMenu>
+
+        </Window.Resources>
 
     <Window.InputBindings>
         <KeyBinding Key="N" Modifiers="Control" Command="{Binding NewConversationCommand}" />
@@ -107,33 +158,26 @@
                 </Style>
             </ListView.ItemContainerStyle>
             <ListView.ItemTemplate>
-                <DataTemplate DataType="{x:Type local:ChatMessage}">
-                    <Grid Margin="0,6">
-                                                <StackPanel HorizontalAlignment="{Binding Alignment}" MaxWidth="650">     
-                                                    <DockPanel LastChildFill="True" Margin="8,0,8,3">
-                                                        <TextBlock Text="{Binding Timestamp, StringFormat='{}{0:HH:mm}'}" 
-                                                                   DockPanel.Dock="Right"
-                                                                   Foreground="Gray"
-                                                                   FontSize="10"
-                                                                   VerticalAlignment="Bottom"
-                                                                   Margin="5,0,0,0"/>
-                                                        <TextBlock Text="{Binding Author}"
-                                                                   Foreground="{Binding AuthorBrush}"
-                                                                   FontWeight="Bold"/>
-                                                    </DockPanel>
-                                                                                                        <Border Background="{Binding BubbleBackground}" CornerRadius="10">                                <Grid>
+                                                <DataTemplate DataType="{x:Type local:ChatMessage}">
+                                                    <Grid Margin="0,6">
+                                                        <StackPanel HorizontalAlignment="{Binding Alignment}" MaxWidth="650">                                                                    <DockPanel LastChildFill="True" Margin="8,0,8,3">
+                                                                        <TextBlock Text="{Binding Timestamp, StringFormat='{}{0:HH:mm}'}"
+                                                                                   DockPanel.Dock="Right"
+                                                                                   Foreground="Gray"
+                                                                                   FontSize="10"
+                                                                                   VerticalAlignment="Bottom"
+                                                                                   Margin="5,0,0,0"/>
+                                                                        <TextBlock Text="{Binding Author}"
+                                                                                   Foreground="{Binding AuthorBrush}"
+                                                                                   FontWeight="Bold"/>
+                                                                    </DockPanel>
+                                                                    <Border Background="{Binding BubbleBackground}" CornerRadius="10">
+                                                <Grid>
                                                                                         <StackPanel>
-                                                                                                                                                                                        <Border Background="Transparent" PreviewMouseRightButtonUp="ChatBubble_PreviewMouseRightButtonUp"
-                                                                                                                                                                                                Tag="{Binding DataContext, RelativeSource={RelativeSource AncestorType=Window}}">
-                                                                                                                                                                                            <Border.ContextMenu>
-                                                                                                                                                                                                <ContextMenu>
-                                                                                                                                                                                                    <MenuItem Header="Regenerate" 
-                                                                                                                                                                                                              Command="{Binding PlacementTarget.Tag.RegenerateResponseCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}" 
-                                                                                                                                                                                                              CommandParameter="{Binding}" />                                                                                                                                                                                                             <Separator />                                                                                                        <MenuItem Header="Copy" Click="CopyMessage_Click" CommandParameter="{Binding}" />
-                                                                                                        <MenuItem Header="Edit" Click="EditMessage_Click" CommandParameter="{Binding}" />
-                                                                                                        <MenuItem Header="Delete" Click="DeleteMessage_Click" CommandParameter="{Binding}" />
-                                                                                                    </ContextMenu> 
-                                                                                                </Border.ContextMenu>
+                                                                                            <Border Background="Transparent"
+                                                                                                    Tag="{Binding DataContext, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                                                                    ContextMenu="{StaticResource MessageContextMenu}"
+                                                                                                    PreviewMouseRightButtonUp="ChatBubble_PreviewMouseRightButtonUp">
                                                                                                 <Grid>
                                                                                                     <TextBox Text="{Binding Text, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                                                                                              Visibility="{Binding IsEditing, Converter={StaticResource BooleanToVisibilityConverter}}"
@@ -142,10 +186,10 @@
                                                                                                     <md:MarkdownViewer Markdown="{Binding Text}"
                                                                                                                        Padding="10"
                                                                                                                        Background="Transparent"
-                                                                                                                       Style="{StaticResource InverseVisibilityBasedOnIsEditing}" />
+                                                                                                                       Style="{StaticResource InverseVisibilityBasedOnIsEditing}"
+                                                                                                                       Tag="{Binding DataContext, RelativeSource={RelativeSource AncestorType=Window}}"/>
                                                                                                 </Grid>
-                                                                                            </Border>
-                                                    
+                                                                                            </Border>                                                    
                                                                                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,4,4,4">
                                             <Button Content="Save" Click="SaveEdit_Click" CommandParameter="{Binding}" Visibility="{Binding IsEditing, Converter={StaticResource BooleanToVisibilityConverter}}" Margin="0,0,4,0" />
                                             <Button Content="Cancel" Click="CancelEdit_Click" CommandParameter="{Binding}" Visibility="{Binding IsEditing, Converter={StaticResource BooleanToVisibilityConverter}}" />

@@ -3,6 +3,7 @@ using LLama;
 using LLama.Common;
 using LLama.Sampling;
 using LlamaChatApp.Commands;
+using LlamaChatApp;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -146,6 +147,8 @@ namespace LlamaChatApp.ViewModels
         public ICommand ImportConversationCommand { get; }
         public ICommand RegenerateResponseCommand { get; }
         public ICommand MessageEditedCommand { get; }
+        public ICommand DeleteMessageCommand { get; }
+        public ICommand CopyMessageCommand { get; }
 
         public Func<string?>? RequestFileDialog { get; set; }
         public Func<string, string, string?>? RequestSaveFileDialog { get; set; }
@@ -171,15 +174,42 @@ namespace LlamaChatApp.ViewModels
                                                 ExportConversationCommand = new RelayCommand(_ => ExportConversation(), _ => CurrentConversation != null);
                                                 ImportConversationCommand = new RelayCommand(_ => ImportConversation());
                                                 RegenerateResponseCommand = new RelayCommand(async _ => await RegenerateResponse(), _ => IsIdle && IsModelLoaded && ChatMessages.Count > 0);
-                                                MessageEditedCommand = new RelayCommand(_ =>
-                                                {
-                                                    if (CurrentConversation != null && IsModelLoaded)
-                                                    {
-                                                        RestoreContextFromConversation(CurrentConversation);
-                                                    }
-                                                }, _ => IsIdle && IsModelLoaded);
-                                    
-                                                var conv = new ChatConversation { Title = AppConstants.FIRST_CONVERSATION_TITLE };            conv.Messages.Add(new ChatMessage { Author = AppConstants.ROLE_SYSTEM, Text = AppConstants.MESSAGE_WELCOME, AuthorBrush = Brushes.DarkSlateGray });
+                                                            MessageEditedCommand = new RelayCommand(_ =>
+                                                            {
+                                                                if (CurrentConversation != null && IsModelLoaded)
+                                                                {
+                                                                    RestoreContextFromConversation(CurrentConversation);
+                                                                }
+                                                            }, _ => IsIdle && IsModelLoaded);
+                                                
+                                                            DeleteMessageCommand = new RelayCommand(obj =>
+                                                            {
+                                                                if (obj is ChatMessage msg && ChatMessages.Contains(msg))
+                                                                {
+                                                                    ChatMessages.Remove(msg);
+                                                                    if (CurrentConversation != null && IsModelLoaded)
+                                                                    {
+                                                                        RestoreContextFromConversation(CurrentConversation);
+                                                                    }
+                                                                }
+                                                            }, _ => IsIdle);
+                                                
+                                                            CopyMessageCommand = new RelayCommand(obj =>
+                                                            {
+                                                                if (obj is ChatMessage msg && !string.IsNullOrEmpty(msg.Text))
+                                                                {
+                                                                    try
+                                                                    {
+                                                                        Clipboard.SetText(msg.Text);
+                                                                    }
+                                                                    catch (Exception ex)
+                                                                    {
+                                                                        System.Diagnostics.Debug.WriteLine($"Clipboard error: {ex.Message}");
+                                                                    }
+                                                                }
+                                                            });
+                                                
+                                                            var conv = new ChatConversation { Title = AppConstants.FIRST_CONVERSATION_TITLE };            conv.Messages.Add(new ChatMessage { Author = AppConstants.ROLE_SYSTEM, Text = AppConstants.MESSAGE_WELCOME, AuthorBrush = Brushes.DarkSlateGray });
             Conversations.Add(conv);
             CurrentConversation = conv;
         }
@@ -349,7 +379,8 @@ namespace LlamaChatApp.ViewModels
             
             try
             {
-                Directory.CreateDirectory(Path.GetDirectoryName(_settingsFilePath)!);
+                var settingsDir = Path.GetDirectoryName(_settingsFilePath);
+                if (!string.IsNullOrEmpty(settingsDir)) Directory.CreateDirectory(settingsDir);
                 if (File.Exists(_settingsFilePath))
                 {
                     try
@@ -424,7 +455,8 @@ namespace LlamaChatApp.ViewModels
             {
                 UpdateSettingsFromUI();
                 var json = JsonSerializer.Serialize(_settings, new JsonSerializerOptions { WriteIndented = true });
-                Directory.CreateDirectory(Path.GetDirectoryName(_settingsFilePath)!);
+                var settingsDir = Path.GetDirectoryName(_settingsFilePath);
+                if (!string.IsNullOrEmpty(settingsDir)) Directory.CreateDirectory(settingsDir);
                 File.WriteAllText(_settingsFilePath, json);
                 SaveConversations();
             }
@@ -446,11 +478,12 @@ namespace LlamaChatApp.ViewModels
 
         private void SaveConversations()
         {
-            try
-            {
-                Directory.CreateDirectory(Path.GetDirectoryName(_conversationsFilePath)!);
-
-                var toSave = Conversations.Select(c => new SavedConversation
+                        try
+                        {
+                            var convDir = Path.GetDirectoryName(_conversationsFilePath);
+                            if (!string.IsNullOrEmpty(convDir)) Directory.CreateDirectory(convDir);
+            
+                            var toSave = Conversations.Select(c => new SavedConversation
                 {
                     Title = c.Title,
                     Messages = c.Messages.Select(m => new SavedMessage { Author = m.Author, Text = m.Text }).ToList()
