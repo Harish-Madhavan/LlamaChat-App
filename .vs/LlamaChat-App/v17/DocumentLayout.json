@@ -55,8 +55,7 @@
               "RelativeToolTip": "chat_app\\MainWindow.xaml.cs",
               "ViewState": "AgIAABQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-04T05:13:31.06Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-07-04T05:13:31.06Z"
             },
             {
               "$type": "Document",
@@ -68,8 +67,7 @@
               "RelativeToolTip": "chat_app\\ChatMessage.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-04T05:13:26.356Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-07-04T05:13:26.356Z"
             },
             {
               "$type": "Document",
@@ -81,8 +79,7 @@
               "RelativeToolTip": "chat_app\\AssemblyInfo.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-04T05:13:24.534Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-07-04T05:13:24.534Z"
             },
             {
               "$type": "Document",
@@ -94,8 +91,11 @@
               "RelativeToolTip": "chat_app\\AppSettings.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-04T05:13:20.867Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-07-04T05:13:20.867Z"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{cce594b6-0c39-4442-ba28-10c64ac7e89f}"
             }
           ]
         }

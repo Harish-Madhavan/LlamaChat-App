@@ -245,3 +245,9 @@ E:\Git Repo\LlamaChat-App\chat_app\bin\x64\Release\net8.0-windows\runtimes\win-x
 E:\Git Repo\LlamaChat-App\chat_app\bin\x64\Release\net8.0-windows\runtimes\win-x64\native\avx512\mtmd.dll
 E:\Git Repo\LlamaChat-App\chat_app\bin\x64\Release\net8.0-windows\runtimes\win-x64\native\noavx\mtmd.dll
 E:\Git Repo\LlamaChat-App\chat_app\bin\x64\Release\net8.0-windows\runtimes\win-x64\native\vulkan\mtmd.dll
+E:\Git Repo\LlamaChat-App\chat_app\obj\x64\Release\net8.0-windows\App.baml
+E:\Git Repo\LlamaChat-App\chat_app\bin\x64\Release\net8.0-windows\UglyToad.PdfPig.dll
+E:\Git Repo\LlamaChat-App\chat_app\bin\x64\Release\net8.0-windows\UglyToad.PdfPig.Core.dll
+E:\Git Repo\LlamaChat-App\chat_app\bin\x64\Release\net8.0-windows\UglyToad.PdfPig.Fonts.dll
+E:\Git Repo\LlamaChat-App\chat_app\bin\x64\Release\net8.0-windows\UglyToad.PdfPig.Tokenization.dll
+E:\Git Repo\LlamaChat-App\chat_app\bin\x64\Release\net8.0-windows\UglyToad.PdfPig.Tokens.dll

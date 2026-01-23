@@ -1,9 +1,32 @@
-﻿<Application x:Class="chat_app.App"
+﻿<Application x:Class="LlamaChatApp.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:chat_app"
+             xmlns:local="clr-namespace:LlamaChatApp"
+             xmlns:md="clr-namespace:Markdig.Wpf;assembly=Markdig.Wpf"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <!-- Merge the Markdig.Wpf resource dictionary so its styles (ParagraphStyleKey, etc.) are available -->
+                <ResourceDictionary Source="pack://application:,,,/Markdig.Wpf;component/Themes/Generic.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+            <!-- Converters used by the UI -->
+            <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+
+            <!-- Fallback styles in case the Markdig.Wpf resource keys are not present at runtime -->
+            <!-- ParagraphStyleKey: target a Flow Document Paragraph element -->
+            <Style x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type md:Styles}, ResourceId=ParagraphStyleKey}" TargetType="Paragraph">
+                <Setter Property="Margin" Value="0,0,0,8" />
+                <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" />
+            </Style>
+
+            <!-- HeadingStyleKey: also target Paragraph (used by markdown headings within FlowDocument) -->
+            <Style x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type md:Styles}, ResourceId=HeadingStyleKey}" TargetType="Paragraph">
+                <Setter Property="FontWeight" Value="SemiBold" />
+                <Setter Property="Margin" Value="0,4,0,4" />
+                <Setter Property="FontSize" Value="16" />
+            </Style>
+        </ResourceDictionary>
     </Application.Resources>
 </Application>

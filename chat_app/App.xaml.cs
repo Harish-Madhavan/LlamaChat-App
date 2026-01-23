@@ -2,7 +2,7 @@
 using System.Data;
 using System.Windows;
 
-namespace chat_app
+namespace LlamaChatApp
 {
     /// <summary>
     /// Interaction logic for App.xaml

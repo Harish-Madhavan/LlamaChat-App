@@ -34,8 +34,31 @@ namespace LlamaChatApp
                 return openFileDialog.ShowDialog() == true ? openFileDialog.FileName : null;
             };
 
+            // Provide PDF file dialog for import
+            _viewModel.RequestPdfFileDialog = () =>
+            {
+                var openFileDialog = new OpenFileDialog
+                {
+                    Filter = "PDF Files (*.pdf)|*.pdf|All files (*.*)|*.*",
+                    Title = "Select a PDF to import"
+                };
+                return openFileDialog.ShowDialog() == true ? openFileDialog.FileName : null;
+            };
+
             // Subscribe to collection changes for the smart-scrolling feature
             _viewModel.ChatMessages.CollectionChanged += ChatMessages_CollectionChanged;
+
+            // Also respond to current conversation changes so we can re-subscribe
+            _viewModel.PropertyChanged += ViewModel_PropertyChanged;
+        }
+
+        private void ViewModel_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(MainViewModel.ChatMessages))
+            {
+                // Re-subscribe to the new collection
+                _viewModel.ChatMessages.CollectionChanged += ChatMessages_CollectionChanged;
+            }
         }
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
@@ -46,6 +69,11 @@ namespace LlamaChatApp
         private void MainWindow_Closing(object? sender, CancelEventArgs e)
         {
             _viewModel.SaveSettingsCommand.Execute(null);
+            try
+            {
+                (_viewModel as IDisposable)?.Dispose();
+            }
+            catch { }
         }
 
         // This is the improved auto-scroll logic
@@ -81,6 +109,52 @@ namespace LlamaChatApp
                     _viewModel.SendMessageCommand.Execute(null);
                 }
             }
+        }
+
+        private void CopyMessage_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is MenuItem mi && mi.CommandParameter is ChatMessage msg)
+            {
+                Clipboard.SetText(msg.Text ?? string.Empty);
+            }
+        }
+
+        private void EditMessage_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is MenuItem mi && mi.CommandParameter is ChatMessage msg)
+            {
+                msg.BeginEdit();
+            }
+        }
+
+        private void DeleteMessage_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is MenuItem mi && mi.CommandParameter is ChatMessage msg)
+            {
+                _viewModel.ChatMessages.Remove(msg);
+            }
+        }
+
+        private void SaveEdit_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button b && b.CommandParameter is ChatMessage msg)
+            {
+                msg.SaveEdit();
+            }
+        }
+
+        private void CancelEdit_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button b && b.CommandParameter is ChatMessage msg)
+            {
+                msg.CancelEdit();
+            }
+        }
+
+        // Add a handler for Import PDF button if you add one in XAML
+        private void ImportPdfButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (_viewModel.ImportPdfCommand.CanExecute(null)) _viewModel.ImportPdfCommand.Execute(null);
         }
     }
 }

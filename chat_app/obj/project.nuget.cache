@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "+TDonGOgg9s=",
+  "dgSpecHash": "ROfoi1pKuK0=",
   "success": true,
   "projectFilePath": "E:\\Git Repo\\LlamaChat-App\\chat_app\\chat_app.csproj",
   "expectedPackageFiles": [
@@ -15,7 +15,65 @@
     "C:\\Users\\Harish\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\9.0.8\\microsoft.extensions.dependencyinjection.abstractions.9.0.8.nupkg.sha512",
     "C:\\Users\\Harish\\.nuget\\packages\\microsoft.extensions.logging.abstractions\\9.0.8\\microsoft.extensions.logging.abstractions.9.0.8.nupkg.sha512",
     "C:\\Users\\Harish\\.nuget\\packages\\system.diagnostics.diagnosticsource\\9.0.8\\system.diagnostics.diagnosticsource.9.0.8.nupkg.sha512",
-    "C:\\Users\\Harish\\.nuget\\packages\\system.numerics.tensors\\9.0.8\\system.numerics.tensors.9.0.8.nupkg.sha512"
+    "C:\\Users\\Harish\\.nuget\\packages\\system.numerics.tensors\\9.0.8\\system.numerics.tensors.9.0.8.nupkg.sha512",
+    "C:\\Users\\Harish\\.nuget\\packages\\uglytoad.pdfpig\\0.1.9-alpha001-patch1\\uglytoad.pdfpig.0.1.9-alpha001-patch1.nupkg.sha512",
+    "C:\\Users\\Harish\\.nuget\\packages\\uglytoad.pdfpig.core\\1.7.0-custom-5\\uglytoad.pdfpig.core.1.7.0-custom-5.nupkg.sha512",
+    "C:\\Users\\Harish\\.nuget\\packages\\uglytoad.pdfpig.fonts\\1.7.0-custom-5\\uglytoad.pdfpig.fonts.1.7.0-custom-5.nupkg.sha512",
+    "C:\\Users\\Harish\\.nuget\\packages\\uglytoad.pdfpig.tokenization\\1.7.0-custom-5\\uglytoad.pdfpig.tokenization.1.7.0-custom-5.nupkg.sha512",
+    "C:\\Users\\Harish\\.nuget\\packages\\uglytoad.pdfpig.tokens\\1.7.0-custom-5\\uglytoad.pdfpig.tokens.1.7.0-custom-5.nupkg.sha512",
+    "C:\\Users\\Harish\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\8.0.23\\microsoft.windowsdesktop.app.ref.8.0.23.nupkg.sha512",
+    "C:\\Users\\Harish\\.nuget\\packages\\microsoft.netcore.app.ref\\8.0.23\\microsoft.netcore.app.ref.8.0.23.nupkg.sha512",
+    "C:\\Users\\Harish\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\8.0.23\\microsoft.aspnetcore.app.ref.8.0.23.nupkg.sha512",
+    "C:\\Users\\Harish\\.nuget\\packages\\microsoft.netcore.app.host.win-x64\\8.0.23\\microsoft.netcore.app.host.win-x64.8.0.23.nupkg.sha512"
   ],
-  "logs": []
+  "logs": [
+    {
+      "code": "NU1603",
+      "level": "Warning",
+      "message": "UglyToad.PdfPig 0.1.9-alpha001-patch1 depends on UglyToad.PdfPig.Core (>= 0.1.9-alpha001-patch1) but UglyToad.PdfPig.Core 0.1.9-alpha001-patch1 was not found. UglyToad.PdfPig.Core 1.7.0-custom-5 was resolved instead.",
+      "projectPath": "E:\\Git Repo\\LlamaChat-App\\chat_app\\chat_app.csproj",
+      "warningLevel": 1,
+      "filePath": "E:\\Git Repo\\LlamaChat-App\\chat_app\\chat_app.csproj",
+      "libraryId": "UglyToad.PdfPig.Core",
+      "targetGraphs": [
+        "net8.0-windows7.0"
+      ]
+    },
+    {
+      "code": "NU1603",
+      "level": "Warning",
+      "message": "UglyToad.PdfPig 0.1.9-alpha001-patch1 depends on UglyToad.PdfPig.Fonts (>= 0.1.9-alpha001-patch1) but UglyToad.PdfPig.Fonts 0.1.9-alpha001-patch1 was not found. UglyToad.PdfPig.Fonts 1.7.0-custom-5 was resolved instead.",
+      "projectPath": "E:\\Git Repo\\LlamaChat-App\\chat_app\\chat_app.csproj",
+      "warningLevel": 1,
+      "filePath": "E:\\Git Repo\\LlamaChat-App\\chat_app\\chat_app.csproj",
+      "libraryId": "UglyToad.PdfPig.Fonts",
+      "targetGraphs": [
+        "net8.0-windows7.0"
+      ]
+    },
+    {
+      "code": "NU1603",
+      "level": "Warning",
+      "message": "UglyToad.PdfPig 0.1.9-alpha001-patch1 depends on UglyToad.PdfPig.Tokenization (>= 0.1.9-alpha001-patch1) but UglyToad.PdfPig.Tokenization 0.1.9-alpha001-patch1 was not found. UglyToad.PdfPig.Tokenization 1.7.0-custom-5 was resolved instead.",
+      "projectPath": "E:\\Git Repo\\LlamaChat-App\\chat_app\\chat_app.csproj",
+      "warningLevel": 1,
+      "filePath": "E:\\Git Repo\\LlamaChat-App\\chat_app\\chat_app.csproj",
+      "libraryId": "UglyToad.PdfPig.Tokenization",
+      "targetGraphs": [
+        "net8.0-windows7.0"
+      ]
+    },
+    {
+      "code": "NU1603",
+      "level": "Warning",
+      "message": "UglyToad.PdfPig 0.1.9-alpha001-patch1 depends on UglyToad.PdfPig.Tokens (>= 0.1.9-alpha001-patch1) but UglyToad.PdfPig.Tokens 0.1.9-alpha001-patch1 was not found. UglyToad.PdfPig.Tokens 1.7.0-custom-5 was resolved instead.",
+      "projectPath": "E:\\Git Repo\\LlamaChat-App\\chat_app\\chat_app.csproj",
+      "warningLevel": 1,
+      "filePath": "E:\\Git Repo\\LlamaChat-App\\chat_app\\chat_app.csproj",
+      "libraryId": "UglyToad.PdfPig.Tokens",
+      "targetGraphs": [
+        "net8.0-windows7.0"
+      ]
+    }
+  ]
 }
