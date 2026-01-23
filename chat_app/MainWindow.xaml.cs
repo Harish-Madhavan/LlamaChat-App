@@ -30,11 +30,30 @@ namespace LlamaChatApp
                     Filter = "GGUF Model Files (*.gguf)|*.gguf|All files (*.*)|*.*",
                     Title = "Select a Llama Model File"
                 };
-                return openFileDialog.ShowDialog() == true ? openFileDialog.FileName : null;
-            };
-
-            _viewModel.ChatMessages.CollectionChanged += ChatMessages_CollectionChanged;
-
+                                return openFileDialog.ShowDialog() == true ? openFileDialog.FileName : null;      
+                            };
+                
+                            _viewModel.RequestSaveFileDialog = (filter, title) =>
+                            {
+                                var saveFileDialog = new SaveFileDialog
+                                {
+                                    Filter = filter,
+                                    Title = title
+                                };
+                                return saveFileDialog.ShowDialog() == true ? saveFileDialog.FileName : null;
+                            };
+                
+                            _viewModel.RequestOpenFileDialog = (filter, title) =>
+                            {
+                                var openFileDialog = new OpenFileDialog
+                                {
+                                    Filter = filter,
+                                    Title = title
+                                };
+                                return openFileDialog.ShowDialog() == true ? openFileDialog.FileName : null;
+                            };
+                
+                            _viewModel.ChatMessages.CollectionChanged += ChatMessages_CollectionChanged;
             // Also respond to current conversation changes so we can re-subscribe
             _viewModel.PropertyChanged += ViewModel_PropertyChanged;
         }

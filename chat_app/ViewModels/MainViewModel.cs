@@ -84,10 +84,19 @@ namespace LlamaChatApp.ViewModels
             get => _currentConversation;
             set
             {
-                _currentConversation = value;
-                OnPropertyChanged();
-                OnPropertyChanged(nameof(ChatMessages));
-                CommandManager.InvalidateRequerySuggested();
+                if (_currentConversation != value)
+                {
+                    _currentConversation = value;
+                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(ChatMessages));
+                    CommandManager.InvalidateRequerySuggested();
+                    
+                    // Restore context for the newly selected conversation
+                    if (_currentConversation != null && IsModelLoaded)
+                    {
+                        RestoreContextFromConversation(_currentConversation);
+                    }
+                }
             }
         }
 
@@ -133,8 +142,13 @@ namespace LlamaChatApp.ViewModels
         public ICommand SelectConversationCommand { get; }
         public ICommand SwitchToLightThemeCommand { get; }
         public ICommand SwitchToDarkThemeCommand { get; }
+        public ICommand ExportConversationCommand { get; }
+        public ICommand ImportConversationCommand { get; }
+        public ICommand RegenerateResponseCommand { get; }
 
         public Func<string?>? RequestFileDialog { get; set; }
+        public Func<string, string, string?>? RequestSaveFileDialog { get; set; }
+        public Func<string, string, string?>? RequestOpenFileDialog { get; set; }
         #endregion
 
         public MainViewModel()
@@ -151,11 +165,13 @@ namespace LlamaChatApp.ViewModels
             CloseConversationCommand = new RelayCommand(obj => CloseConversation(obj as ChatConversation), obj => obj is ChatConversation);
                         SelectConversationCommand = new RelayCommand(obj => CurrentConversation = obj as ChatConversation, obj => obj is ChatConversation);
                         RenameConversationCommand = new RelayCommand(obj => { /* optional: implement rename dialog */ }, obj => obj is ChatConversation);
-                        SwitchToLightThemeCommand = new RelayCommand(_ => ChangeTheme("Themes/LightTheme.xaml"));
-                        SwitchToDarkThemeCommand = new RelayCommand(_ => ChangeTheme("Themes/DarkTheme.xaml"));
-            
-                        var conv = new ChatConversation { Title = AppConstants.FIRST_CONVERSATION_TITLE };
-            conv.Messages.Add(new ChatMessage { Author = AppConstants.ROLE_SYSTEM, Text = AppConstants.MESSAGE_WELCOME, AuthorBrush = Brushes.DarkSlateGray });
+                                    SwitchToLightThemeCommand = new RelayCommand(_ => ChangeTheme("Themes/LightTheme.xaml"));
+                                    SwitchToDarkThemeCommand = new RelayCommand(_ => ChangeTheme("Themes/DarkTheme.xaml"));
+                                    ExportConversationCommand = new RelayCommand(_ => ExportConversation(), _ => CurrentConversation != null);
+                                    ImportConversationCommand = new RelayCommand(_ => ImportConversation());
+                                    RegenerateResponseCommand = new RelayCommand(async _ => await RegenerateResponse(), _ => IsIdle && IsModelLoaded && ChatMessages.Count > 0 && ChatMessages.Last().Author == AppConstants.ROLE_ASSISTANT);
+                        
+                                    var conv = new ChatConversation { Title = AppConstants.FIRST_CONVERSATION_TITLE };            conv.Messages.Add(new ChatMessage { Author = AppConstants.ROLE_SYSTEM, Text = AppConstants.MESSAGE_WELCOME, AuthorBrush = Brushes.DarkSlateGray });
             Conversations.Add(conv);
             CurrentConversation = conv;
         }
@@ -191,6 +207,97 @@ namespace LlamaChatApp.ViewModels
                 System.Diagnostics.Debug.WriteLine($"Failed to change theme: {ex}");
                 MessageBox.Show($"Could not change theme: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+        }
+
+        private void ExportConversation()
+        {
+            if (CurrentConversation == null) return;
+
+            var filename = RequestSaveFileDialog?.Invoke("JSON Files (*.json)|*.json", "Export Conversation");
+            if (string.IsNullOrEmpty(filename)) return;
+
+            try
+            {
+                var toSave = new SavedConversation
+                {
+                    Title = CurrentConversation.Title,
+                    Messages = CurrentConversation.Messages.Select(m => new SavedMessage { Author = m.Author, Text = m.Text }).ToList()
+                };
+
+                var json = JsonSerializer.Serialize(toSave, new JsonSerializerOptions { WriteIndented = true });
+                File.WriteAllText(filename, json);
+                StatusMessage = "Conversation exported";
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Failed to export conversation: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void ImportConversation()
+        {
+            var filename = RequestOpenFileDialog?.Invoke("JSON Files (*.json)|*.json", "Import Conversation");
+            if (string.IsNullOrEmpty(filename)) return;
+
+            try
+            {
+                var json = File.ReadAllText(filename);
+                var saved = JsonSerializer.Deserialize<SavedConversation>(json);
+
+                if (saved != null)
+                {
+                    var conv = new ChatConversation { Title = saved.Title };
+                    foreach (var sm in saved.Messages)
+                    {
+                        conv.Messages.Add(new ChatMessage { Author = sm.Author, Text = sm.Text, Alignment = sm.Author == AppConstants.ROLE_USER ? HorizontalAlignment.Right : HorizontalAlignment.Left });
+                    }
+                    Conversations.Add(conv);
+                    CurrentConversation = conv;
+                    StatusMessage = "Conversation imported";
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Failed to import conversation: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private async Task RegenerateResponse()
+        {
+            if (_session == null || CurrentConversation == null) return;
+
+            // 1. Identify the last assistant message and the preceding user message
+            var lastMsg = ChatMessages.LastOrDefault();
+            if (lastMsg == null || lastMsg.Author != AppConstants.ROLE_ASSISTANT) return;
+
+            // Remove last assistant message
+            ChatMessages.Remove(lastMsg);
+            
+            // Get the user prompt that triggered it (it should be the last one now)
+            var userMsg = ChatMessages.LastOrDefault();
+            if (userMsg == null || userMsg.Author != AppConstants.ROLE_USER) return;
+
+            // 2. IMPORTANT: We need to rewind the ChatSession history
+            // LLamaSharp's ChatSession tracks history. We need to remove the last Assistant response AND the User message 
+            // from the history, because we are going to re-submit the User message.
+            // If we don't remove the user message from history, ChatSession will see it twice.
+            
+            // Note: ChatHistory.Messages is a List<ChatHistory.Message>
+            var history = _session.History.Messages;
+            if (history.Count >= 2)
+            {
+                // Assuming standard turn-taking: ... User, Assistant
+                // Remove Assistant response
+                _session.History.Messages.RemoveAt(_session.History.Messages.Count - 1);
+                // Remove User prompt (because ChatAsync adds it again)
+                _session.History.Messages.RemoveAt(_session.History.Messages.Count - 1);
+            }
+
+            // 3. Re-trigger generation using the user's text
+            UserInputText = userMsg.Text;
+            ChatMessages.Remove(userMsg); // Remove from UI temporarily, HandleUserPrompt will re-add it
+            
+            await HandleUserPrompt();
         }
 
         #region Command Logic and Core Methods
@@ -488,6 +595,43 @@ namespace LlamaChatApp.ViewModels
             var history = new ChatHistory();
             history.AddMessage(AuthorRole.System, SystemPrompt);
             _session = new ChatSession(executor, history);
+        }
+
+        private void RestoreContextFromConversation(ChatConversation conversation)
+        {
+            if (_model == null || string.IsNullOrEmpty(_settings.LastModelPath)) return;
+
+            // Re-initialize context to clear previous state
+            _context?.Dispose();
+
+            var parameters = new ModelParams(_settings.LastModelPath)
+            {
+                ContextSize = (uint)ContextSize,
+                GpuLayerCount = GpuLayerCount
+            };
+            _context = _model.CreateContext(parameters);
+            var executor = new InteractiveExecutor(_context);
+            
+            // Rebuild history from conversation messages
+            var history = new ChatHistory();
+            history.AddMessage(AuthorRole.System, SystemPrompt);
+
+            foreach (var msg in conversation.Messages)
+            {
+                if (msg.Author == AppConstants.ROLE_USER)
+                {
+                    history.AddMessage(AuthorRole.User, msg.Text);
+                }
+                else if (msg.Author == AppConstants.ROLE_ASSISTANT)
+                {
+                    history.AddMessage(AuthorRole.Assistant, msg.Text);
+                }
+                // Skip system messages in the list as we already added the default SystemPrompt
+                // or if specific system messages are part of the flow, handle them here.
+            }
+
+            _session = new ChatSession(executor, history);
+            StatusMessage = "Context restored";
         }
 
         private async Task HandleUserPrompt()

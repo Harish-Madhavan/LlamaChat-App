@@ -49,11 +49,16 @@
             <!-- Menu Bar + Conversations Tab selector -->
             <DockPanel Grid.Row="0">
                 <Menu DockPanel.Dock="Top" Padding="5" Background="{DynamicResource SettingsBackgroundBrush}" Foreground="{DynamicResource PrimaryTextBrush}">
-                    <MenuItem Header="_File">                                    <MenuItem Header="_Open Model..." Command="{Binding LoadModelCommand}" />     
-                                    <MenuItem Header="_Clear Chat" Command="{Binding ClearChatCommand}" />        
-                                    <Separator />
-                                    <MenuItem Header="E_xit" Command="{Binding ExitCommand}" />
-                                </MenuItem>
+                                    <MenuItem Header="_File">
+                                        <MenuItem Header="_Open Model..." Command="{Binding LoadModelCommand}" />
+                                        <Separator />
+                                        <MenuItem Header="_Export Conversation..." Command="{Binding ExportConversationCommand}" />
+                                        <MenuItem Header="_Import Conversation..." Command="{Binding ImportConversationCommand}" />
+                                        <Separator />
+                                        <MenuItem Header="_Clear Chat" Command="{Binding ClearChatCommand}" />        
+                                        <Separator />
+                                        <MenuItem Header="E_xit" Command="{Binding ExitCommand}" />
+                                    </MenuItem>
                                 <MenuItem Header="_Themes">
                                     <MenuItem Header="_Light Theme" Command="{Binding SwitchToLightThemeCommand}" />
                                     <MenuItem Header="_Dark Theme" Command="{Binding SwitchToDarkThemeCommand}" />
@@ -118,13 +123,15 @@
                                                                    FontWeight="Bold"/>
                                                     </DockPanel>
                                                     <Border Background="{Binding BubbleBackground}" CornerRadius="10">                                <Grid>
-                                    <Grid.ContextMenu>
-                                        <ContextMenu>
-                                            <MenuItem Header="Copy" Click="CopyMessage_Click" CommandParameter="{Binding}" />
-                                            <MenuItem Header="Edit" Click="EditMessage_Click" CommandParameter="{Binding}" />
-                                            <MenuItem Header="Delete" Click="DeleteMessage_Click" CommandParameter="{Binding}" />
-                                        </ContextMenu>
-                                    </Grid.ContextMenu>
+                                                                        <Grid.ContextMenu>
+                                                                            <ContextMenu>
+                                                                                <MenuItem Header="Regenerate" Command="{Binding DataContext.RegenerateResponseCommand, RelativeSource={RelativeSource AncestorType=Window}}" />
+                                                                                <Separator />
+                                                                                <MenuItem Header="Copy" Click="CopyMessage_Click" CommandParameter="{Binding}" />
+                                                                                <MenuItem Header="Edit" Click="EditMessage_Click" CommandParameter="{Binding}" />
+                                                                                <MenuItem Header="Delete" Click="DeleteMessage_Click" CommandParameter="{Binding}" />
+                                                                            </ContextMenu>
+                                                                        </Grid.ContextMenu>
 
                                     <StackPanel>
                                         <TextBox Text="{Binding Text, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
