@@ -87,12 +87,18 @@ namespace LlamaChatApp
         // Handle Enter key for sending message (Shift+Enter for newline)
         private async void UserInputTextBox_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Enter && !Keyboard.IsKeyDown(Key.LeftShift))
+            if (e.Key == Key.Enter)
             {
+                if (Keyboard.Modifiers == ModifierKeys.Control || Keyboard.Modifiers == ModifierKeys.Shift)
+                {
+                    // Allow newline for Ctrl+Enter or Shift+Enter
+                    return;
+                }
+
+                // Plain Enter sends the message
                 e.Handled = true;
                 if (_viewModel.SendMessageCommand.CanExecute(null))
                 {
-                    // Directly invoke the command
                     _viewModel.SendMessageCommand.Execute(null);
                 }
             }

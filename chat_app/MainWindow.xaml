@@ -16,6 +16,7 @@
 
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+        <local:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter" />
         <Style x:Key="InverseVisibilityBasedOnIsEditing" TargetType="md:MarkdownViewer">
             <Style.Triggers>
                 <DataTrigger Binding="{Binding IsEditing}" Value="True">
@@ -28,25 +29,35 @@
         </Style>
     </Window.Resources>
 
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-        </Grid.RowDefinitions>
+    <Window.InputBindings>
+        <KeyBinding Key="N" Modifiers="Control" Command="{Binding NewConversationCommand}" />
+        <KeyBinding Key="W" Modifiers="Control" Command="{Binding CloseConversationCommand}" CommandParameter="{Binding CurrentConversation}" />
+        <KeyBinding Key="O" Modifiers="Control" Command="{Binding LoadModelCommand}" />
+        <KeyBinding Key="L" Modifiers="Control" Command="{Binding ClearChatCommand}" />
+    </Window.InputBindings>
 
-        <!-- Menu Bar + Conversations Tab selector -->
-        <DockPanel Grid.Row="0">
-            <Menu DockPanel.Dock="Top" Padding="5">
-                <MenuItem Header="_File">
-                    <MenuItem Header="_Open Model..." Command="{Binding LoadModelCommand}" />
-                    <MenuItem Header="_Clear Chat" Command="{Binding ClearChatCommand}" />
-                    <Separator />
-                    <MenuItem Header="E_xit" Command="{Binding ExitCommand}" />
-                </MenuItem>
-            </Menu>
+        <Grid Background="{DynamicResource WindowBackgroundBrush}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+    
+            <!-- Menu Bar + Conversations Tab selector -->
+            <DockPanel Grid.Row="0">
+                <Menu DockPanel.Dock="Top" Padding="5" Background="{DynamicResource SettingsBackgroundBrush}" Foreground="{DynamicResource PrimaryTextBrush}">
+                    <MenuItem Header="_File">                                    <MenuItem Header="_Open Model..." Command="{Binding LoadModelCommand}" />     
+                                    <MenuItem Header="_Clear Chat" Command="{Binding ClearChatCommand}" />        
+                                    <Separator />
+                                    <MenuItem Header="E_xit" Command="{Binding ExitCommand}" />
+                                </MenuItem>
+                                <MenuItem Header="_Themes">
+                                    <MenuItem Header="_Light Theme" Command="{Binding SwitchToLightThemeCommand}" />
+                                    <MenuItem Header="_Dark Theme" Command="{Binding SwitchToDarkThemeCommand}" />
+                                </MenuItem>            </Menu>
 
             <StackPanel Orientation="Horizontal" DockPanel.Dock="Top" Margin="8,4,8,8" VerticalAlignment="Center">
                 <TabControl ItemsSource="{Binding Conversations}"
@@ -81,6 +92,7 @@
         <ListView x:Name="ChatListView" Grid.Row="2" Margin="15,5,15,10"
                   ItemsSource="{Binding ChatMessages}"
                   BorderThickness="0"
+                  Background="{DynamicResource ChatBackgroundBrush}"
                   HorizontalContentAlignment="Stretch"
                   ScrollViewer.CanContentScroll="False"
                   ScrollViewer.HorizontalScrollBarVisibility="Disabled">
@@ -93,13 +105,19 @@
             <ListView.ItemTemplate>
                 <DataTemplate DataType="{x:Type local:ChatMessage}">
                     <Grid Margin="0,6">
-                        <StackPanel HorizontalAlignment="{Binding Alignment}" MaxWidth="650">
-                            <TextBlock Text="{Binding Author}" 
-                                       Foreground="{Binding AuthorBrush}" 
-                                       FontWeight="Bold"
-                                       Margin="8,0,8,3"/>
-                            <Border Background="{Binding BubbleBackground}" CornerRadius="10">
-                                <Grid>
+                                                <StackPanel HorizontalAlignment="{Binding Alignment}" MaxWidth="650">     
+                                                    <DockPanel LastChildFill="True" Margin="8,0,8,3">
+                                                        <TextBlock Text="{Binding Timestamp, StringFormat='{}{0:HH:mm}'}" 
+                                                                   DockPanel.Dock="Right"
+                                                                   Foreground="Gray"
+                                                                   FontSize="10"
+                                                                   VerticalAlignment="Bottom"
+                                                                   Margin="5,0,0,0"/>
+                                                        <TextBlock Text="{Binding Author}"
+                                                                   Foreground="{Binding AuthorBrush}"
+                                                                   FontWeight="Bold"/>
+                                                    </DockPanel>
+                                                    <Border Background="{Binding BubbleBackground}" CornerRadius="10">                                <Grid>
                                     <Grid.ContextMenu>
                                         <ContextMenu>
                                             <MenuItem Header="Copy" Click="CopyMessage_Click" CommandParameter="{Binding}" />
@@ -155,31 +173,85 @@
                     Command="{Binding SendMessageCommand}" IsDefault="True"/>
         </Grid>
 
-        <!-- Inference Settings Panel -->
-        <Border Grid.Row="4" Background="#F0F0F0" BorderBrush="#D0D0D0" BorderThickness="0,1,0,0" IsEnabled="{Binding IsIdle}">
-            <StackPanel Orientation="Horizontal" Margin="15,5" HorizontalAlignment="Center">
-                <TextBlock Text="Temp:" VerticalAlignment="Center" FontWeight="SemiBold"/>
-                <Slider x:Name="TemperatureSlider" Width="80" Minimum="0" Maximum="2.0" SmallChange="0.1" TickFrequency="0.1" Margin="5,0,10,0"
-                        Value="{Binding Temperature, Mode=TwoWay}"/>
-                <TextBlock Text="{Binding ElementName=TemperatureSlider, Path=Value, StringFormat={}{0:F1}}" VerticalAlignment="Center" Width="25"/>
+                        <!-- Inference Settings Panel -->
 
+                        <Border Grid.Row="4" Background="{DynamicResource SettingsBackgroundBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="0,1,0,0" IsEnabled="{Binding IsIdle}">
 
-                <TextBlock Text="Top P:" VerticalAlignment="Center" FontWeight="SemiBold"/>
-                <Slider Width="80" Minimum="0" Maximum="1.0" SmallChange="0.05" TickFrequency="0.05" Margin="5,0,10,0"
-                        Value="{Binding TopP, Mode=TwoWay}"/>
+                            <StackPanel Orientation="Horizontal" Margin="15,5" HorizontalAlignment="Center">      
 
-                <TextBlock Text="Max Tokens:" VerticalAlignment="Center" FontWeight="SemiBold"/>
-                <TextBox Width="50" VerticalContentAlignment="Center" Margin="5,0,10,0"
-                         Text="{Binding MaxTokens, Mode=TwoWay}"/>
+                                <TextBlock Text="Temp:" VerticalAlignment="Center" FontWeight="SemiBold" Foreground="{DynamicResource PrimaryTextBrush}"/>        
 
-                <TextBlock Text="GPU Layers:" VerticalAlignment="Center" FontWeight="SemiBold"/>
-                <TextBox Width="40" VerticalContentAlignment="Center" Margin="5,0,10,0"
-                         Text="{Binding GpuLayerCount, Mode=TwoWay}"/>
+                                <Slider x:Name="TemperatureSlider" Width="80" Minimum="0" Maximum="2.0" SmallChange="0.1" TickFrequency="0.1" Margin="5,0,10,0"
 
-                <TextBlock Text="Ctx Size:" VerticalAlignment="Center" FontWeight="SemiBold"/>
-                <TextBox Width="50" VerticalContentAlignment="Center" Margin="5,0,0,0"
-                         Text="{Binding ContextSize, Mode=TwoWay}"/>
-            </StackPanel>
-        </Border>
-    </Grid>
+                                        Value="{Binding Temperature, Mode=TwoWay}"/>
+
+                                <TextBlock Text="{Binding ElementName=TemperatureSlider, Path=Value, StringFormat={}{0:F1}}" VerticalAlignment="Center" Width="25" Foreground="{DynamicResource PrimaryTextBrush}"/>
+
+                
+
+                
+
+                                <TextBlock Text="Top P:" VerticalAlignment="Center" FontWeight="SemiBold" Foreground="{DynamicResource PrimaryTextBrush}"/>       
+
+                                <Slider Width="80" Minimum="0" Maximum="1.0" SmallChange="0.05" TickFrequency="0.05" Margin="5,0,10,0"
+
+                                        Value="{Binding TopP, Mode=TwoWay}"/>
+
+                
+
+                                <TextBlock Text="Max Tokens:" VerticalAlignment="Center" FontWeight="SemiBold" Foreground="{DynamicResource PrimaryTextBrush}"/>  
+
+                                <TextBox Width="50" VerticalContentAlignment="Center" Margin="5,0,10,0"
+
+                                         Text="{Binding MaxTokens, Mode=TwoWay}"
+
+                                         Background="{DynamicResource WindowBackgroundBrush}" Foreground="{DynamicResource PrimaryTextBrush}"/>
+
+                
+
+                                <TextBlock Text="GPU Layers:" VerticalAlignment="Center" FontWeight="SemiBold" Foreground="{DynamicResource PrimaryTextBrush}"/>  
+
+                                <TextBox Width="40" VerticalContentAlignment="Center" Margin="5,0,10,0"
+
+                                         Text="{Binding GpuLayerCount, Mode=TwoWay}"
+
+                                         Background="{DynamicResource WindowBackgroundBrush}" Foreground="{DynamicResource PrimaryTextBrush}"/>
+
+                
+
+                                <TextBlock Text="Ctx Size:" VerticalAlignment="Center" FontWeight="SemiBold" Foreground="{DynamicResource PrimaryTextBrush}"/>    
+
+                                <TextBox Width="50" VerticalContentAlignment="Center" Margin="5,0,0,0"
+
+                                         Text="{Binding ContextSize, Mode=TwoWay}"
+
+                                         Background="{DynamicResource WindowBackgroundBrush}" Foreground="{DynamicResource PrimaryTextBrush}"/>
+
+                            </StackPanel>
+
+                        </Border>
+
+                
+
+                        <!-- Status Bar -->
+
+                        <StatusBar Grid.Row="5" Background="{DynamicResource StatusBarBackgroundBrush}" Foreground="{DynamicResource PrimaryTextBrush}">
+
+                            <StatusBarItem>
+
+                                <TextBlock Text="{Binding StatusMessage}" />
+
+                            </StatusBarItem>
+
+                            <StatusBarItem HorizontalAlignment="Right">
+
+                                <ProgressBar IsIndeterminate="True" Width="100" Height="15" 
+
+                                             Visibility="{Binding IsIdle, Converter={StaticResource InverseBooleanToVisibilityConverter}}" />
+
+                            </StatusBarItem>
+
+                        </StatusBar>
+
+            </Grid>
     </Window>

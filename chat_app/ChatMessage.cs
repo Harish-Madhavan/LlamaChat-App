@@ -16,6 +16,7 @@ namespace LlamaChatApp
         public Brush AuthorBrush { get; set; } = Brushes.Black;
         public Brush BubbleBackground { get; set; } = Brushes.LightGray;
         public HorizontalAlignment Alignment { get; set; } = HorizontalAlignment.Left;
+        public DateTime Timestamp { get; set; } = DateTime.Now;
 
         public string Text
         {

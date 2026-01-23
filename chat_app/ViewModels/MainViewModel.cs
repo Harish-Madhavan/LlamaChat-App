@@ -131,6 +131,8 @@ namespace LlamaChatApp.ViewModels
         public ICommand CloseConversationCommand { get; }
         public ICommand RenameConversationCommand { get; }
         public ICommand SelectConversationCommand { get; }
+        public ICommand SwitchToLightThemeCommand { get; }
+        public ICommand SwitchToDarkThemeCommand { get; }
 
         public Func<string?>? RequestFileDialog { get; set; }
         #endregion
@@ -147,13 +149,48 @@ namespace LlamaChatApp.ViewModels
 
             NewConversationCommand = new RelayCommand(_ => CreateNewConversation());
             CloseConversationCommand = new RelayCommand(obj => CloseConversation(obj as ChatConversation), obj => obj is ChatConversation);
-            SelectConversationCommand = new RelayCommand(obj => CurrentConversation = obj as ChatConversation, obj => obj is ChatConversation);
-            RenameConversationCommand = new RelayCommand(obj => { /* optional: implement rename dialog */ }, obj => obj is ChatConversation);
-
-            var conv = new ChatConversation { Title = AppConstants.FIRST_CONVERSATION_TITLE };
+                        SelectConversationCommand = new RelayCommand(obj => CurrentConversation = obj as ChatConversation, obj => obj is ChatConversation);
+                        RenameConversationCommand = new RelayCommand(obj => { /* optional: implement rename dialog */ }, obj => obj is ChatConversation);
+                        SwitchToLightThemeCommand = new RelayCommand(_ => ChangeTheme("Themes/LightTheme.xaml"));
+                        SwitchToDarkThemeCommand = new RelayCommand(_ => ChangeTheme("Themes/DarkTheme.xaml"));
+            
+                        var conv = new ChatConversation { Title = AppConstants.FIRST_CONVERSATION_TITLE };
             conv.Messages.Add(new ChatMessage { Author = AppConstants.ROLE_SYSTEM, Text = AppConstants.MESSAGE_WELCOME, AuthorBrush = Brushes.DarkSlateGray });
             Conversations.Add(conv);
             CurrentConversation = conv;
+        }
+
+        private void ChangeTheme(string themePath)
+        {
+            try
+            {
+                var appResources = Application.Current.Resources;
+                var mergedDicts = appResources.MergedDictionaries;
+
+                // Find the existing theme dictionary (checking for "Themes/" in the URI)
+                var existingTheme = mergedDicts.FirstOrDefault(d => 
+                    d.Source != null && 
+                    d.Source.ToString().Contains("Themes/", StringComparison.OrdinalIgnoreCase));
+
+                // Construct a Pack URI for the new theme to ensure it resolves correctly
+                // This assumes the files are at the root/Themes/ path in the assembly
+                var uriString = $"pack://application:,,,/{themePath}";
+                var newTheme = new ResourceDictionary { Source = new Uri(uriString, UriKind.Absolute) };
+
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    if (existingTheme != null)
+                    {
+                        mergedDicts.Remove(existingTheme);
+                    }
+                    mergedDicts.Add(newTheme);
+                });
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Failed to change theme: {ex}");
+                MessageBox.Show($"Could not change theme: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         #region Command Logic and Core Methods

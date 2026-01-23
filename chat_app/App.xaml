@@ -6,10 +6,11 @@
              StartupUri="MainWindow.xaml">
     <Application.Resources>
         <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <!-- Merge the Markdig.Wpf resource dictionary so its styles (ParagraphStyleKey, etc.) are available -->
-                <ResourceDictionary Source="pack://application:,,,/Markdig.Wpf;component/Themes/Generic.xaml" />
-            </ResourceDictionary.MergedDictionaries>
+                        <ResourceDictionary.MergedDictionaries>
+                            <!-- Merge the Markdig.Wpf resource dictionary so its styles (ParagraphStyleKey, etc.) are available -->
+                            <ResourceDictionary Source="pack://application:,,,/Markdig.Wpf;component/Themes/Generic.xaml" />
+                            <ResourceDictionary Source="Themes/LightTheme.xaml" />
+                        </ResourceDictionary.MergedDictionaries>
 
             <!-- Converters used by the UI -->
             <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
