@@ -23,7 +23,6 @@ namespace LlamaChatApp
             this.Loaded += MainWindow_Loaded;
             this.Closing += MainWindow_Closing;
 
-            // This is how the ViewModel can request a service (like showing a dialog) from the View
             _viewModel.RequestFileDialog = () =>
             {
                 var openFileDialog = new OpenFileDialog
@@ -34,18 +33,6 @@ namespace LlamaChatApp
                 return openFileDialog.ShowDialog() == true ? openFileDialog.FileName : null;
             };
 
-            // Provide PDF file dialog for import
-            _viewModel.RequestPdfFileDialog = () =>
-            {
-                var openFileDialog = new OpenFileDialog
-                {
-                    Filter = "PDF Files (*.pdf)|*.pdf|All files (*.*)|*.*",
-                    Title = "Select a PDF to import"
-                };
-                return openFileDialog.ShowDialog() == true ? openFileDialog.FileName : null;
-            };
-
-            // Subscribe to collection changes for the smart-scrolling feature
             _viewModel.ChatMessages.CollectionChanged += ChatMessages_CollectionChanged;
 
             // Also respond to current conversation changes so we can re-subscribe
@@ -151,10 +138,5 @@ namespace LlamaChatApp
             }
         }
 
-        // Add a handler for Import PDF button if you add one in XAML
-        private void ImportPdfButton_Click(object sender, RoutedEventArgs e)
-        {
-            if (_viewModel.ImportPdfCommand.CanExecute(null)) _viewModel.ImportPdfCommand.Execute(null);
-        }
     }
 }

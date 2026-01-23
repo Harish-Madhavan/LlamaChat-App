@@ -14,9 +14,6 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
-using UglyToad.PdfPig;
-using System.Text;
-using System.Text.RegularExpressions;
 
 namespace LlamaChatApp.ViewModels
 {
@@ -29,17 +26,8 @@ namespace LlamaChatApp.ViewModels
         private CancellationTokenSource? _cts;
 
         private AppSettings _settings = new AppSettings();
-        private readonly string _settingsFilePath = Path.Combine(
-            Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-            "LlamaChatApp",
-            "settings.json"
-        );
-
-        private readonly string _conversationsFilePath = Path.Combine(
-            Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-            "LlamaChatApp",
-            "conversations.json"
-        );
+        private readonly string _settingsFilePath = AppConstants.SETTINGS_FILE_PATH;
+        private readonly string _conversationsFilePath = AppConstants.CONVERSATIONS_FILE_PATH;
         #endregion
 
         #region UI Properties
@@ -65,6 +53,20 @@ namespace LlamaChatApp.ViewModels
         }
 
         public bool IsIdle => IsModelLoaded && !IsGenerating;
+
+        private AppLoadingState _loadingState = AppLoadingState.Idle;
+        public AppLoadingState LoadingState
+        {
+            get => _loadingState;
+            set { _loadingState = value; OnPropertyChanged(); }
+        }
+
+        private string _statusMessage = string.Empty;
+        public string StatusMessage
+        {
+            get => _statusMessage;
+            set { _statusMessage = value; OnPropertyChanged(); }
+        }
 
         private string _userInputText = string.Empty;
         public string UserInputText
@@ -130,17 +132,11 @@ namespace LlamaChatApp.ViewModels
         public ICommand RenameConversationCommand { get; }
         public ICommand SelectConversationCommand { get; }
 
-        // Add import PDF command
-        public ICommand ImportPdfCommand { get; }
-
         public Func<string?>? RequestFileDialog { get; set; }
-        // add a public Func for PDF file dialog; assigned by the View
-        public Func<string?>? RequestPdfFileDialog { get; set; }
         #endregion
 
         public MainViewModel()
         {
-            // existing command initializations
             LoadSettingsCommand = new RelayCommand(async _ => await LoadAppSettingsAsync());
             SaveSettingsCommand = new RelayCommand(_ => SaveAppSettings());
             LoadModelCommand = new RelayCommand(async _ => await ExecuteLoadModelAsync(), _ => !IsGenerating);
@@ -149,18 +145,13 @@ namespace LlamaChatApp.ViewModels
             ClearChatCommand = new RelayCommand(_ => ExecuteClearChat(), _ => IsModelLoaded && IsIdle);
             ExitCommand = new RelayCommand(_ => { Dispose(); Application.Current.Shutdown(); });
 
-            // conversation commands
             NewConversationCommand = new RelayCommand(_ => CreateNewConversation());
             CloseConversationCommand = new RelayCommand(obj => CloseConversation(obj as ChatConversation), obj => obj is ChatConversation);
             SelectConversationCommand = new RelayCommand(obj => CurrentConversation = obj as ChatConversation, obj => obj is ChatConversation);
             RenameConversationCommand = new RelayCommand(obj => { /* optional: implement rename dialog */ }, obj => obj is ChatConversation);
 
-            // Import PDF command
-            ImportPdfCommand = new RelayCommand(async _ => await ExecuteImportPdfAsync());
-
-            // initialize with a default conversation
-            var conv = new ChatConversation { Title = "Conversation 1" };
-            conv.Messages.Add(new ChatMessage { Author = "System", Text = "Welcome! Please open a GGUF model file from the File menu to begin.", AuthorBrush = Brushes.DarkSlateGray });
+            var conv = new ChatConversation { Title = AppConstants.FIRST_CONVERSATION_TITLE };
+            conv.Messages.Add(new ChatMessage { Author = AppConstants.ROLE_SYSTEM, Text = AppConstants.MESSAGE_WELCOME, AuthorBrush = Brushes.DarkSlateGray });
             Conversations.Add(conv);
             CurrentConversation = conv;
         }
@@ -169,53 +160,97 @@ namespace LlamaChatApp.ViewModels
 
         private async Task LoadAppSettingsAsync()
         {
-            Directory.CreateDirectory(Path.GetDirectoryName(_settingsFilePath)!);
-            if (File.Exists(_settingsFilePath))
+            LoadingState = AppLoadingState.LoadingSettings;
+            StatusMessage = "Loading settings...";
+            
+            try
             {
-                try
+                Directory.CreateDirectory(Path.GetDirectoryName(_settingsFilePath)!);
+                if (File.Exists(_settingsFilePath))
                 {
-                    var json = await File.ReadAllTextAsync(_settingsFilePath);
-                    _settings = JsonSerializer.Deserialize<AppSettings>(json) ?? new AppSettings();
+                    try
+                    {
+                        var json = await File.ReadAllTextAsync(_settingsFilePath);
+                        _settings = JsonSerializer.Deserialize<AppSettings>(json) ?? new AppSettings();
+                    }
+                    catch (Exception ex)
+                    {
+                        System.Diagnostics.Debug.WriteLine($"Failed to load settings: {ex.Message}");
+                        MessageBox.Show($"Could not load settings: {ex.Message}", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+                        _settings = new AppSettings();
+                    }
                 }
-                catch (Exception ex)
+                else
                 {
-                    MessageBox.Show($"Could not load settings: {ex.Message}", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
                     _settings = new AppSettings();
                 }
-            }
 
-            Temperature = _settings.Temperature;
-            TopP = _settings.TopP;
-            MaxTokens = _settings.MaxTokens;
-            GpuLayerCount = _settings.GpuLayerCount;
-            ContextSize = _settings.ContextSize;
-            SystemPrompt = _settings.SystemPrompt;
+                ApplySettings(_settings);
+                await LoadConversationsAsync();
 
-            // Load persisted conversations if any
-            await LoadConversationsAsync();
-
-            if (!string.IsNullOrEmpty(_settings.LastModelPath) && File.Exists(_settings.LastModelPath))
-            {
-                await LoadModelAsync(_settings.LastModelPath);
-            }
-            else
-            {
-                // If no conversations were loaded, ensure a welcome message exists in the default conversation
-                if (Conversations.Count == 0)
+                if (!string.IsNullOrEmpty(_settings.LastModelPath) && File.Exists(_settings.LastModelPath))
                 {
-                    var conv = new ChatConversation { Title = "Conversation 1" };
-                    conv.Messages.Add(new ChatMessage { Author = "System", Text = "Welcome! Please open a GGUF model file from the File menu to begin.", AuthorBrush = Brushes.DarkSlateGray });
-                    Conversations.Add(conv);
-                    CurrentConversation = conv;
+                    await LoadModelAsync(_settings.LastModelPath);
                 }
-                else if (CurrentConversation == null && Conversations.Count > 0)
+                else
                 {
-                    CurrentConversation = Conversations[0];
+                    EnsureDefaultConversation();
+                    StatusMessage = "Ready";
                 }
+            }
+            finally
+            {
+                LoadingState = AppLoadingState.Idle;
+            }
+        }
+
+        private void ApplySettings(AppSettings settings)
+        {
+            Temperature = settings.Temperature;
+            TopP = settings.TopP;
+            MaxTokens = settings.MaxTokens;
+            GpuLayerCount = settings.GpuLayerCount;
+            ContextSize = settings.ContextSize;
+            SystemPrompt = settings.SystemPrompt;
+        }
+
+        private void EnsureDefaultConversation()
+        {
+            if (Conversations.Count == 0)
+            {
+                var conv = new ChatConversation { Title = AppConstants.FIRST_CONVERSATION_TITLE };
+                conv.Messages.Add(new ChatMessage 
+                { 
+                    Author = AppConstants.ROLE_SYSTEM, 
+                    Text = AppConstants.MESSAGE_WELCOME, 
+                    AuthorBrush = Brushes.DarkSlateGray 
+                });
+                Conversations.Add(conv);
+                CurrentConversation = conv;
+            }
+            else if (CurrentConversation == null && Conversations.Count > 0)
+            {
+                CurrentConversation = Conversations[0];
             }
         }
 
         private void SaveAppSettings()
+        {
+            try
+            {
+                UpdateSettingsFromUI();
+                var json = JsonSerializer.Serialize(_settings, new JsonSerializerOptions { WriteIndented = true });
+                Directory.CreateDirectory(Path.GetDirectoryName(_settingsFilePath)!);
+                File.WriteAllText(_settingsFilePath, json);
+                SaveConversations();
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Failed to save settings: {ex.Message}");
+            }
+        }
+
+        private void UpdateSettingsFromUI()
         {
             _settings.Temperature = Temperature;
             _settings.TopP = TopP;
@@ -223,17 +258,6 @@ namespace LlamaChatApp.ViewModels
             _settings.GpuLayerCount = GpuLayerCount;
             _settings.ContextSize = ContextSize;
             _settings.SystemPrompt = SystemPrompt;
-
-            var json = JsonSerializer.Serialize(_settings, new JsonSerializerOptions { WriteIndented = true });
-            Directory.CreateDirectory(Path.GetDirectoryName(_settingsFilePath)!);
-            File.WriteAllText(_settingsFilePath, json);
-
-            // Also save conversations
-            try
-            {
-                SaveConversations();
-            }
-            catch { }
         }
 
         private void SaveConversations()
@@ -312,26 +336,25 @@ namespace LlamaChatApp.ViewModels
 
         private async Task LoadModelAsync(string modelPath)
         {
+            if (string.IsNullOrEmpty(modelPath) || !File.Exists(modelPath))
+            {
+                MessageBox.Show(AppConstants.MESSAGE_FILE_NOT_FOUND, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
             IsGenerating = true;
             IsModelLoaded = false;
+            LoadingState = AppLoadingState.LoadingModel;
             ChatMessages.Clear();
-            ChatMessages.Add(new ChatMessage { Author = "System", Text = "Loading model, please wait...", AuthorBrush = Brushes.DarkSlateGray });
+            ChatMessages.Add(new ChatMessage { Author = AppConstants.ROLE_SYSTEM, Text = AppConstants.MESSAGE_LOADING, AuthorBrush = Brushes.DarkSlateGray });
+            StatusMessage = "Loading model...";
 
             try
             {
                 await Task.Run(() =>
                 {
-                    _model?.Dispose();
-                    _context?.Dispose();
-
-                    var parameters = new ModelParams(modelPath)
-                    {
-                        ContextSize = (uint)ContextSize,
-                        GpuLayerCount = GpuLayerCount
-                    };
-                    _model = LLamaWeights.LoadFromFile(parameters);
-
-                    ResetContextAndChat();
+                    DisposeModel();
+                    LoadModelInternal(modelPath);
                 });
 
                 _settings.LastModelPath = modelPath;
@@ -339,30 +362,52 @@ namespace LlamaChatApp.ViewModels
                 ChatMessages.Clear();
                 ChatMessages.Add(new ChatMessage
                 {
-                    Author = "System",
-                    Text = $"Model loaded successfully: **{ModelName}**\nYour system prompt has been applied. You can start chatting now!",
+                    Author = AppConstants.ROLE_SYSTEM,
+                    Text = string.Format(AppConstants.MESSAGE_LOADED_SUCCESS, ModelName),
                     AuthorBrush = Brushes.DarkSlateGray
                 });
                 IsModelLoaded = true;
+                StatusMessage = $"Model ready: {ModelName}";
             }
             catch (Exception ex)
             {
+                System.Diagnostics.Debug.WriteLine($"Model load error: {ex}");
                 MessageBox.Show($"Failed to load model: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                ChatMessages.Add(new ChatMessage { Author = "Error", Text = $"Could not load model.\nDetails: {ex.Message}", AuthorBrush = Brushes.Red });
+                ChatMessages.Add(new ChatMessage { Author = AppConstants.ROLE_ERROR, Text = string.Format(AppConstants.MESSAGE_LOAD_FAILED, ex.Message), AuthorBrush = Brushes.Red });
                 ModelName = "Load Failed";
                 _settings.LastModelPath = null;
-                _model = null;
-                _context = null;
+                DisposeModel();
+                StatusMessage = "Model load failed";
             }
             finally
             {
                 IsGenerating = false;
+                LoadingState = AppLoadingState.Idle;
             }
+        }
+
+        private void LoadModelInternal(string modelPath)
+        {
+            var parameters = new ModelParams(modelPath)
+            {
+                ContextSize = (uint)ContextSize,
+                GpuLayerCount = GpuLayerCount
+            };
+            _model = LLamaWeights.LoadFromFile(parameters);
+            ResetContextAndChat();
+        }
+
+        private void DisposeModel()
+        {
+            _context?.Dispose();
+            _context = null;
+            _model?.Dispose();
+            _model = null;
         }
 
         private void CreateNewConversation()
         {
-            var conv = new ChatConversation { Title = $"Conversation {Conversations.Count + 1}" };
+            var conv = new ChatConversation { Title = string.Format(AppConstants.DEFAULT_CONVERSATION_TITLE, Conversations.Count + 1) };
             Conversations.Add(conv);
             CurrentConversation = conv;
         }
@@ -384,12 +429,14 @@ namespace LlamaChatApp.ViewModels
         {
             ResetContextAndChat();
             ChatMessages.Clear();
-            ChatMessages.Add(new ChatMessage { Author = "System", Text = "Chat cleared. The system prompt has been re-applied. You can start a new conversation.", AuthorBrush = Brushes.DarkSlateGray });
+            ChatMessages.Add(new ChatMessage { Author = AppConstants.ROLE_SYSTEM, Text = AppConstants.MESSAGE_CHAT_CLEARED, AuthorBrush = Brushes.DarkSlateGray });
+            StatusMessage = "Chat cleared";
         }
 
         private void ResetContextAndChat()
         {
-            if (_model == null || string.IsNullOrEmpty(_settings.LastModelPath)) return;
+            if (_model == null || string.IsNullOrEmpty(_settings.LastModelPath))
+                return;
 
             _context?.Dispose();
 
@@ -400,7 +447,6 @@ namespace LlamaChatApp.ViewModels
             };
             _context = _model.CreateContext(parameters);
 
-            // --- FIX 1: This is the standard way to create a session with a system prompt ---
             var executor = new InteractiveExecutor(_context);
             var history = new ChatHistory();
             history.AddMessage(AuthorRole.System, SystemPrompt);
@@ -409,27 +455,35 @@ namespace LlamaChatApp.ViewModels
 
         private async Task HandleUserPrompt()
         {
-            if (_session == null) return;
+            if (_session == null)
+                return;
+
             var prompt = UserInputText;
+            if (string.IsNullOrWhiteSpace(prompt))
+                return;
+
             UserInputText = string.Empty;
             IsGenerating = true;
+            LoadingState = AppLoadingState.Generating;
+            StatusMessage = "Generating response...";
 
-            ChatMessages.Add(new ChatMessage
+            var userMessage = new ChatMessage
             {
-                Author = "You",
+                Author = AppConstants.ROLE_USER,
                 Text = prompt,
                 Alignment = HorizontalAlignment.Right,
                 AuthorBrush = Brushes.DodgerBlue,
-                BubbleBackground = new SolidColorBrush(Color.FromRgb(225, 245, 254))
-            });
+                BubbleBackground = new SolidColorBrush(Color.FromRgb(AppConstants.Colors.USER_R, AppConstants.Colors.USER_G, AppConstants.Colors.USER_B))
+            };
+            ChatMessages.Add(userMessage);
 
             var assistantMessage = new ChatMessage
             {
-                Author = "Assistant",
+                Author = AppConstants.ROLE_ASSISTANT,
                 Text = "▍",
                 Alignment = HorizontalAlignment.Left,
                 AuthorBrush = Brushes.DarkGreen,
-                BubbleBackground = new SolidColorBrush(Color.FromRgb(240, 240, 240))
+                BubbleBackground = new SolidColorBrush(Color.FromRgb(AppConstants.Colors.ASSISTANT_R, AppConstants.Colors.ASSISTANT_G, AppConstants.Colors.ASSISTANT_B))
             };
             ChatMessages.Add(assistantMessage);
 
@@ -438,196 +492,59 @@ namespace LlamaChatApp.ViewModels
 
             try
             {
-                await Task.Run(async () =>
-                {
-                    var pipeline = new DefaultSamplingPipeline { Temperature = (float)Temperature, TopP = (float)TopP, RepeatPenalty = 1.1f };
-                    var inferenceParams = new InferenceParams()
-                    {
-                        MaxTokens = MaxTokens,
-                        AntiPrompts = new List<string> { "<|eot_id|>", "User:", "You:" },
-                        SamplingPipeline = pipeline
-                    };
-
-                    // --- FIX 2 & 3: We must wrap the user's prompt in a Message object ---
-                    // This resolves all the argument conversion errors.
-                    var userMessage = new ChatHistory.Message(AuthorRole.User, prompt);
-
-                    await foreach (var text in _session.ChatAsync(userMessage, inferenceParams, _cts.Token))
-                    {
-                        Application.Current.Dispatcher.Invoke(() =>
-                        {
-                            if (firstToken) { assistantMessage.Text = ""; firstToken = false; }
-                            assistantMessage.Text += text;
-                        });
-                    }
-                }, _cts.Token);
+                await Task.Run(async () => await GenerateResponseAsync(prompt, assistantMessage, firstToken), _cts.Token);
+                StatusMessage = "Ready";
             }
-            catch (OperationCanceledException) { assistantMessage.Text += " [generation stopped]"; }
+            catch (OperationCanceledException)
+            {
+                assistantMessage.Text += AppConstants.MESSAGE_GENERATION_STOPPED;
+                StatusMessage = "Generation stopped";
+            }
             catch (Exception ex)
             {
+                System.Diagnostics.Debug.WriteLine($"Inference error: {ex}");
                 MessageBox.Show($"An error occurred during inference: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                assistantMessage.Text += $"\n[Error: {ex.Message}]";
+                assistantMessage.Text += string.Format(AppConstants.MESSAGE_GENERATION_ERROR, ex.Message);
+                StatusMessage = "Generation error";
             }
             finally
             {
-                _cts.Dispose(); _cts = null;
+                _cts?.Dispose();
+                _cts = null;
                 IsGenerating = false;
+                LoadingState = AppLoadingState.Idle;
             }
         }
 
-        // New: create a summarized import that creates a single document entry and optional summary
-        private async Task ExecuteImportPdfAsync()
+        private async Task GenerateResponseAsync(string prompt, ChatMessage assistantMessage, bool firstToken)
         {
-            var path = RequestPdfFileDialog?.Invoke();
-            if (string.IsNullOrEmpty(path) || !File.Exists(path)) return;
-
-            try
+            var pipeline = new DefaultSamplingPipeline 
+            { 
+                Temperature = (float)Temperature, 
+                TopP = (float)TopP, 
+                RepeatPenalty = AppConstants.DEFAULT_REPEAT_PENALTY
+            };
+            
+            var inferenceParams = new InferenceParams
             {
-                string fullText = string.Empty;
-                await Task.Run(() =>
-                {
-                    var sb = new StringBuilder();
-                    using var document = PdfDocument.Open(path);
-                    foreach (var page in document.GetPages())
-                    {
-                        var text = page.Text;
-                        if (!string.IsNullOrWhiteSpace(text))
-                        {
-                            sb.AppendLine(text);
-                        }
-                    }
-                    fullText = sb.ToString().Trim();
-                });
+                MaxTokens = MaxTokens,
+                AntiPrompts = AppConstants.ANTI_PROMPTS.ToList(),
+                SamplingPipeline = pipeline
+            };
 
-                if (string.IsNullOrWhiteSpace(fullText))
-                {
-                    Application.Current.Dispatcher.Invoke(() =>
-                    {
-                        var notice = new ChatConversation { Title = Path.GetFileName(path) };
-                        notice.Messages.Add(new ChatMessage { Author = "System", Text = "No extractable text found in PDF.", AuthorBrush = Brushes.DarkSlateGray });
-                        Conversations.Add(notice);
-                        CurrentConversation = notice;
-                        SaveConversations();
-                    });
-                    return;
-                }
+            var userMessage = new ChatHistory.Message(AuthorRole.User, prompt);
 
-                // Clean and normalize whitespace
-                fullText = Regex.Replace(fullText, "\r\n|\n|\r", "\n");
-                fullText = Regex.Replace(fullText, "\n{2,}", "\n\n");
-
-                // Build a document message containing the full text but keep it as a single message for reference
-                var conv = new ChatConversation { Title = Path.GetFileName(path), SourcePath = path };
-                conv.Messages.Add(new ChatMessage
-                {
-                    Author = "Document",
-                    Text = fullText,
-                    Alignment = HorizontalAlignment.Left,
-                    AuthorBrush = Brushes.Gray,
-                    BubbleBackground = new SolidColorBrush(Color.FromRgb(250, 250, 250))
-                });
-
+            await foreach (var text in _session.ChatAsync(userMessage, inferenceParams, _cts.Token))
+            {
                 Application.Current.Dispatcher.Invoke(() =>
                 {
-                    Conversations.Add(conv);
-                    CurrentConversation = conv;
-                    SaveConversations();
+                    if (firstToken) 
+                    { 
+                        assistantMessage.Text = ""; 
+                        firstToken = false; 
+                    }
+                    assistantMessage.Text += text;
                 });
-
-                // Generate a short summary in background (if model loaded use model, otherwise use heuristic)
-                _ = Task.Run(async () =>
-                {
-                    string summary = await GeneratePdfSummaryAsync(fullText, Path.GetFileName(path));
-                    Application.Current.Dispatcher.Invoke(() =>
-                    {
-                        conv.Summary = summary;
-                        conv.Messages.Insert(0, new ChatMessage { Author = "Summary", Text = summary, AuthorBrush = Brushes.DarkSlateGray, BubbleBackground = new SolidColorBrush(Color.FromRgb(245, 245, 245)) });
-                        SaveConversations();
-                    });
-                });
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Failed to import PDF: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-        }
-
-        private async Task<string> GeneratePdfSummaryAsync(string fullText, string title)
-        {
-            try
-            {
-                if (_session != null && IsModelLoaded)
-                {
-                    // Use the local model to create a short summary prompt
-                    var prompt = $"Summarize the following document titled '{title}' into 5 concise bullet points:\n\n{(fullText.Length > 20000 ? fullText.Substring(0, 20000) : fullText)}";
-
-                    // Send the prompt synchronously via the existing chat machinery
-                    var tcs = new TaskCompletionSource<string>();
-                    var summaryBuilder = new StringBuilder();
-
-                    var assistantMessage = new ChatMessage { Author = "Assistant", Text = "▍", AuthorBrush = Brushes.DarkGreen };
-                    Application.Current.Dispatcher.Invoke(() =>
-                    {
-                        CurrentConversation?.Messages.Add(assistantMessage);
-                    });
-
-                    var localCts = new CancellationTokenSource(TimeSpan.FromSeconds(60));
-                    try
-                    {
-                        await Task.Run(async () =>
-                        {
-                            var pipeline = new DefaultSamplingPipeline { Temperature = 0.2f, TopP = 0.9f, RepeatPenalty = 1.1f };
-                            var inferenceParams = new InferenceParams
-                            {
-                                MaxTokens = 300,
-                                SamplingPipeline = pipeline
-                            };
-
-                            var userMessage = new ChatHistory.Message(AuthorRole.User, prompt);
-                            await foreach (var text in _session.ChatAsync(userMessage, inferenceParams, localCts.Token))
-                            {
-                                summaryBuilder.Append(text);
-                            }
-
-                            tcs.SetResult(summaryBuilder.ToString());
-                        }, localCts.Token);
-
-                        var result = await tcs.Task;
-                        Application.Current.Dispatcher.Invoke(() => assistantMessage.Text = result);
-                        return result;
-                    }
-                    catch (Exception ex)
-                    {
-                        Application.Current.Dispatcher.Invoke(() => assistantMessage.Text = $"[Summary error: {ex.Message}]" );
-                        return $"[Summary failed: {ex.Message}]";
-                    }
-                    finally
-                    {
-                        localCts.Dispose();
-                    }
-                }
-                else
-                {
-                    // Heuristic summary: take the first N sentences or first 500 chars
-                    var sentences = Regex.Split(fullText, "(?<=[.!?])\\s+");
-                    var take = Math.Min(5, sentences.Length);
-                    var sb = new StringBuilder();
-                    for (int i = 0; i < take; i++)
-                    {
-                        sb.AppendLine("- " + sentences[i].Trim());
-                    }
-
-                    if (sb.Length == 0)
-                    {
-                        var preview = fullText.Length > 500 ? fullText.Substring(0, 500) + "..." : fullText;
-                        sb.AppendLine(preview);
-                    }
-                    return sb.ToString().Trim();
-                }
-            }
-            catch (Exception ex)
-            {
-                return $"[Summary error: {ex.Message}]";
             }
         }
 
@@ -638,44 +555,26 @@ namespace LlamaChatApp.ViewModels
             try
             {
                 _cts?.Cancel();
-            }
-            catch { }
-
-            try
-            {
                 _cts?.Dispose();
             }
-            catch { }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error disposing cancellation token: {ex.Message}");
+            }
+
             _cts = null;
+            _session = null;
 
             try
             {
-                _session = null;
-            }
-            catch { }
-
-            try
-            {
-                _context?.Dispose();
-            }
-            catch { }
-            _context = null;
-
-            try
-            {
-                _model?.Dispose();
-            }
-            catch { }
-            _model = null;
-
-            // Save conversations before exiting
-            try
-            {
+                DisposeModel();
                 SaveConversations();
             }
-            catch { }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error during disposal: {ex.Message}");
+            }
 
-            // Ensure UI requery so buttons update after disposal
             CommandManager.InvalidateRequerySuggested();
             GC.SuppressFinalize(this);
         }
