@@ -145,6 +145,7 @@ namespace LlamaChatApp.ViewModels
         public ICommand ExportConversationCommand { get; }
         public ICommand ImportConversationCommand { get; }
         public ICommand RegenerateResponseCommand { get; }
+        public ICommand MessageEditedCommand { get; }
 
         public Func<string?>? RequestFileDialog { get; set; }
         public Func<string, string, string?>? RequestSaveFileDialog { get; set; }
@@ -167,11 +168,18 @@ namespace LlamaChatApp.ViewModels
                         RenameConversationCommand = new RelayCommand(obj => { /* optional: implement rename dialog */ }, obj => obj is ChatConversation);
                                     SwitchToLightThemeCommand = new RelayCommand(_ => ChangeTheme("Themes/LightTheme.xaml"));
                                     SwitchToDarkThemeCommand = new RelayCommand(_ => ChangeTheme("Themes/DarkTheme.xaml"));
-                                    ExportConversationCommand = new RelayCommand(_ => ExportConversation(), _ => CurrentConversation != null);
-                                    ImportConversationCommand = new RelayCommand(_ => ImportConversation());
-                                    RegenerateResponseCommand = new RelayCommand(async _ => await RegenerateResponse(), _ => IsIdle && IsModelLoaded && ChatMessages.Count > 0 && ChatMessages.Last().Author == AppConstants.ROLE_ASSISTANT);
-                        
-                                    var conv = new ChatConversation { Title = AppConstants.FIRST_CONVERSATION_TITLE };            conv.Messages.Add(new ChatMessage { Author = AppConstants.ROLE_SYSTEM, Text = AppConstants.MESSAGE_WELCOME, AuthorBrush = Brushes.DarkSlateGray });
+                                                ExportConversationCommand = new RelayCommand(_ => ExportConversation(), _ => CurrentConversation != null);
+                                                ImportConversationCommand = new RelayCommand(_ => ImportConversation());
+                                                RegenerateResponseCommand = new RelayCommand(async _ => await RegenerateResponse(), _ => IsIdle && IsModelLoaded && ChatMessages.Count > 0);
+                                                MessageEditedCommand = new RelayCommand(_ =>
+                                                {
+                                                    if (CurrentConversation != null && IsModelLoaded)
+                                                    {
+                                                        RestoreContextFromConversation(CurrentConversation);
+                                                    }
+                                                }, _ => IsIdle && IsModelLoaded);
+                                    
+                                                var conv = new ChatConversation { Title = AppConstants.FIRST_CONVERSATION_TITLE };            conv.Messages.Add(new ChatMessage { Author = AppConstants.ROLE_SYSTEM, Text = AppConstants.MESSAGE_WELCOME, AuthorBrush = Brushes.DarkSlateGray });
             Conversations.Add(conv);
             CurrentConversation = conv;
         }
@@ -262,43 +270,159 @@ namespace LlamaChatApp.ViewModels
             }
         }
 
-        private async Task RegenerateResponse()
-        {
-            if (_session == null || CurrentConversation == null) return;
+                private async Task RegenerateResponse(object? parameter = null)
 
-            // 1. Identify the last assistant message and the preceding user message
-            var lastMsg = ChatMessages.LastOrDefault();
-            if (lastMsg == null || lastMsg.Author != AppConstants.ROLE_ASSISTANT) return;
+                {
 
-            // Remove last assistant message
-            ChatMessages.Remove(lastMsg);
-            
-            // Get the user prompt that triggered it (it should be the last one now)
-            var userMsg = ChatMessages.LastOrDefault();
-            if (userMsg == null || userMsg.Author != AppConstants.ROLE_USER) return;
+                    if (_session == null || CurrentConversation == null) return;
 
-            // 2. IMPORTANT: We need to rewind the ChatSession history
-            // LLamaSharp's ChatSession tracks history. We need to remove the last Assistant response AND the User message 
-            // from the history, because we are going to re-submit the User message.
-            // If we don't remove the user message from history, ChatSession will see it twice.
-            
-            // Note: ChatHistory.Messages is a List<ChatHistory.Message>
-            var history = _session.History.Messages;
-            if (history.Count >= 2)
-            {
-                // Assuming standard turn-taking: ... User, Assistant
-                // Remove Assistant response
-                _session.History.Messages.RemoveAt(_session.History.Messages.Count - 1);
-                // Remove User prompt (because ChatAsync adds it again)
-                _session.History.Messages.RemoveAt(_session.History.Messages.Count - 1);
-            }
+        
 
-            // 3. Re-trigger generation using the user's text
-            UserInputText = userMsg.Text;
-            ChatMessages.Remove(userMsg); // Remove from UI temporarily, HandleUserPrompt will re-add it
-            
-            await HandleUserPrompt();
-        }
+                    // Determine the context for regeneration
+
+                    ChatMessage? targetMessage = parameter as ChatMessage;
+
+        
+
+                    // If no specific message was targeted, default to the last message if it's an assistant's response
+
+                    if (targetMessage == null)
+
+                    {
+
+                        var last = ChatMessages.LastOrDefault();
+
+                        if (last != null && last.Author == AppConstants.ROLE_ASSISTANT)
+
+                        {
+
+                            targetMessage = last;
+
+                        }
+
+                    }
+
+                    
+
+                    // If we still don't have a valid target message from the assistant, we can't regenerate
+
+                    if (targetMessage == null || targetMessage.Author != AppConstants.ROLE_ASSISTANT) return;
+
+        
+
+                    // Find the index of this message
+
+                    int index = ChatMessages.IndexOf(targetMessage);
+
+                    if (index == -1) return;
+
+        
+
+                    // We need the *preceding* user message to prompt generation again
+
+                    // Ensure there is a preceding message and it is from the user
+
+                    if (index == 0) return; // No preceding message
+
+                    var userMsg = ChatMessages[index - 1];
+
+                    if (userMsg.Author != AppConstants.ROLE_USER) return;
+
+        
+
+                    // Truncate the conversation from the UI (remove the target assistant message and everything after)
+
+                    // Actually, we want to remove the target message. 
+
+                    // If there are messages *after* this one, we should probably remove them too to maintain flow,
+
+                    // or just regenerate this single response? Standard behavior is usually "Regenerate" replaces the last response.
+
+                    // If the user right-clicked a message in the middle of history, "Regenerate" usually implies "Cut off here and retry".
+
+                    
+
+                    // Let's remove everything from 'index' onwards.
+
+                    while (ChatMessages.Count > index)
+
+                    {
+
+                        ChatMessages.RemoveAt(ChatMessages.Count - 1);
+
+                    }
+
+        
+
+                    // Now we also need to rewind the LLM session history to match.
+
+                    // The session history should reflect the state *before* the user message was processed?
+
+                    // No, wait. 
+
+                    // _session.History contains (User, Assistant, User, Assistant...)
+
+                    // We want to remove the last (Assistant) pair corresponding to this interaction.
+
+                    // But if we are in the middle of the chat, we need to rebuild the context up to that point.
+
+        
+
+                    // The safest and most robust way to handle "Regenerate from middle" is to:
+
+                    // 1. Identify the messages we want to keep (everything up to the user prompt).
+
+                    // 2. Clear the current session/context.
+
+                    // 3. Restore context from the truncated conversation.
+
+                    
+
+                    // However, that might be slow. 
+
+                    // If we are just regenerating the *last* message, we can pop from history.
+
+                    // If we are regenerating a middle message, we MUST rebuild context because LLamaSharp doesn't support "delete from middle of history".
+
+                    
+
+                    // Let's implement the robust "Truncate and Restore" approach.
+
+                    
+
+                    // 1. We already truncated ChatMessages (the UI list).
+
+                    // The userMsg (prompt) is at ChatMessages.Last().
+
+                    
+
+                    // 2. Remove the user message from UI temporarily because HandleUserPrompt adds it back?
+
+                    // Wait, HandleUserPrompt adds the user message to UI.
+
+                    // If we want to reuse HandleUserPrompt, we should remove the user message from UI too.
+
+                    ChatMessages.Remove(userMsg);
+
+                    UserInputText = userMsg.Text; // Set input to the prompt text
+
+        
+
+                    // 3. Now we need to sync the LLM context to this state (which is effectively "Conversation up to index-2").
+
+                    // Since we modified the CurrentConversation.Messages (via ChatMessages binding), 
+
+                    // calling RestoreContextFromConversation should do exactly what we want.
+
+                    RestoreContextFromConversation(CurrentConversation);
+
+        
+
+                    // 4. Trigger generation
+
+                    await HandleUserPrompt();
+
+                }
 
         #region Command Logic and Core Methods
 

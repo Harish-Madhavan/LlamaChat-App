@@ -144,6 +144,10 @@ namespace LlamaChatApp
             if (sender is MenuItem mi && mi.CommandParameter is ChatMessage msg)
             {
                 _viewModel.ChatMessages.Remove(msg);
+                if (_viewModel.MessageEditedCommand.CanExecute(null))
+                {
+                    _viewModel.MessageEditedCommand.Execute(null);
+                }
             }
         }
 
@@ -152,6 +156,10 @@ namespace LlamaChatApp
             if (sender is Button b && b.CommandParameter is ChatMessage msg)
             {
                 msg.SaveEdit();
+                if (_viewModel.MessageEditedCommand.CanExecute(msg))
+                {
+                    _viewModel.MessageEditedCommand.Execute(msg);
+                }
             }
         }
 
@@ -160,6 +168,20 @@ namespace LlamaChatApp
             if (sender is Button b && b.CommandParameter is ChatMessage msg)
             {
                 msg.CancelEdit();
+            }
+        }
+
+        private void ChatBubble_PreviewMouseRightButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            if (sender is Border border && border.ContextMenu != null)
+            {
+                // Set the DataContext of the ContextMenu to match the Border's DataContext (the ChatMessage)
+                // This ensures commands like Copy/Edit/Delete work correctly
+                border.ContextMenu.DataContext = border.DataContext;
+                
+                border.ContextMenu.PlacementTarget = border;
+                border.ContextMenu.IsOpen = true;
+                e.Handled = true;
             }
         }
 

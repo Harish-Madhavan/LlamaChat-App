@@ -104,7 +104,6 @@
             <ListView.ItemContainerStyle>
                 <Style TargetType="ListViewItem">
                     <Setter Property="Focusable" Value="False"/>
-                    <Setter Property="IsHitTestVisible" Value="False"/>
                 </Style>
             </ListView.ItemContainerStyle>
             <ListView.ItemTemplate>
@@ -122,28 +121,32 @@
                                                                    Foreground="{Binding AuthorBrush}"
                                                                    FontWeight="Bold"/>
                                                     </DockPanel>
-                                                    <Border Background="{Binding BubbleBackground}" CornerRadius="10">                                <Grid>
-                                                                        <Grid.ContextMenu>
-                                                                            <ContextMenu>
-                                                                                <MenuItem Header="Regenerate" Command="{Binding DataContext.RegenerateResponseCommand, RelativeSource={RelativeSource AncestorType=Window}}" />
-                                                                                <Separator />
-                                                                                <MenuItem Header="Copy" Click="CopyMessage_Click" CommandParameter="{Binding}" />
-                                                                                <MenuItem Header="Edit" Click="EditMessage_Click" CommandParameter="{Binding}" />
-                                                                                <MenuItem Header="Delete" Click="DeleteMessage_Click" CommandParameter="{Binding}" />
-                                                                            </ContextMenu>
-                                                                        </Grid.ContextMenu>
-
-                                    <StackPanel>
-                                        <TextBox Text="{Binding Text, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
-                                                 Visibility="{Binding IsEditing, Converter={StaticResource BooleanToVisibilityConverter}}" 
-                                                 Padding="10" Background="Transparent" BorderThickness="0" AcceptsReturn="True"/>
-
-                                        <md:MarkdownViewer Markdown="{Binding Text}"
-                                                           Padding="10"
-                                                           Background="Transparent"
-                                                           Style="{StaticResource InverseVisibilityBasedOnIsEditing}" />
-
-                                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,4,4,4">
+                                                                                                        <Border Background="{Binding BubbleBackground}" CornerRadius="10">                                <Grid>
+                                                                                        <StackPanel>
+                                                                                                                                                                                        <Border Background="Transparent" PreviewMouseRightButtonUp="ChatBubble_PreviewMouseRightButtonUp"
+                                                                                                                                                                                                Tag="{Binding DataContext, RelativeSource={RelativeSource AncestorType=Window}}">
+                                                                                                                                                                                            <Border.ContextMenu>
+                                                                                                                                                                                                <ContextMenu>
+                                                                                                                                                                                                    <MenuItem Header="Regenerate" 
+                                                                                                                                                                                                              Command="{Binding PlacementTarget.Tag.RegenerateResponseCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}" 
+                                                                                                                                                                                                              CommandParameter="{Binding}" />                                                                                                                                                                                                             <Separator />                                                                                                        <MenuItem Header="Copy" Click="CopyMessage_Click" CommandParameter="{Binding}" />
+                                                                                                        <MenuItem Header="Edit" Click="EditMessage_Click" CommandParameter="{Binding}" />
+                                                                                                        <MenuItem Header="Delete" Click="DeleteMessage_Click" CommandParameter="{Binding}" />
+                                                                                                    </ContextMenu> 
+                                                                                                </Border.ContextMenu>
+                                                                                                <Grid>
+                                                                                                    <TextBox Text="{Binding Text, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                                                                             Visibility="{Binding IsEditing, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                                                                             Padding="10" Background="Transparent" BorderThickness="0" AcceptsReturn="True"/>
+                                                    
+                                                                                                    <md:MarkdownViewer Markdown="{Binding Text}"
+                                                                                                                       Padding="10"
+                                                                                                                       Background="Transparent"
+                                                                                                                       Style="{StaticResource InverseVisibilityBasedOnIsEditing}" />
+                                                                                                </Grid>
+                                                                                            </Border>
+                                                    
+                                                                                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,4,4,4">
                                             <Button Content="Save" Click="SaveEdit_Click" CommandParameter="{Binding}" Visibility="{Binding IsEditing, Converter={StaticResource BooleanToVisibilityConverter}}" Margin="0,0,4,0" />
                                             <Button Content="Cancel" Click="CancelEdit_Click" CommandParameter="{Binding}" Visibility="{Binding IsEditing, Converter={StaticResource BooleanToVisibilityConverter}}" />
                                         </StackPanel>
