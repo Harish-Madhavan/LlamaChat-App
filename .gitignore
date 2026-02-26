@@ -6,3 +6,5 @@
 !*.csproj
 !*.sln
 !*.json
+bin/
+obj/
