@@ -1,9 +1,6 @@
-﻿// ViewModels/MainViewModel.cs
-using LLama;
 using LLama.Common;
-using LLama.Sampling;
 using LlamaChatApp.Commands;
-using LlamaChatApp;
+using LlamaChatApp.Services;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -21,14 +18,12 @@ namespace LlamaChatApp.ViewModels
     public class MainViewModel : ViewModelBase, IDisposable
     {
         #region Private Fields
-        private LLamaWeights? _model;
-        private LLamaContext? _context;
-        private ChatSession? _session;
+        private readonly ILLamaService _llamaService;
         private CancellationTokenSource? _cts;
 
         private AppSettings _settings = new AppSettings();
         private readonly string _settingsFilePath = AppConstants.SETTINGS_FILE_PATH;
-        private readonly string _conversationsFilePath = AppConstants.CONVERSATIONS_FILE_PATH;
+        private readonly string _conversationsFilePath = AppConstants.CONVERSATIONS_FILE_PATH;    
         #endregion
 
         #region UI Properties
@@ -76,7 +71,6 @@ namespace LlamaChatApp.ViewModels
             set { _userInputText = value; OnPropertyChanged(); CommandManager.InvalidateRequerySuggested(); }
         }
 
-        // Replace single ChatMessages with multiple conversations
         public ObservableCollection<ChatConversation> Conversations { get; } = new ObservableCollection<ChatConversation>();
 
         private ChatConversation? _currentConversation;
@@ -91,8 +85,7 @@ namespace LlamaChatApp.ViewModels
                     OnPropertyChanged();
                     OnPropertyChanged(nameof(ChatMessages));
                     CommandManager.InvalidateRequerySuggested();
-                    
-                    // Restore context for the newly selected conversation
+
                     if (_currentConversation != null && IsModelLoaded)
                     {
                         RestoreContextFromConversation(_currentConversation);
@@ -101,7 +94,6 @@ namespace LlamaChatApp.ViewModels
             }
         }
 
-        // Backwards-compatible property used by XAML
         public ObservableCollection<ChatMessage> ChatMessages => CurrentConversation?.Messages ?? _fallbackMessages;
 
         private readonly ObservableCollection<ChatMessage> _fallbackMessages = new ObservableCollection<ChatMessage>();
@@ -136,7 +128,6 @@ namespace LlamaChatApp.ViewModels
         public ICommand ClearChatCommand { get; }
         public ICommand ExitCommand { get; }
 
-        // conversation commands
         public ICommand NewConversationCommand { get; }
         public ICommand CloseConversationCommand { get; }
         public ICommand RenameConversationCommand { get; }
@@ -155,61 +146,68 @@ namespace LlamaChatApp.ViewModels
         public Func<string, string, string?>? RequestOpenFileDialog { get; set; }
         #endregion
 
-        public MainViewModel()
+        public MainViewModel() : this(new LlamaService())
         {
-            LoadSettingsCommand = new RelayCommand(async _ => await LoadAppSettingsAsync());
+        }
+
+        public MainViewModel(ILLamaService llamaService)
+        {
+            _llamaService = llamaService;
+
+            LoadSettingsCommand = new RelayCommand(async _ => await LoadAppSettingsAsync());      
             SaveSettingsCommand = new RelayCommand(_ => SaveAppSettings());
             LoadModelCommand = new RelayCommand(async _ => await ExecuteLoadModelAsync(), _ => !IsGenerating);
             SendMessageCommand = new RelayCommand(async _ => await HandleUserPrompt(), _ => IsIdle && !string.IsNullOrWhiteSpace(UserInputText));
-            StopGenerationCommand = new RelayCommand(_ => _cts?.Cancel(), _ => IsGenerating);
+            StopGenerationCommand = new RelayCommand(_ => _cts?.Cancel(), _ => IsGenerating);     
             ClearChatCommand = new RelayCommand(_ => ExecuteClearChat(), _ => IsModelLoaded && IsIdle);
-            ExitCommand = new RelayCommand(_ => { Dispose(); Application.Current.Shutdown(); });
+            ExitCommand = new RelayCommand(_ => { Dispose(); Application.Current.Shutdown(); });  
 
             NewConversationCommand = new RelayCommand(_ => CreateNewConversation());
             CloseConversationCommand = new RelayCommand(obj => CloseConversation(obj as ChatConversation), obj => obj is ChatConversation);
-                        SelectConversationCommand = new RelayCommand(obj => CurrentConversation = obj as ChatConversation, obj => obj is ChatConversation);
-                        RenameConversationCommand = new RelayCommand(obj => { /* optional: implement rename dialog */ }, obj => obj is ChatConversation);
-                                    SwitchToLightThemeCommand = new RelayCommand(_ => ChangeTheme("Themes/LightTheme.xaml"));
-                                    SwitchToDarkThemeCommand = new RelayCommand(_ => ChangeTheme("Themes/DarkTheme.xaml"));
-                                                ExportConversationCommand = new RelayCommand(_ => ExportConversation(), _ => CurrentConversation != null);
-                                                ImportConversationCommand = new RelayCommand(_ => ImportConversation());
-                                                RegenerateResponseCommand = new RelayCommand(async _ => await RegenerateResponse(), _ => IsIdle && IsModelLoaded && ChatMessages.Count > 0);
-                                                            MessageEditedCommand = new RelayCommand(_ =>
-                                                            {
-                                                                if (CurrentConversation != null && IsModelLoaded)
-                                                                {
-                                                                    RestoreContextFromConversation(CurrentConversation);
-                                                                }
-                                                            }, _ => IsIdle && IsModelLoaded);
-                                                
-                                                            DeleteMessageCommand = new RelayCommand(obj =>
-                                                            {
-                                                                if (obj is ChatMessage msg && ChatMessages.Contains(msg))
-                                                                {
-                                                                    ChatMessages.Remove(msg);
-                                                                    if (CurrentConversation != null && IsModelLoaded)
-                                                                    {
-                                                                        RestoreContextFromConversation(CurrentConversation);
-                                                                    }
-                                                                }
-                                                            }, _ => IsIdle);
-                                                
-                                                            CopyMessageCommand = new RelayCommand(obj =>
-                                                            {
-                                                                if (obj is ChatMessage msg && !string.IsNullOrEmpty(msg.Text))
-                                                                {
-                                                                    try
-                                                                    {
-                                                                        Clipboard.SetText(msg.Text);
-                                                                    }
-                                                                    catch (Exception ex)
-                                                                    {
-                                                                        System.Diagnostics.Debug.WriteLine($"Clipboard error: {ex.Message}");
-                                                                    }
-                                                                }
-                                                            });
-                                                
-                                                            var conv = new ChatConversation { Title = AppConstants.FIRST_CONVERSATION_TITLE };            conv.Messages.Add(new ChatMessage { Author = AppConstants.ROLE_SYSTEM, Text = AppConstants.MESSAGE_WELCOME, AuthorBrush = Brushes.DarkSlateGray });
+            SelectConversationCommand = new RelayCommand(obj => CurrentConversation = obj as ChatConversation, obj => obj is ChatConversation);
+            RenameConversationCommand = new RelayCommand(obj => { }, obj => obj is ChatConversation);
+            SwitchToLightThemeCommand = new RelayCommand(_ => ChangeTheme("Themes/LightTheme.xaml"));
+            SwitchToDarkThemeCommand = new RelayCommand(_ => ChangeTheme("Themes/DarkTheme.xaml"));
+            ExportConversationCommand = new RelayCommand(_ => ExportConversation(), _ => CurrentConversation != null);
+            ImportConversationCommand = new RelayCommand(_ => ImportConversation());
+            RegenerateResponseCommand = new RelayCommand(async _ => await RegenerateResponse(), _ => IsIdle && IsModelLoaded && ChatMessages.Count > 0);        
+            MessageEditedCommand = new RelayCommand(_ =>
+            {
+                if (CurrentConversation != null && IsModelLoaded)
+                {
+                    RestoreContextFromConversation(CurrentConversation);
+                }
+            }, _ => IsIdle && IsModelLoaded);     
+
+            DeleteMessageCommand = new RelayCommand(obj =>
+            {
+                if (obj is ChatMessage msg && ChatMessages.Contains(msg))
+                {
+                    ChatMessages.Remove(msg);     
+                    if (CurrentConversation != null && IsModelLoaded)
+                    {
+                        RestoreContextFromConversation(CurrentConversation);
+                    }
+                }
+            }, _ => IsIdle);
+
+            CopyMessageCommand = new RelayCommand(obj =>
+            {
+                if (obj is ChatMessage msg && !string.IsNullOrEmpty(msg.Text))
+                {
+                    try
+                    {
+                        Clipboard.SetText(msg.Text);
+                    }
+                    catch (Exception ex)
+                    {
+                        System.Diagnostics.Debug.WriteLine($"Clipboard error: {ex.Message}");
+                    }
+                }
+            });
+
+            var conv = new ChatConversation { Title = AppConstants.FIRST_CONVERSATION_TITLE };            
+            conv.Messages.Add(new ChatMessage { Author = AppConstants.ROLE_SYSTEM, Text = AppConstants.MESSAGE_WELCOME, AuthorBrush = Brushes.DarkSlateGray });
             Conversations.Add(conv);
             CurrentConversation = conv;
         }
@@ -220,37 +218,26 @@ namespace LlamaChatApp.ViewModels
             {
                 var appResources = Application.Current.Resources;
                 var mergedDicts = appResources.MergedDictionaries;
+                var existingTheme = mergedDicts.FirstOrDefault(d => d.Source != null && d.Source.ToString().Contains("Themes/", StringComparison.OrdinalIgnoreCase)); 
 
-                // Find the existing theme dictionary (checking for "Themes/" in the URI)
-                var existingTheme = mergedDicts.FirstOrDefault(d => 
-                    d.Source != null && 
-                    d.Source.ToString().Contains("Themes/", StringComparison.OrdinalIgnoreCase));
-
-                // Construct a Pack URI for the new theme to ensure it resolves correctly
-                // This assumes the files are at the root/Themes/ path in the assembly
                 var uriString = $"pack://application:,,,/{themePath}";
                 var newTheme = new ResourceDictionary { Source = new Uri(uriString, UriKind.Absolute) };
 
                 Application.Current.Dispatcher.Invoke(() =>
                 {
-                    if (existingTheme != null)
-                    {
-                        mergedDicts.Remove(existingTheme);
-                    }
+                    if (existingTheme != null) mergedDicts.Remove(existingTheme);
                     mergedDicts.Add(newTheme);
                 });
             }
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine($"Failed to change theme: {ex}");
-                MessageBox.Show($"Could not change theme: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
         private void ExportConversation()
         {
             if (CurrentConversation == null) return;
-
             var filename = RequestSaveFileDialog?.Invoke("JSON Files (*.json)|*.json", "Export Conversation");
             if (string.IsNullOrEmpty(filename)) return;
 
@@ -261,14 +248,13 @@ namespace LlamaChatApp.ViewModels
                     Title = CurrentConversation.Title,
                     Messages = CurrentConversation.Messages.Select(m => new SavedMessage { Author = m.Author, Text = m.Text }).ToList()
                 };
-
                 var json = JsonSerializer.Serialize(toSave, new JsonSerializerOptions { WriteIndented = true });
                 File.WriteAllText(filename, json);
                 StatusMessage = "Conversation exported";
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Failed to export conversation: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"Failed to export: {ex.Message}");
             }
         }
 
@@ -296,77 +282,44 @@ namespace LlamaChatApp.ViewModels
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Failed to import conversation: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"Failed to import: {ex.Message}");
             }
         }
 
         private async Task RegenerateResponse(object? parameter = null)
         {
-            if (_session == null || CurrentConversation == null) return;
+            if (CurrentConversation == null) return;
 
-            // Determine the context for regeneration
-            ChatMessage? targetMessage = parameter as ChatMessage;
-
-            // If no specific message was targeted, default to the last message
-            if (targetMessage == null)
-            {
-                targetMessage = ChatMessages.LastOrDefault();
-            }
-
+            ChatMessage? targetMessage = parameter as ChatMessage ?? ChatMessages.LastOrDefault();
             if (targetMessage == null) return;
 
             string prompt = string.Empty;
 
             if (targetMessage.Author == AppConstants.ROLE_ASSISTANT)
             {
-                // Logic for Assistant message: Remove it, go back to User prompt
                 int index = ChatMessages.IndexOf(targetMessage);
-                if (index <= 0) return; // Should have a preceding user message
+                if (index <= 0) return; 
 
                 var userMsg = ChatMessages[index - 1];
                 if (userMsg.Author != AppConstants.ROLE_USER) return;
 
                 prompt = userMsg.Text;
-
-                // Remove the assistant message and everything after (though usually it's the last)
-                while (ChatMessages.Count > index)
-                {
-                    ChatMessages.RemoveAt(ChatMessages.Count - 1);
-                }
-                
-                // Also remove the user message temporarily to reuse HandleUserPrompt logic which adds it back
+                while (ChatMessages.Count > index) ChatMessages.RemoveAt(ChatMessages.Count - 1);
                 ChatMessages.Remove(userMsg);
             }
             else if (targetMessage.Author == AppConstants.ROLE_USER)
             {
-                // Logic for User message: This IS the prompt. Remove everything AFTER it.
                 int index = ChatMessages.IndexOf(targetMessage);
                 if (index == -1) return;
 
                 prompt = targetMessage.Text;
-
-                // Remove everything after this user message
-                while (ChatMessages.Count > index + 1)
-                {
-                    ChatMessages.RemoveAt(ChatMessages.Count - 1);
-                }
-
-                // Remove the user message temporarily to reuse HandleUserPrompt logic
+                while (ChatMessages.Count > index + 1) ChatMessages.RemoveAt(ChatMessages.Count - 1);
                 ChatMessages.Remove(targetMessage);
             }
-            else
-            {
-                // System message or other? Ignore.
-                return;
-            }
+            else return;
 
-            // Set input to the prompt text
             UserInputText = prompt;
-
-            // Sync LLM context to the current state of ChatMessages (which is now truncated)
             RestoreContextFromConversation(CurrentConversation);
-
-            // Trigger generation
             await HandleUserPrompt();
         }
 
@@ -376,11 +329,11 @@ namespace LlamaChatApp.ViewModels
         {
             LoadingState = AppLoadingState.LoadingSettings;
             StatusMessage = "Loading settings...";
-            
+
             try
             {
                 var settingsDir = Path.GetDirectoryName(_settingsFilePath);
-                if (!string.IsNullOrEmpty(settingsDir)) Directory.CreateDirectory(settingsDir);
+                if (!string.IsNullOrEmpty(settingsDir)) Directory.CreateDirectory(settingsDir);   
                 if (File.Exists(_settingsFilePath))
                 {
                     try
@@ -390,16 +343,10 @@ namespace LlamaChatApp.ViewModels
                     }
                     catch (Exception ex)
                     {
-                        System.Diagnostics.Debug.WriteLine($"Failed to load settings: {ex.Message}");
-                        MessageBox.Show($"Could not load settings: {ex.Message}", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+                        MessageBox.Show($"Could not load settings: {ex.Message}");
                         _settings = new AppSettings();
                     }
                 }
-                else
-                {
-                    _settings = new AppSettings();
-                }
-
                 ApplySettings(_settings);
                 await LoadConversationsAsync();
 
@@ -434,12 +381,7 @@ namespace LlamaChatApp.ViewModels
             if (Conversations.Count == 0)
             {
                 var conv = new ChatConversation { Title = AppConstants.FIRST_CONVERSATION_TITLE };
-                conv.Messages.Add(new ChatMessage 
-                { 
-                    Author = AppConstants.ROLE_SYSTEM, 
-                    Text = AppConstants.MESSAGE_WELCOME, 
-                    AuthorBrush = Brushes.DarkSlateGray 
-                });
+                conv.Messages.Add(new ChatMessage { Author = AppConstants.ROLE_SYSTEM, Text = AppConstants.MESSAGE_WELCOME, AuthorBrush = Brushes.DarkSlateGray });
                 Conversations.Add(conv);
                 CurrentConversation = conv;
             }
@@ -456,13 +398,13 @@ namespace LlamaChatApp.ViewModels
                 UpdateSettingsFromUI();
                 var json = JsonSerializer.Serialize(_settings, new JsonSerializerOptions { WriteIndented = true });
                 var settingsDir = Path.GetDirectoryName(_settingsFilePath);
-                if (!string.IsNullOrEmpty(settingsDir)) Directory.CreateDirectory(settingsDir);
+                if (!string.IsNullOrEmpty(settingsDir)) Directory.CreateDirectory(settingsDir);   
                 File.WriteAllText(_settingsFilePath, json);
                 SaveConversations();
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"Failed to save settings: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"Failed to save settings: {ex.Message}");     
             }
         }
 
@@ -478,12 +420,12 @@ namespace LlamaChatApp.ViewModels
 
         private void SaveConversations()
         {
-                        try
-                        {
-                            var convDir = Path.GetDirectoryName(_conversationsFilePath);
-                            if (!string.IsNullOrEmpty(convDir)) Directory.CreateDirectory(convDir);
-            
-                            var toSave = Conversations.Select(c => new SavedConversation
+            try
+            {
+                var convDir = Path.GetDirectoryName(_conversationsFilePath);
+                if (!string.IsNullOrEmpty(convDir)) Directory.CreateDirectory(convDir);
+
+                var toSave = Conversations.Select(c => new SavedConversation
                 {
                     Title = c.Title,
                     Messages = c.Messages.Select(m => new SavedMessage { Author = m.Author, Text = m.Text }).ToList()
@@ -494,7 +436,6 @@ namespace LlamaChatApp.ViewModels
             }
             catch (Exception ex)
             {
-                // Fail silently but could log
                 System.Diagnostics.Debug.WriteLine($"Failed to save conversations: {ex.Message}");
             }
         }
@@ -506,7 +447,7 @@ namespace LlamaChatApp.ViewModels
                 if (File.Exists(_conversationsFilePath))
                 {
                     var json = await File.ReadAllTextAsync(_conversationsFilePath);
-                    var saved = JsonSerializer.Deserialize<List<SavedConversation>>(json);
+                    var saved = JsonSerializer.Deserialize<List<SavedConversation>>(json);        
                     if (saved != null)
                     {
                         Conversations.Clear();
@@ -529,7 +470,6 @@ namespace LlamaChatApp.ViewModels
             }
         }
 
-        // DTOs for persistence
         private class SavedConversation
         {
             public string Title { get; set; } = string.Empty;
@@ -553,11 +493,7 @@ namespace LlamaChatApp.ViewModels
 
         private async Task LoadModelAsync(string modelPath)
         {
-            if (string.IsNullOrEmpty(modelPath) || !File.Exists(modelPath))
-            {
-                MessageBox.Show(AppConstants.MESSAGE_FILE_NOT_FOUND, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                return;
-            }
+            if (string.IsNullOrEmpty(modelPath)) return;
 
             IsGenerating = true;
             IsModelLoaded = false;
@@ -568,14 +504,17 @@ namespace LlamaChatApp.ViewModels
 
             try
             {
-                await Task.Run(() =>
+                var parameters = new ModelParams(modelPath)
                 {
-                    DisposeModel();
-                    LoadModelInternal(modelPath);
-                });
+                    ContextSize = (uint)ContextSize,
+                    GpuLayerCount = GpuLayerCount
+                };
+
+                await _llamaService.LoadModelAsync(modelPath, parameters);
 
                 _settings.LastModelPath = modelPath;
-                ModelName = Path.GetFileName(modelPath);
+                ModelName = _llamaService.ModelName;
+
                 ChatMessages.Clear();
                 ChatMessages.Add(new ChatMessage
                 {
@@ -583,17 +522,19 @@ namespace LlamaChatApp.ViewModels
                     Text = string.Format(AppConstants.MESSAGE_LOADED_SUCCESS, ModelName),
                     AuthorBrush = Brushes.DarkSlateGray
                 });
+
+                // Initialize a session with the system prompt
+                _llamaService.InitializeSession(SystemPrompt);
+
                 IsModelLoaded = true;
                 StatusMessage = $"Model ready: {ModelName}";
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"Model load error: {ex}");
                 MessageBox.Show($"Failed to load model: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 ChatMessages.Add(new ChatMessage { Author = AppConstants.ROLE_ERROR, Text = string.Format(AppConstants.MESSAGE_LOAD_FAILED, ex.Message), AuthorBrush = Brushes.Red });
                 ModelName = "Load Failed";
                 _settings.LastModelPath = null;
-                DisposeModel();
                 StatusMessage = "Model load failed";
             }
             finally
@@ -601,25 +542,6 @@ namespace LlamaChatApp.ViewModels
                 IsGenerating = false;
                 LoadingState = AppLoadingState.Idle;
             }
-        }
-
-        private void LoadModelInternal(string modelPath)
-        {
-            var parameters = new ModelParams(modelPath)
-            {
-                ContextSize = (uint)ContextSize,
-                GpuLayerCount = GpuLayerCount
-            };
-            _model = LLamaWeights.LoadFromFile(parameters);
-            ResetContextAndChat();
-        }
-
-        private void DisposeModel()
-        {
-            _context?.Dispose();
-            _context = null;
-            _model?.Dispose();
-            _model = null;
         }
 
         private void CreateNewConversation()
@@ -637,84 +559,52 @@ namespace LlamaChatApp.ViewModels
                 Conversations.Remove(conv);
                 if (CurrentConversation == conv)
                 {
-                    CurrentConversation = Conversations.Count > 0 ? Conversations[0] : null;
+                    CurrentConversation = Conversations.Count > 0 ? Conversations[0] : null;      
                 }
             }
         }
 
         private void ExecuteClearChat()
         {
-            ResetContextAndChat();
-            ChatMessages.Clear();
-            ChatMessages.Add(new ChatMessage { Author = AppConstants.ROLE_SYSTEM, Text = AppConstants.MESSAGE_CHAT_CLEARED, AuthorBrush = Brushes.DarkSlateGray });
-            StatusMessage = "Chat cleared";
-        }
-
-        private void ResetContextAndChat()
-        {
-            if (_model == null || string.IsNullOrEmpty(_settings.LastModelPath))
-                return;
-
-            _context?.Dispose();
-
-            var parameters = new ModelParams(_settings.LastModelPath)
+            if (CurrentConversation == null) return;
+            
+            CurrentConversation.Messages.Clear();
+            CurrentConversation.Messages.Add(new ChatMessage { Author = AppConstants.ROLE_SYSTEM, Text = AppConstants.MESSAGE_CHAT_CLEARED, AuthorBrush = Brushes.DarkSlateGray });
+            
+            // Re-initialize session
+            try 
             {
-                ContextSize = (uint)ContextSize,
-                GpuLayerCount = GpuLayerCount
-            };
-            _context = _model.CreateContext(parameters);
-
-            var executor = new InteractiveExecutor(_context);
-            var history = new ChatHistory();
-            history.AddMessage(AuthorRole.System, SystemPrompt);
-            _session = new ChatSession(executor, history);
+                _llamaService.InitializeSession(SystemPrompt);
+                StatusMessage = "Chat cleared";
+            }
+            catch (Exception ex)
+            {
+                StatusMessage = "Error clearing chat";
+                System.Diagnostics.Debug.WriteLine(ex);
+            }
         }
 
         private void RestoreContextFromConversation(ChatConversation conversation)
         {
-            if (_model == null || string.IsNullOrEmpty(_settings.LastModelPath)) return;
+            if (!_llamaService.IsModelLoaded) return;
 
-            // Re-initialize context to clear previous state
-            _context?.Dispose();
-
-            var parameters = new ModelParams(_settings.LastModelPath)
+            try
             {
-                ContextSize = (uint)ContextSize,
-                GpuLayerCount = GpuLayerCount
-            };
-            _context = _model.CreateContext(parameters);
-            var executor = new InteractiveExecutor(_context);
-            
-            // Rebuild history from conversation messages
-            var history = new ChatHistory();
-            history.AddMessage(AuthorRole.System, SystemPrompt);
-
-            foreach (var msg in conversation.Messages)
-            {
-                if (msg.Author == AppConstants.ROLE_USER)
-                {
-                    history.AddMessage(AuthorRole.User, msg.Text);
-                }
-                else if (msg.Author == AppConstants.ROLE_ASSISTANT)
-                {
-                    history.AddMessage(AuthorRole.Assistant, msg.Text);
-                }
-                // Skip system messages in the list as we already added the default SystemPrompt
-                // or if specific system messages are part of the flow, handle them here.
+                var history = conversation.Messages.Select(m => (m.Author, m.Text));
+                _llamaService.RestoreSession(SystemPrompt, history);
+                StatusMessage = "Context restored";
             }
-
-            _session = new ChatSession(executor, history);
-            StatusMessage = "Context restored";
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error restoring context: {ex}");
+                StatusMessage = "Context restore error";
+            }
         }
 
         private async Task HandleUserPrompt()
         {
-            if (_session == null)
-                return;
-
             var prompt = UserInputText;
-            if (string.IsNullOrWhiteSpace(prompt))
-                return;
+            if (string.IsNullOrWhiteSpace(prompt)) return;
 
             UserInputText = string.Empty;
             IsGenerating = true;
@@ -746,7 +636,35 @@ namespace LlamaChatApp.ViewModels
 
             try
             {
-                await Task.Run(async () => await GenerateResponseAsync(prompt, assistantMessage, firstToken), _cts.Token);
+                await Task.Run(async () => 
+                {
+                     var pipeline = new LLama.Sampling.DefaultSamplingPipeline
+                     {
+                         Temperature = (float)Temperature,
+                         TopP = (float)TopP,
+                         RepeatPenalty = AppConstants.DEFAULT_REPEAT_PENALTY
+                     };
+
+                     var inferenceParams = new LLama.Common.InferenceParams
+                     {
+                         MaxTokens = MaxTokens,
+                         AntiPrompts = AppConstants.ANTI_PROMPTS.ToList(),
+                         SamplingPipeline = pipeline
+                     };
+
+                     await foreach (var text in _llamaService.GenerateResponseAsync(prompt, inferenceParams, _cts.Token))
+                     {
+                         Application.Current.Dispatcher.Invoke(() =>
+                         {
+                            if (firstToken)
+                            {
+                                assistantMessage.Text = "";
+                                firstToken = false;
+                            }
+                            assistantMessage.Text += text;
+                         });
+                     }
+                });
                 StatusMessage = "Ready";
             }
             catch (OperationCanceledException)
@@ -757,7 +675,7 @@ namespace LlamaChatApp.ViewModels
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine($"Inference error: {ex}");
-                MessageBox.Show($"An error occurred during inference: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"An error occurred: {ex.Message}", "Error");
                 assistantMessage.Text += string.Format(AppConstants.MESSAGE_GENERATION_ERROR, ex.Message);
                 StatusMessage = "Generation error";
             }
@@ -770,66 +688,14 @@ namespace LlamaChatApp.ViewModels
             }
         }
 
-        private async Task GenerateResponseAsync(string prompt, ChatMessage assistantMessage, bool firstToken)
-        {
-            var pipeline = new DefaultSamplingPipeline 
-            { 
-                Temperature = (float)Temperature, 
-                TopP = (float)TopP, 
-                RepeatPenalty = AppConstants.DEFAULT_REPEAT_PENALTY
-            };
-            
-            var inferenceParams = new InferenceParams
-            {
-                MaxTokens = MaxTokens,
-                AntiPrompts = AppConstants.ANTI_PROMPTS.ToList(),
-                SamplingPipeline = pipeline
-            };
-
-            var userMessage = new ChatHistory.Message(AuthorRole.User, prompt);
-
-            await foreach (var text in _session.ChatAsync(userMessage, inferenceParams, _cts.Token))
-            {
-                Application.Current.Dispatcher.Invoke(() =>
-                {
-                    if (firstToken) 
-                    { 
-                        assistantMessage.Text = ""; 
-                        firstToken = false; 
-                    }
-                    assistantMessage.Text += text;
-                });
-            }
-        }
-
         #endregion
 
         public void Dispose()
         {
-            try
-            {
-                _cts?.Cancel();
-                _cts?.Dispose();
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine($"Error disposing cancellation token: {ex.Message}");
-            }
-
-            _cts = null;
-            _session = null;
-
-            try
-            {
-                DisposeModel();
-                SaveConversations();
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine($"Error during disposal: {ex.Message}");
-            }
-
-            CommandManager.InvalidateRequerySuggested();
+            _cts?.Cancel();
+            _cts?.Dispose();
+            _llamaService.Dispose();
+            SaveConversations();
             GC.SuppressFinalize(this);
         }
     }
