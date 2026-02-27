@@ -13,6 +13,7 @@
     <SourceRoot Include="C:\Users\Harish\.nuget\packages\" />
   </ItemGroup>
   <ImportGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
-    <Import Project="$(NuGetPackageRoot)llamasharp.backend.cpu\0.25.0\build\netstandard2.0\LLamaSharp.Backend.Cpu.props" Condition="Exists('$(NuGetPackageRoot)llamasharp.backend.cpu\0.25.0\build\netstandard2.0\LLamaSharp.Backend.Cpu.props')" />
+    <Import Project="$(NuGetPackageRoot)llamasharp.backend.cpu\0.26.0\build\netstandard2.0\LLamaSharp.Backend.Cpu.props" Condition="Exists('$(NuGetPackageRoot)llamasharp.backend.cpu\0.26.0\build\netstandard2.0\LLamaSharp.Backend.Cpu.props')" />
+    <Import Project="$(NuGetPackageRoot)llamasharp.backend.vulkan.windows\0.26.0\build\netstandard2.0\LLamaSharp.Backend.Vulkan.Windows.props" Condition="Exists('$(NuGetPackageRoot)llamasharp.backend.vulkan.windows\0.26.0\build\netstandard2.0\LLamaSharp.Backend.Vulkan.Windows.props')" />
   </ImportGroup>
 </Project>

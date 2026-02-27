@@ -15,14 +15,14 @@
           }
         }
       },
-      "LLamaSharp/0.25.0": {
+      "LLamaSharp/0.26.0": {
         "type": "package",
         "dependencies": {
           "CommunityToolkit.HighPerformance": "8.4.0",
-          "Microsoft.Bcl.AsyncInterfaces": "9.0.8",
-          "Microsoft.Extensions.AI.Abstractions": "9.7.1",
-          "Microsoft.Extensions.Logging.Abstractions": "9.0.8",
-          "System.Numerics.Tensors": "9.0.8"
+          "Microsoft.Bcl.AsyncInterfaces": "10.0.2",
+          "Microsoft.Extensions.AI.Abstractions": "9.10.1",
+          "Microsoft.Extensions.Logging.Abstractions": "10.0.2",
+          "System.Numerics.Tensors": "9.0.9"
         },
         "compile": {
           "lib/net8.0/LLamaSharp.dll": {
@@ -35,380 +35,19 @@
           }
         }
       },
-      "LLamaSharp.Backend.Cpu/0.25.0": {
+      "LLamaSharp.Backend.Cpu/0.26.0": {
         "type": "package",
         "build": {
           "build/netstandard2.0/LLamaSharp.Backend.Cpu.props": {}
-        },
-        "runtimeTargets": {
-          "runtimes/linux-arm64/native/libggml-base.so": {
-            "assetType": "native",
-            "rid": "linux-arm64"
-          },
-          "runtimes/linux-arm64/native/libggml-cpu.so": {
-            "assetType": "native",
-            "rid": "linux-arm64"
-          },
-          "runtimes/linux-arm64/native/libggml.so": {
-            "assetType": "native",
-            "rid": "linux-arm64"
-          },
-          "runtimes/linux-arm64/native/libllama.so": {
-            "assetType": "native",
-            "rid": "linux-arm64"
-          },
-          "runtimes/linux-arm64/native/libmtmd.so": {
-            "assetType": "native",
-            "rid": "linux-arm64"
-          },
-          "runtimes/linux-musl-x64/native/avx/libggml-base.so": {
-            "assetType": "native",
-            "rid": "linux-musl-x64"
-          },
-          "runtimes/linux-musl-x64/native/avx/libggml-cpu.so": {
-            "assetType": "native",
-            "rid": "linux-musl-x64"
-          },
-          "runtimes/linux-musl-x64/native/avx/libggml.so": {
-            "assetType": "native",
-            "rid": "linux-musl-x64"
-          },
-          "runtimes/linux-musl-x64/native/avx/libllama.so": {
-            "assetType": "native",
-            "rid": "linux-musl-x64"
-          },
-          "runtimes/linux-musl-x64/native/avx/libmtmd.so": {
-            "assetType": "native",
-            "rid": "linux-musl-x64"
-          },
-          "runtimes/linux-musl-x64/native/avx2/libggml-base.so": {
-            "assetType": "native",
-            "rid": "linux-musl-x64"
-          },
-          "runtimes/linux-musl-x64/native/avx2/libggml-cpu.so": {
-            "assetType": "native",
-            "rid": "linux-musl-x64"
-          },
-          "runtimes/linux-musl-x64/native/avx2/libggml.so": {
-            "assetType": "native",
-            "rid": "linux-musl-x64"
-          },
-          "runtimes/linux-musl-x64/native/avx2/libllama.so": {
-            "assetType": "native",
-            "rid": "linux-musl-x64"
-          },
-          "runtimes/linux-musl-x64/native/avx2/libmtmd.so": {
-            "assetType": "native",
-            "rid": "linux-musl-x64"
-          },
-          "runtimes/linux-musl-x64/native/avx512/libggml-base.so": {
-            "assetType": "native",
-            "rid": "linux-musl-x64"
-          },
-          "runtimes/linux-musl-x64/native/avx512/libggml-cpu.so": {
-            "assetType": "native",
-            "rid": "linux-musl-x64"
-          },
-          "runtimes/linux-musl-x64/native/avx512/libggml.so": {
-            "assetType": "native",
-            "rid": "linux-musl-x64"
-          },
-          "runtimes/linux-musl-x64/native/avx512/libllama.so": {
-            "assetType": "native",
-            "rid": "linux-musl-x64"
-          },
-          "runtimes/linux-musl-x64/native/avx512/libmtmd.so": {
-            "assetType": "native",
-            "rid": "linux-musl-x64"
-          },
-          "runtimes/linux-musl-x64/native/noavx/libggml-base.so": {
-            "assetType": "native",
-            "rid": "linux-musl-x64"
-          },
-          "runtimes/linux-musl-x64/native/noavx/libggml-cpu.so": {
-            "assetType": "native",
-            "rid": "linux-musl-x64"
-          },
-          "runtimes/linux-musl-x64/native/noavx/libggml.so": {
-            "assetType": "native",
-            "rid": "linux-musl-x64"
-          },
-          "runtimes/linux-musl-x64/native/noavx/libllama.so": {
-            "assetType": "native",
-            "rid": "linux-musl-x64"
-          },
-          "runtimes/linux-musl-x64/native/noavx/libmtmd.so": {
-            "assetType": "native",
-            "rid": "linux-musl-x64"
-          },
-          "runtimes/linux-x64/native/avx/libggml-base.so": {
-            "assetType": "native",
-            "rid": "linux-x64"
-          },
-          "runtimes/linux-x64/native/avx/libggml-cpu.so": {
-            "assetType": "native",
-            "rid": "linux-x64"
-          },
-          "runtimes/linux-x64/native/avx/libggml.so": {
-            "assetType": "native",
-            "rid": "linux-x64"
-          },
-          "runtimes/linux-x64/native/avx/libllama.so": {
-            "assetType": "native",
-            "rid": "linux-x64"
-          },
-          "runtimes/linux-x64/native/avx/libmtmd.so": {
-            "assetType": "native",
-            "rid": "linux-x64"
-          },
-          "runtimes/linux-x64/native/avx2/libggml-base.so": {
-            "assetType": "native",
-            "rid": "linux-x64"
-          },
-          "runtimes/linux-x64/native/avx2/libggml-cpu.so": {
-            "assetType": "native",
-            "rid": "linux-x64"
-          },
-          "runtimes/linux-x64/native/avx2/libggml.so": {
-            "assetType": "native",
-            "rid": "linux-x64"
-          },
-          "runtimes/linux-x64/native/avx2/libllama.so": {
-            "assetType": "native",
-            "rid": "linux-x64"
-          },
-          "runtimes/linux-x64/native/avx2/libmtmd.so": {
-            "assetType": "native",
-            "rid": "linux-x64"
-          },
-          "runtimes/linux-x64/native/avx512/libggml-base.so": {
-            "assetType": "native",
-            "rid": "linux-x64"
-          },
-          "runtimes/linux-x64/native/avx512/libggml-cpu.so": {
-            "assetType": "native",
-            "rid": "linux-x64"
-          },
-          "runtimes/linux-x64/native/avx512/libggml.so": {
-            "assetType": "native",
-            "rid": "linux-x64"
-          },
-          "runtimes/linux-x64/native/avx512/libllama.so": {
-            "assetType": "native",
-            "rid": "linux-x64"
-          },
-          "runtimes/linux-x64/native/avx512/libmtmd.so": {
-            "assetType": "native",
-            "rid": "linux-x64"
-          },
-          "runtimes/linux-x64/native/noavx/libggml-base.so": {
-            "assetType": "native",
-            "rid": "linux-x64"
-          },
-          "runtimes/linux-x64/native/noavx/libggml-cpu.so": {
-            "assetType": "native",
-            "rid": "linux-x64"
-          },
-          "runtimes/linux-x64/native/noavx/libggml.so": {
-            "assetType": "native",
-            "rid": "linux-x64"
-          },
-          "runtimes/linux-x64/native/noavx/libllama.so": {
-            "assetType": "native",
-            "rid": "linux-x64"
-          },
-          "runtimes/linux-x64/native/noavx/libmtmd.so": {
-            "assetType": "native",
-            "rid": "linux-x64"
-          },
-          "runtimes/osx-arm64/native/ggml-metal.metal": {
-            "assetType": "native",
-            "rid": "osx-arm64"
-          },
-          "runtimes/osx-arm64/native/libggml-base.dylib": {
-            "assetType": "native",
-            "rid": "osx-arm64"
-          },
-          "runtimes/osx-arm64/native/libggml-blas.dylib": {
-            "assetType": "native",
-            "rid": "osx-arm64"
-          },
-          "runtimes/osx-arm64/native/libggml-cpu.dylib": {
-            "assetType": "native",
-            "rid": "osx-arm64"
-          },
-          "runtimes/osx-arm64/native/libggml-metal.dylib": {
-            "assetType": "native",
-            "rid": "osx-arm64"
-          },
-          "runtimes/osx-arm64/native/libggml.dylib": {
-            "assetType": "native",
-            "rid": "osx-arm64"
-          },
-          "runtimes/osx-arm64/native/libllama.dylib": {
-            "assetType": "native",
-            "rid": "osx-arm64"
-          },
-          "runtimes/osx-arm64/native/libmtmd.dylib": {
-            "assetType": "native",
-            "rid": "osx-arm64"
-          },
-          "runtimes/osx-x64/native/libggml-base.dylib": {
-            "assetType": "native",
-            "rid": "osx-x64"
-          },
-          "runtimes/osx-x64/native/libggml-blas.dylib": {
-            "assetType": "native",
-            "rid": "osx-x64"
-          },
-          "runtimes/osx-x64/native/libggml-cpu.dylib": {
-            "assetType": "native",
-            "rid": "osx-x64"
-          },
-          "runtimes/osx-x64/native/libggml.dylib": {
-            "assetType": "native",
-            "rid": "osx-x64"
-          },
-          "runtimes/osx-x64/native/libllama.dylib": {
-            "assetType": "native",
-            "rid": "osx-x64"
-          },
-          "runtimes/osx-x64/native/libmtmd.dylib": {
-            "assetType": "native",
-            "rid": "osx-x64"
-          },
-          "runtimes/osx-x64/native/rosetta2/libggml-base.dylib": {
-            "assetType": "native",
-            "rid": "osx-x64"
-          },
-          "runtimes/osx-x64/native/rosetta2/libggml-blas.dylib": {
-            "assetType": "native",
-            "rid": "osx-x64"
-          },
-          "runtimes/osx-x64/native/rosetta2/libggml-cpu.dylib": {
-            "assetType": "native",
-            "rid": "osx-x64"
-          },
-          "runtimes/osx-x64/native/rosetta2/libggml.dylib": {
-            "assetType": "native",
-            "rid": "osx-x64"
-          },
-          "runtimes/osx-x64/native/rosetta2/libllama.dylib": {
-            "assetType": "native",
-            "rid": "osx-x64"
-          },
-          "runtimes/osx-x64/native/rosetta2/libmtmd.dylib": {
-            "assetType": "native",
-            "rid": "osx-x64"
-          },
-          "runtimes/win-x64/native/avx/ggml-base.dll": {
-            "assetType": "native",
-            "rid": "win-x64"
-          },
-          "runtimes/win-x64/native/avx/ggml-cpu.dll": {
-            "assetType": "native",
-            "rid": "win-x64"
-          },
-          "runtimes/win-x64/native/avx/ggml.dll": {
-            "assetType": "native",
-            "rid": "win-x64"
-          },
-          "runtimes/win-x64/native/avx/llama.dll": {
-            "assetType": "native",
-            "rid": "win-x64"
-          },
-          "runtimes/win-x64/native/avx/mtmd.dll": {
-            "assetType": "native",
-            "rid": "win-x64"
-          },
-          "runtimes/win-x64/native/avx2/ggml-base.dll": {
-            "assetType": "native",
-            "rid": "win-x64"
-          },
-          "runtimes/win-x64/native/avx2/ggml-cpu.dll": {
-            "assetType": "native",
-            "rid": "win-x64"
-          },
-          "runtimes/win-x64/native/avx2/ggml.dll": {
-            "assetType": "native",
-            "rid": "win-x64"
-          },
-          "runtimes/win-x64/native/avx2/llama.dll": {
-            "assetType": "native",
-            "rid": "win-x64"
-          },
-          "runtimes/win-x64/native/avx2/mtmd.dll": {
-            "assetType": "native",
-            "rid": "win-x64"
-          },
-          "runtimes/win-x64/native/avx512/ggml-base.dll": {
-            "assetType": "native",
-            "rid": "win-x64"
-          },
-          "runtimes/win-x64/native/avx512/ggml-cpu.dll": {
-            "assetType": "native",
-            "rid": "win-x64"
-          },
-          "runtimes/win-x64/native/avx512/ggml.dll": {
-            "assetType": "native",
-            "rid": "win-x64"
-          },
-          "runtimes/win-x64/native/avx512/llama.dll": {
-            "assetType": "native",
-            "rid": "win-x64"
-          },
-          "runtimes/win-x64/native/avx512/mtmd.dll": {
-            "assetType": "native",
-            "rid": "win-x64"
-          },
-          "runtimes/win-x64/native/noavx/ggml-base.dll": {
-            "assetType": "native",
-            "rid": "win-x64"
-          },
-          "runtimes/win-x64/native/noavx/ggml-cpu.dll": {
-            "assetType": "native",
-            "rid": "win-x64"
-          },
-          "runtimes/win-x64/native/noavx/ggml.dll": {
-            "assetType": "native",
-            "rid": "win-x64"
-          },
-          "runtimes/win-x64/native/noavx/llama.dll": {
-            "assetType": "native",
-            "rid": "win-x64"
-          },
-          "runtimes/win-x64/native/noavx/mtmd.dll": {
-            "assetType": "native",
-            "rid": "win-x64"
-          }
         }
       },
-      "LLamaSharp.Backend.Vulkan.Windows/0.25.0": {
+      "LLamaSharp.Backend.Vulkan.Windows/0.26.0": {
         "type": "package",
         "dependencies": {
-          "LLamaSharp.Backend.Cpu": "0.25.0"
+          "LLamaSharp.Backend.Cpu": "0.26.0"
         },
-        "runtimeTargets": {
-          "runtimes/win-x64/native/vulkan/ggml-base.dll": {
-            "assetType": "native",
-            "rid": "win-x64"
-          },
-          "runtimes/win-x64/native/vulkan/ggml-vulkan.dll": {
-            "assetType": "native",
-            "rid": "win-x64"
-          },
-          "runtimes/win-x64/native/vulkan/ggml.dll": {
-            "assetType": "native",
-            "rid": "win-x64"
-          },
-          "runtimes/win-x64/native/vulkan/llama.dll": {
-            "assetType": "native",
-            "rid": "win-x64"
-          },
-          "runtimes/win-x64/native/vulkan/mtmd.dll": {
-            "assetType": "native",
-            "rid": "win-x64"
-          }
+        "build": {
+          "build/netstandard2.0/LLamaSharp.Backend.Vulkan.Windows.props": {}
         }
       },
       "Markdig/0.22.0": {
@@ -439,7 +78,7 @@
           "Microsoft.WindowsDesktop.App.WPF"
         ]
       },
-      "Microsoft.Bcl.AsyncInterfaces/9.0.8": {
+      "Microsoft.Bcl.AsyncInterfaces/10.0.2": {
         "type": "package",
         "compile": {
           "lib/netstandard2.1/Microsoft.Bcl.AsyncInterfaces.dll": {
@@ -450,12 +89,9 @@
           "lib/netstandard2.1/Microsoft.Bcl.AsyncInterfaces.dll": {
             "related": ".xml"
           }
-        },
-        "build": {
-          "buildTransitive/net8.0/_._": {}
         }
       },
-      "Microsoft.Extensions.AI.Abstractions/9.7.1": {
+      "Microsoft.Extensions.AI.Abstractions/9.10.1": {
         "type": "package",
         "compile": {
           "lib/net8.0/Microsoft.Extensions.AI.Abstractions.dll": {
@@ -468,7 +104,7 @@
           }
         }
       },
-      "Microsoft.Extensions.DependencyInjection.Abstractions/9.0.8": {
+      "Microsoft.Extensions.DependencyInjection.Abstractions/10.0.2": {
         "type": "package",
         "compile": {
           "lib/net8.0/Microsoft.Extensions.DependencyInjection.Abstractions.dll": {
@@ -484,11 +120,11 @@
           "buildTransitive/net8.0/_._": {}
         }
       },
-      "Microsoft.Extensions.Logging.Abstractions/9.0.8": {
+      "Microsoft.Extensions.Logging.Abstractions/10.0.2": {
         "type": "package",
         "dependencies": {
-          "Microsoft.Extensions.DependencyInjection.Abstractions": "9.0.8",
-          "System.Diagnostics.DiagnosticSource": "9.0.8"
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "10.0.2",
+          "System.Diagnostics.DiagnosticSource": "10.0.2"
         },
         "compile": {
           "lib/net8.0/Microsoft.Extensions.Logging.Abstractions.dll": {
@@ -504,7 +140,7 @@
           "buildTransitive/net8.0/Microsoft.Extensions.Logging.Abstractions.targets": {}
         }
       },
-      "System.Diagnostics.DiagnosticSource/9.0.8": {
+      "System.Diagnostics.DiagnosticSource/10.0.2": {
         "type": "package",
         "compile": {
           "lib/net8.0/System.Diagnostics.DiagnosticSource.dll": {
@@ -520,7 +156,7 @@
           "buildTransitive/net8.0/_._": {}
         }
       },
-      "System.Numerics.Tensors/9.0.8": {
+      "System.Numerics.Tensors/9.0.9": {
         "type": "package",
         "compile": {
           "lib/net8.0/System.Numerics.Tensors.dll": {
@@ -655,10 +291,10 @@
         "lib/netstandard2.1/CommunityToolkit.HighPerformance.xml"
       ]
     },
-    "LLamaSharp/0.25.0": {
-      "sha512": "7xX6WOLd8ylbFziLTVSUJ35OV0ti7HYQ37olK/ib3tSUr1SRqncqBaCpZFYenkMNdbQVUDrWdTr/nX+OaYohyw==",
+    "LLamaSharp/0.26.0": {
+      "sha512": "saxMnaMMac9xYmQji8g6xZ+LN+xTJbElWsN5B8t1mZ/XmbPEz6ZefA09CqOUj6xUQlwsx4Zn/5oXqjtUv+TNYw==",
       "type": "package",
-      "path": "llamasharp/0.25.0",
+      "path": "llamasharp/0.26.0",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -667,124 +303,124 @@
         "lib/net8.0/LLamaSharp.xml",
         "lib/netstandard2.0/LLamaSharp.dll",
         "lib/netstandard2.0/LLamaSharp.xml",
-        "llamasharp.0.25.0.nupkg.sha512",
+        "llamasharp.0.26.0.nupkg.sha512",
         "llamasharp.nuspec"
       ]
     },
-    "LLamaSharp.Backend.Cpu/0.25.0": {
-      "sha512": "z8AGddGm0w3bdpDkEDjA6sdEK8ScsJCl42cGQ1jVCKXMhwQEoEGP4Vv20Vroeh3Li7Ny8azcz/wxF9BGJrmdSg==",
+    "LLamaSharp.Backend.Cpu/0.26.0": {
+      "sha512": "xqWvja7N+Dw5CsIyhM/StQ6Uv5GhE0N27dfGevMVSWYZDsA/D9BDfQrAdgrdrzgK/6HK6bR/E/e3K9b5SbpBSg==",
       "type": "package",
-      "path": "llamasharp.backend.cpu/0.25.0",
+      "path": "llamasharp.backend.cpu/0.26.0",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
+        "LLamaSharpRuntimes/linux-arm64/native/libggml-base.so",
+        "LLamaSharpRuntimes/linux-arm64/native/libggml-cpu.so",
+        "LLamaSharpRuntimes/linux-arm64/native/libggml.so",
+        "LLamaSharpRuntimes/linux-arm64/native/libllama.so",
+        "LLamaSharpRuntimes/linux-arm64/native/libmtmd.so",
+        "LLamaSharpRuntimes/linux-musl-x64/native/avx/libggml-base.so",
+        "LLamaSharpRuntimes/linux-musl-x64/native/avx/libggml-cpu.so",
+        "LLamaSharpRuntimes/linux-musl-x64/native/avx/libggml.so",
+        "LLamaSharpRuntimes/linux-musl-x64/native/avx/libllama.so",
+        "LLamaSharpRuntimes/linux-musl-x64/native/avx/libmtmd.so",
+        "LLamaSharpRuntimes/linux-musl-x64/native/avx2/libggml-base.so",
+        "LLamaSharpRuntimes/linux-musl-x64/native/avx2/libggml-cpu.so",
+        "LLamaSharpRuntimes/linux-musl-x64/native/avx2/libggml.so",
+        "LLamaSharpRuntimes/linux-musl-x64/native/avx2/libllama.so",
+        "LLamaSharpRuntimes/linux-musl-x64/native/avx2/libmtmd.so",
+        "LLamaSharpRuntimes/linux-musl-x64/native/avx512/libggml-base.so",
+        "LLamaSharpRuntimes/linux-musl-x64/native/avx512/libggml-cpu.so",
+        "LLamaSharpRuntimes/linux-musl-x64/native/avx512/libggml.so",
+        "LLamaSharpRuntimes/linux-musl-x64/native/avx512/libllama.so",
+        "LLamaSharpRuntimes/linux-musl-x64/native/avx512/libmtmd.so",
+        "LLamaSharpRuntimes/linux-musl-x64/native/noavx/libggml-base.so",
+        "LLamaSharpRuntimes/linux-musl-x64/native/noavx/libggml-cpu.so",
+        "LLamaSharpRuntimes/linux-musl-x64/native/noavx/libggml.so",
+        "LLamaSharpRuntimes/linux-musl-x64/native/noavx/libllama.so",
+        "LLamaSharpRuntimes/linux-musl-x64/native/noavx/libmtmd.so",
+        "LLamaSharpRuntimes/linux-x64/native/avx/libggml-base.so",
+        "LLamaSharpRuntimes/linux-x64/native/avx/libggml-cpu.so",
+        "LLamaSharpRuntimes/linux-x64/native/avx/libggml.so",
+        "LLamaSharpRuntimes/linux-x64/native/avx/libllama.so",
+        "LLamaSharpRuntimes/linux-x64/native/avx/libmtmd.so",
+        "LLamaSharpRuntimes/linux-x64/native/avx2/libggml-base.so",
+        "LLamaSharpRuntimes/linux-x64/native/avx2/libggml-cpu.so",
+        "LLamaSharpRuntimes/linux-x64/native/avx2/libggml.so",
+        "LLamaSharpRuntimes/linux-x64/native/avx2/libllama.so",
+        "LLamaSharpRuntimes/linux-x64/native/avx2/libmtmd.so",
+        "LLamaSharpRuntimes/linux-x64/native/avx512/libggml-base.so",
+        "LLamaSharpRuntimes/linux-x64/native/avx512/libggml-cpu.so",
+        "LLamaSharpRuntimes/linux-x64/native/avx512/libggml.so",
+        "LLamaSharpRuntimes/linux-x64/native/avx512/libllama.so",
+        "LLamaSharpRuntimes/linux-x64/native/avx512/libmtmd.so",
+        "LLamaSharpRuntimes/linux-x64/native/noavx/libggml-base.so",
+        "LLamaSharpRuntimes/linux-x64/native/noavx/libggml-cpu.so",
+        "LLamaSharpRuntimes/linux-x64/native/noavx/libggml.so",
+        "LLamaSharpRuntimes/linux-x64/native/noavx/libllama.so",
+        "LLamaSharpRuntimes/linux-x64/native/noavx/libmtmd.so",
+        "LLamaSharpRuntimes/osx-arm64/native/ggml-metal.metal",
+        "LLamaSharpRuntimes/osx-arm64/native/libggml-base.dylib",
+        "LLamaSharpRuntimes/osx-arm64/native/libggml-blas.dylib",
+        "LLamaSharpRuntimes/osx-arm64/native/libggml-cpu.dylib",
+        "LLamaSharpRuntimes/osx-arm64/native/libggml-metal.dylib",
+        "LLamaSharpRuntimes/osx-arm64/native/libggml.dylib",
+        "LLamaSharpRuntimes/osx-arm64/native/libllama.dylib",
+        "LLamaSharpRuntimes/osx-arm64/native/libmtmd.dylib",
+        "LLamaSharpRuntimes/osx-x64/native/libggml-base.dylib",
+        "LLamaSharpRuntimes/osx-x64/native/libggml-blas.dylib",
+        "LLamaSharpRuntimes/osx-x64/native/libggml-cpu.dylib",
+        "LLamaSharpRuntimes/osx-x64/native/libggml.dylib",
+        "LLamaSharpRuntimes/osx-x64/native/libllama.dylib",
+        "LLamaSharpRuntimes/osx-x64/native/libmtmd.dylib",
+        "LLamaSharpRuntimes/osx-x64/native/rosetta2/libggml-base.dylib",
+        "LLamaSharpRuntimes/osx-x64/native/rosetta2/libggml-blas.dylib",
+        "LLamaSharpRuntimes/osx-x64/native/rosetta2/libggml-cpu.dylib",
+        "LLamaSharpRuntimes/osx-x64/native/rosetta2/libggml.dylib",
+        "LLamaSharpRuntimes/osx-x64/native/rosetta2/libllama.dylib",
+        "LLamaSharpRuntimes/osx-x64/native/rosetta2/libmtmd.dylib",
+        "LLamaSharpRuntimes/win-x64/native/avx/ggml-base.dll",
+        "LLamaSharpRuntimes/win-x64/native/avx/ggml-cpu.dll",
+        "LLamaSharpRuntimes/win-x64/native/avx/ggml.dll",
+        "LLamaSharpRuntimes/win-x64/native/avx/llama.dll",
+        "LLamaSharpRuntimes/win-x64/native/avx/mtmd.dll",
+        "LLamaSharpRuntimes/win-x64/native/avx2/ggml-base.dll",
+        "LLamaSharpRuntimes/win-x64/native/avx2/ggml-cpu.dll",
+        "LLamaSharpRuntimes/win-x64/native/avx2/ggml.dll",
+        "LLamaSharpRuntimes/win-x64/native/avx2/llama.dll",
+        "LLamaSharpRuntimes/win-x64/native/avx2/mtmd.dll",
+        "LLamaSharpRuntimes/win-x64/native/avx512/ggml-base.dll",
+        "LLamaSharpRuntimes/win-x64/native/avx512/ggml-cpu.dll",
+        "LLamaSharpRuntimes/win-x64/native/avx512/ggml.dll",
+        "LLamaSharpRuntimes/win-x64/native/avx512/llama.dll",
+        "LLamaSharpRuntimes/win-x64/native/avx512/mtmd.dll",
+        "LLamaSharpRuntimes/win-x64/native/noavx/ggml-base.dll",
+        "LLamaSharpRuntimes/win-x64/native/noavx/ggml-cpu.dll",
+        "LLamaSharpRuntimes/win-x64/native/noavx/ggml.dll",
+        "LLamaSharpRuntimes/win-x64/native/noavx/llama.dll",
+        "LLamaSharpRuntimes/win-x64/native/noavx/mtmd.dll",
         "build/netstandard2.0/LLamaSharp.Backend.Cpu.props",
         "icon512.png",
-        "llamasharp.backend.cpu.0.25.0.nupkg.sha512",
-        "llamasharp.backend.cpu.nuspec",
-        "runtimes/linux-arm64/native/libggml-base.so",
-        "runtimes/linux-arm64/native/libggml-cpu.so",
-        "runtimes/linux-arm64/native/libggml.so",
-        "runtimes/linux-arm64/native/libllama.so",
-        "runtimes/linux-arm64/native/libmtmd.so",
-        "runtimes/linux-musl-x64/native/avx/libggml-base.so",
-        "runtimes/linux-musl-x64/native/avx/libggml-cpu.so",
-        "runtimes/linux-musl-x64/native/avx/libggml.so",
-        "runtimes/linux-musl-x64/native/avx/libllama.so",
-        "runtimes/linux-musl-x64/native/avx/libmtmd.so",
-        "runtimes/linux-musl-x64/native/avx2/libggml-base.so",
-        "runtimes/linux-musl-x64/native/avx2/libggml-cpu.so",
-        "runtimes/linux-musl-x64/native/avx2/libggml.so",
-        "runtimes/linux-musl-x64/native/avx2/libllama.so",
-        "runtimes/linux-musl-x64/native/avx2/libmtmd.so",
-        "runtimes/linux-musl-x64/native/avx512/libggml-base.so",
-        "runtimes/linux-musl-x64/native/avx512/libggml-cpu.so",
-        "runtimes/linux-musl-x64/native/avx512/libggml.so",
-        "runtimes/linux-musl-x64/native/avx512/libllama.so",
-        "runtimes/linux-musl-x64/native/avx512/libmtmd.so",
-        "runtimes/linux-musl-x64/native/noavx/libggml-base.so",
-        "runtimes/linux-musl-x64/native/noavx/libggml-cpu.so",
-        "runtimes/linux-musl-x64/native/noavx/libggml.so",
-        "runtimes/linux-musl-x64/native/noavx/libllama.so",
-        "runtimes/linux-musl-x64/native/noavx/libmtmd.so",
-        "runtimes/linux-x64/native/avx/libggml-base.so",
-        "runtimes/linux-x64/native/avx/libggml-cpu.so",
-        "runtimes/linux-x64/native/avx/libggml.so",
-        "runtimes/linux-x64/native/avx/libllama.so",
-        "runtimes/linux-x64/native/avx/libmtmd.so",
-        "runtimes/linux-x64/native/avx2/libggml-base.so",
-        "runtimes/linux-x64/native/avx2/libggml-cpu.so",
-        "runtimes/linux-x64/native/avx2/libggml.so",
-        "runtimes/linux-x64/native/avx2/libllama.so",
-        "runtimes/linux-x64/native/avx2/libmtmd.so",
-        "runtimes/linux-x64/native/avx512/libggml-base.so",
-        "runtimes/linux-x64/native/avx512/libggml-cpu.so",
-        "runtimes/linux-x64/native/avx512/libggml.so",
-        "runtimes/linux-x64/native/avx512/libllama.so",
-        "runtimes/linux-x64/native/avx512/libmtmd.so",
-        "runtimes/linux-x64/native/noavx/libggml-base.so",
-        "runtimes/linux-x64/native/noavx/libggml-cpu.so",
-        "runtimes/linux-x64/native/noavx/libggml.so",
-        "runtimes/linux-x64/native/noavx/libllama.so",
-        "runtimes/linux-x64/native/noavx/libmtmd.so",
-        "runtimes/osx-arm64/native/ggml-metal.metal",
-        "runtimes/osx-arm64/native/libggml-base.dylib",
-        "runtimes/osx-arm64/native/libggml-blas.dylib",
-        "runtimes/osx-arm64/native/libggml-cpu.dylib",
-        "runtimes/osx-arm64/native/libggml-metal.dylib",
-        "runtimes/osx-arm64/native/libggml.dylib",
-        "runtimes/osx-arm64/native/libllama.dylib",
-        "runtimes/osx-arm64/native/libmtmd.dylib",
-        "runtimes/osx-x64/native/libggml-base.dylib",
-        "runtimes/osx-x64/native/libggml-blas.dylib",
-        "runtimes/osx-x64/native/libggml-cpu.dylib",
-        "runtimes/osx-x64/native/libggml.dylib",
-        "runtimes/osx-x64/native/libllama.dylib",
-        "runtimes/osx-x64/native/libmtmd.dylib",
-        "runtimes/osx-x64/native/rosetta2/libggml-base.dylib",
-        "runtimes/osx-x64/native/rosetta2/libggml-blas.dylib",
-        "runtimes/osx-x64/native/rosetta2/libggml-cpu.dylib",
-        "runtimes/osx-x64/native/rosetta2/libggml.dylib",
-        "runtimes/osx-x64/native/rosetta2/libllama.dylib",
-        "runtimes/osx-x64/native/rosetta2/libmtmd.dylib",
-        "runtimes/win-x64/native/avx/ggml-base.dll",
-        "runtimes/win-x64/native/avx/ggml-cpu.dll",
-        "runtimes/win-x64/native/avx/ggml.dll",
-        "runtimes/win-x64/native/avx/llama.dll",
-        "runtimes/win-x64/native/avx/mtmd.dll",
-        "runtimes/win-x64/native/avx2/ggml-base.dll",
-        "runtimes/win-x64/native/avx2/ggml-cpu.dll",
-        "runtimes/win-x64/native/avx2/ggml.dll",
-        "runtimes/win-x64/native/avx2/llama.dll",
-        "runtimes/win-x64/native/avx2/mtmd.dll",
-        "runtimes/win-x64/native/avx512/ggml-base.dll",
-        "runtimes/win-x64/native/avx512/ggml-cpu.dll",
-        "runtimes/win-x64/native/avx512/ggml.dll",
-        "runtimes/win-x64/native/avx512/llama.dll",
-        "runtimes/win-x64/native/avx512/mtmd.dll",
-        "runtimes/win-x64/native/noavx/ggml-base.dll",
-        "runtimes/win-x64/native/noavx/ggml-cpu.dll",
-        "runtimes/win-x64/native/noavx/ggml.dll",
-        "runtimes/win-x64/native/noavx/llama.dll",
-        "runtimes/win-x64/native/noavx/mtmd.dll"
+        "llamasharp.backend.cpu.0.26.0.nupkg.sha512",
+        "llamasharp.backend.cpu.nuspec"
       ]
     },
-    "LLamaSharp.Backend.Vulkan.Windows/0.25.0": {
-      "sha512": "VYcl4F/0xAl78ig6cIKQPwxg9/aj1nZLJEU7qGEvC0MLsh1ssXxzKDbacV2dHnRVLy+A+6dUcuSxy7oP1H/Z+Q==",
+    "LLamaSharp.Backend.Vulkan.Windows/0.26.0": {
+      "sha512": "1KZSjzRQ+tZW4318Jvt4y5CO1UfYy8sDzFdRJ6MPo1M5WJRGd+RMbJ+bQEBkuBEU4didzL127G7uCQBznjyXMA==",
       "type": "package",
-      "path": "llamasharp.backend.vulkan.windows/0.25.0",
+      "path": "llamasharp.backend.vulkan.windows/0.26.0",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
-        "build/netstandard2.0/LLamaSharp.Backend.Vulkan.props",
+        "LLamaSharpRuntimes/win-x64/native/vulkan/ggml-base.dll",
+        "LLamaSharpRuntimes/win-x64/native/vulkan/ggml-vulkan.dll",
+        "LLamaSharpRuntimes/win-x64/native/vulkan/ggml.dll",
+        "LLamaSharpRuntimes/win-x64/native/vulkan/llama.dll",
+        "LLamaSharpRuntimes/win-x64/native/vulkan/mtmd.dll",
+        "build/netstandard2.0/LLamaSharp.Backend.Vulkan.Windows.props",
         "icon512.png",
-        "llamasharp.backend.vulkan.windows.0.25.0.nupkg.sha512",
-        "llamasharp.backend.vulkan.windows.nuspec",
-        "runtimes/win-x64/native/vulkan/ggml-base.dll",
-        "runtimes/win-x64/native/vulkan/ggml-vulkan.dll",
-        "runtimes/win-x64/native/vulkan/ggml.dll",
-        "runtimes/win-x64/native/vulkan/llama.dll",
-        "runtimes/win-x64/native/vulkan/mtmd.dll"
+        "llamasharp.backend.vulkan.windows.0.26.0.nupkg.sha512",
+        "llamasharp.backend.vulkan.windows.nuspec"
       ]
     },
     "Markdig/0.22.0": {
@@ -822,36 +458,33 @@
         "markdig.wpf.nuspec"
       ]
     },
-    "Microsoft.Bcl.AsyncInterfaces/9.0.8": {
-      "sha512": "mdq9WaHnRJBvmhbDvoEk9aIEjpoW1cmA6wGuE0/eV49NT/0Z/d+NauB4jzw2Dyi/TndebYfjAYHCOXeB0c/Qhg==",
+    "Microsoft.Bcl.AsyncInterfaces/10.0.2": {
+      "sha512": "qE5JhRoeJbAipLqpUCZyNfNwnpAvUttXgIQDnTiJ15d8ji+/bPgoPkB3xLzK5cQTobN2D2ditUesUlDHb7p3Pg==",
       "type": "package",
-      "path": "microsoft.bcl.asyncinterfaces/9.0.8",
+      "path": "microsoft.bcl.asyncinterfaces/10.0.2",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "Icon.png",
-        "LICENSE.TXT",
         "PACKAGE.md",
         "THIRD-PARTY-NOTICES.TXT",
         "buildTransitive/net461/Microsoft.Bcl.AsyncInterfaces.targets",
         "buildTransitive/net462/_._",
-        "buildTransitive/net8.0/_._",
-        "buildTransitive/netcoreapp2.0/Microsoft.Bcl.AsyncInterfaces.targets",
         "lib/net462/Microsoft.Bcl.AsyncInterfaces.dll",
         "lib/net462/Microsoft.Bcl.AsyncInterfaces.xml",
         "lib/netstandard2.0/Microsoft.Bcl.AsyncInterfaces.dll",
         "lib/netstandard2.0/Microsoft.Bcl.AsyncInterfaces.xml",
         "lib/netstandard2.1/Microsoft.Bcl.AsyncInterfaces.dll",
         "lib/netstandard2.1/Microsoft.Bcl.AsyncInterfaces.xml",
-        "microsoft.bcl.asyncinterfaces.9.0.8.nupkg.sha512",
+        "microsoft.bcl.asyncinterfaces.10.0.2.nupkg.sha512",
         "microsoft.bcl.asyncinterfaces.nuspec",
         "useSharedDesignerContext.txt"
       ]
     },
-    "Microsoft.Extensions.AI.Abstractions/9.7.1": {
-      "sha512": "fcAMMDxGgdl7vgkiFQ2yojdEwvGIkIpxsv6SQ33enA+q2iGuv3jsFUZmq6ZJ0YvMgrce7mG6GHFkEVcNxjIl0A==",
+    "Microsoft.Extensions.AI.Abstractions/9.10.1": {
+      "sha512": "e31P/WT7Pgx/9P6HNBUGEO0v9XyuZj6Dbekz4XeaP6v4GQ7jK1AllBiNTu1k2zx2x6upSeAmA6sRp6C2BgmMwQ==",
       "type": "package",
-      "path": "microsoft.extensions.ai.abstractions/9.7.1",
+      "path": "microsoft.extensions.ai.abstractions/9.10.1",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -865,25 +498,26 @@
         "lib/net9.0/Microsoft.Extensions.AI.Abstractions.xml",
         "lib/netstandard2.0/Microsoft.Extensions.AI.Abstractions.dll",
         "lib/netstandard2.0/Microsoft.Extensions.AI.Abstractions.xml",
-        "microsoft.extensions.ai.abstractions.9.7.1.nupkg.sha512",
+        "microsoft.extensions.ai.abstractions.9.10.1.nupkg.sha512",
         "microsoft.extensions.ai.abstractions.nuspec"
       ]
     },
-    "Microsoft.Extensions.DependencyInjection.Abstractions/9.0.8": {
-      "sha512": "xY3lTjj4+ZYmiKIkyWitddrp1uL5uYiweQjqo4BKBw01ZC4HhcfgLghDpPZcUlppgWAFqFy9SgkiYWOMx365pw==",
+    "Microsoft.Extensions.DependencyInjection.Abstractions/10.0.2": {
+      "sha512": "zOIurr59+kUf9vNcsUkCvKWZv+fPosUZXURZesYkJCvl0EzTc9F7maAO4Cd2WEV7ZJJ0AZrFQvuH6Npph9wdBw==",
       "type": "package",
-      "path": "microsoft.extensions.dependencyinjection.abstractions/9.0.8",
+      "path": "microsoft.extensions.dependencyinjection.abstractions/10.0.2",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "Icon.png",
-        "LICENSE.TXT",
         "PACKAGE.md",
         "THIRD-PARTY-NOTICES.TXT",
         "buildTransitive/net461/Microsoft.Extensions.DependencyInjection.Abstractions.targets",
         "buildTransitive/net462/_._",
         "buildTransitive/net8.0/_._",
         "buildTransitive/netcoreapp2.0/Microsoft.Extensions.DependencyInjection.Abstractions.targets",
+        "lib/net10.0/Microsoft.Extensions.DependencyInjection.Abstractions.dll",
+        "lib/net10.0/Microsoft.Extensions.DependencyInjection.Abstractions.xml",
         "lib/net462/Microsoft.Extensions.DependencyInjection.Abstractions.dll",
         "lib/net462/Microsoft.Extensions.DependencyInjection.Abstractions.xml",
         "lib/net8.0/Microsoft.Extensions.DependencyInjection.Abstractions.dll",
@@ -894,20 +528,19 @@
         "lib/netstandard2.0/Microsoft.Extensions.DependencyInjection.Abstractions.xml",
         "lib/netstandard2.1/Microsoft.Extensions.DependencyInjection.Abstractions.dll",
         "lib/netstandard2.1/Microsoft.Extensions.DependencyInjection.Abstractions.xml",
-        "microsoft.extensions.dependencyinjection.abstractions.9.0.8.nupkg.sha512",
+        "microsoft.extensions.dependencyinjection.abstractions.10.0.2.nupkg.sha512",
         "microsoft.extensions.dependencyinjection.abstractions.nuspec",
         "useSharedDesignerContext.txt"
       ]
     },
-    "Microsoft.Extensions.Logging.Abstractions/9.0.8": {
-      "sha512": "pYnAffJL7ARD/HCnnPvnFKSIHnTSmWz84WIlT9tPeQ4lHNiu0Az7N/8itihWvcF8sT+VVD5lq8V+ckMzu4SbOw==",
+    "Microsoft.Extensions.Logging.Abstractions/10.0.2": {
+      "sha512": "RZkez/JjpnO+MZ6efKkSynN6ZztLpw3WbxNzjLCPBd97wWj1S9ZYPWi0nmT4kWBRa6atHsdM1ydGkUr8GudyDQ==",
       "type": "package",
-      "path": "microsoft.extensions.logging.abstractions/9.0.8",
+      "path": "microsoft.extensions.logging.abstractions/10.0.2",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "Icon.png",
-        "LICENSE.TXT",
         "PACKAGE.md",
         "THIRD-PARTY-NOTICES.TXT",
         "analyzers/dotnet/roslyn3.11/cs/Microsoft.Extensions.Logging.Generators.dll",
@@ -957,6 +590,8 @@
         "buildTransitive/net8.0/Microsoft.Extensions.Logging.Abstractions.targets",
         "buildTransitive/netcoreapp2.0/Microsoft.Extensions.Logging.Abstractions.targets",
         "buildTransitive/netstandard2.0/Microsoft.Extensions.Logging.Abstractions.targets",
+        "lib/net10.0/Microsoft.Extensions.Logging.Abstractions.dll",
+        "lib/net10.0/Microsoft.Extensions.Logging.Abstractions.xml",
         "lib/net462/Microsoft.Extensions.Logging.Abstractions.dll",
         "lib/net462/Microsoft.Extensions.Logging.Abstractions.xml",
         "lib/net8.0/Microsoft.Extensions.Logging.Abstractions.dll",
@@ -965,25 +600,26 @@
         "lib/net9.0/Microsoft.Extensions.Logging.Abstractions.xml",
         "lib/netstandard2.0/Microsoft.Extensions.Logging.Abstractions.dll",
         "lib/netstandard2.0/Microsoft.Extensions.Logging.Abstractions.xml",
-        "microsoft.extensions.logging.abstractions.9.0.8.nupkg.sha512",
+        "microsoft.extensions.logging.abstractions.10.0.2.nupkg.sha512",
         "microsoft.extensions.logging.abstractions.nuspec",
         "useSharedDesignerContext.txt"
       ]
     },
-    "System.Diagnostics.DiagnosticSource/9.0.8": {
-      "sha512": "Lj8/a1Hzli1z6jo8H9urc16GxkpVJtJM+W9fmivXMNu7nwzHziGkxn4vO0DFscMbudkEVKSezdDuHk5kgM0X/g==",
+    "System.Diagnostics.DiagnosticSource/10.0.2": {
+      "sha512": "lYWBy8fKkJHaRcOuw30d67PrtVjR5754sz5Wl76s8P+vJ9FSThh9b7LIcTSODx1LY7NB3Srvg+JMnzd67qNZOw==",
       "type": "package",
-      "path": "system.diagnostics.diagnosticsource/9.0.8",
+      "path": "system.diagnostics.diagnosticsource/10.0.2",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "Icon.png",
-        "LICENSE.TXT",
         "THIRD-PARTY-NOTICES.TXT",
         "buildTransitive/net461/System.Diagnostics.DiagnosticSource.targets",
         "buildTransitive/net462/_._",
         "buildTransitive/net8.0/_._",
         "buildTransitive/netcoreapp2.0/System.Diagnostics.DiagnosticSource.targets",
+        "lib/net10.0/System.Diagnostics.DiagnosticSource.dll",
+        "lib/net10.0/System.Diagnostics.DiagnosticSource.xml",
         "lib/net462/System.Diagnostics.DiagnosticSource.dll",
         "lib/net462/System.Diagnostics.DiagnosticSource.xml",
         "lib/net8.0/System.Diagnostics.DiagnosticSource.dll",
@@ -992,15 +628,15 @@
         "lib/net9.0/System.Diagnostics.DiagnosticSource.xml",
         "lib/netstandard2.0/System.Diagnostics.DiagnosticSource.dll",
         "lib/netstandard2.0/System.Diagnostics.DiagnosticSource.xml",
-        "system.diagnostics.diagnosticsource.9.0.8.nupkg.sha512",
+        "system.diagnostics.diagnosticsource.10.0.2.nupkg.sha512",
         "system.diagnostics.diagnosticsource.nuspec",
         "useSharedDesignerContext.txt"
       ]
     },
-    "System.Numerics.Tensors/9.0.8": {
-      "sha512": "vnT3XBwytt8pYM25+lEHzR19F4GTkA9YA1E6wLOb55fiyY0wIaTVhlLrWAurvXcsgUdtNn0Ihw4qwWlsK6Wljg==",
+    "System.Numerics.Tensors/9.0.9": {
+      "sha512": "dItAWpchB6lM0oRan/UEFxRMsxq1fwkycjpRGQI/RMHYZVbS57H4LV6BSJF/Z5v+jre/CPW+PpesbGa/ytFByw==",
       "type": "package",
-      "path": "system.numerics.tensors/9.0.8",
+      "path": "system.numerics.tensors/9.0.9",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -1020,7 +656,7 @@
         "lib/net9.0/System.Numerics.Tensors.xml",
         "lib/netstandard2.0/System.Numerics.Tensors.dll",
         "lib/netstandard2.0/System.Numerics.Tensors.xml",
-        "system.numerics.tensors.9.0.8.nupkg.sha512",
+        "system.numerics.tensors.9.0.9.nupkg.sha512",
         "system.numerics.tensors.nuspec",
         "useSharedDesignerContext.txt"
       ]
@@ -1172,8 +808,8 @@
   },
   "projectFileDependencyGroups": {
     "net8.0-windows7.0": [
-      "LLamaSharp >= 0.25.0",
-      "LLamaSharp.Backend.Vulkan.Windows >= 0.25.0",
+      "LLamaSharp >= 0.26.0",
+      "LLamaSharp.Backend.Vulkan.Windows >= 0.26.0",
       "Markdig.Wpf >= 0.5.0.1",
       "UglyToad.PdfPig >= 0.1.9-alpha001-patch1"
     ]
@@ -1225,11 +861,11 @@
         "dependencies": {
           "LLamaSharp": {
             "target": "Package",
-            "version": "[0.25.0, )"
+            "version": "[0.26.0, )"
           },
           "LLamaSharp.Backend.Vulkan.Windows": {
             "target": "Package",
-            "version": "[0.25.0, )"
+            "version": "[0.26.0, )"
           },
           "Markdig.Wpf": {
             "target": "Package",
@@ -1289,7 +925,7 @@
       "message": "UglyToad.PdfPig 0.1.9-alpha001-patch1 depends on UglyToad.PdfPig.Core (>= 0.1.9-alpha001-patch1) but UglyToad.PdfPig.Core 0.1.9-alpha001-patch1 was not found. UglyToad.PdfPig.Core 1.7.0-custom-5 was resolved instead.",
       "libraryId": "UglyToad.PdfPig.Core",
       "targetGraphs": [
-        "net8.0-windows7.0"
+        "net8.0-windows"
       ]
     },
     {
@@ -1299,7 +935,7 @@
       "message": "UglyToad.PdfPig 0.1.9-alpha001-patch1 depends on UglyToad.PdfPig.Fonts (>= 0.1.9-alpha001-patch1) but UglyToad.PdfPig.Fonts 0.1.9-alpha001-patch1 was not found. UglyToad.PdfPig.Fonts 1.7.0-custom-5 was resolved instead.",
       "libraryId": "UglyToad.PdfPig.Fonts",
       "targetGraphs": [
-        "net8.0-windows7.0"
+        "net8.0-windows"
       ]
     },
     {
@@ -1309,7 +945,7 @@
       "message": "UglyToad.PdfPig 0.1.9-alpha001-patch1 depends on UglyToad.PdfPig.Tokenization (>= 0.1.9-alpha001-patch1) but UglyToad.PdfPig.Tokenization 0.1.9-alpha001-patch1 was not found. UglyToad.PdfPig.Tokenization 1.7.0-custom-5 was resolved instead.",
       "libraryId": "UglyToad.PdfPig.Tokenization",
       "targetGraphs": [
-        "net8.0-windows7.0"
+        "net8.0-windows"
       ]
     },
     {
@@ -1319,7 +955,7 @@
       "message": "UglyToad.PdfPig 0.1.9-alpha001-patch1 depends on UglyToad.PdfPig.Tokens (>= 0.1.9-alpha001-patch1) but UglyToad.PdfPig.Tokens 0.1.9-alpha001-patch1 was not found. UglyToad.PdfPig.Tokens 1.7.0-custom-5 was resolved instead.",
       "libraryId": "UglyToad.PdfPig.Tokens",
       "targetGraphs": [
-        "net8.0-windows7.0"
+        "net8.0-windows"
       ]
     }
   ]

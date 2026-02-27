@@ -48,11 +48,11 @@
           "dependencies": {
             "LLamaSharp": {
               "target": "Package",
-              "version": "[0.25.0, )"
+              "version": "[0.26.0, )"
             },
             "LLamaSharp.Backend.Vulkan.Windows": {
               "target": "Package",
-              "version": "[0.25.0, )"
+              "version": "[0.26.0, )"
             },
             "Markdig.Wpf": {
               "target": "Package",

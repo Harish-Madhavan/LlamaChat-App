@@ -1,28 +1,28 @@
 {
   "version": 2,
-  "dgSpecHash": "LJvRaBtwba8=",
+  "dgSpecHash": "nC5RI0Erpw4=",
   "success": true,
   "projectFilePath": "E:\\Git Repo\\LlamaChat-App1\\chat_app\\chat_app.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Harish\\.nuget\\packages\\communitytoolkit.highperformance\\8.4.0\\communitytoolkit.highperformance.8.4.0.nupkg.sha512",
-    "C:\\Users\\Harish\\.nuget\\packages\\llamasharp\\0.25.0\\llamasharp.0.25.0.nupkg.sha512",
-    "C:\\Users\\Harish\\.nuget\\packages\\llamasharp.backend.cpu\\0.25.0\\llamasharp.backend.cpu.0.25.0.nupkg.sha512",
-    "C:\\Users\\Harish\\.nuget\\packages\\llamasharp.backend.vulkan.windows\\0.25.0\\llamasharp.backend.vulkan.windows.0.25.0.nupkg.sha512",
+    "C:\\Users\\Harish\\.nuget\\packages\\llamasharp\\0.26.0\\llamasharp.0.26.0.nupkg.sha512",
+    "C:\\Users\\Harish\\.nuget\\packages\\llamasharp.backend.cpu\\0.26.0\\llamasharp.backend.cpu.0.26.0.nupkg.sha512",
+    "C:\\Users\\Harish\\.nuget\\packages\\llamasharp.backend.vulkan.windows\\0.26.0\\llamasharp.backend.vulkan.windows.0.26.0.nupkg.sha512",
     "C:\\Users\\Harish\\.nuget\\packages\\markdig\\0.22.0\\markdig.0.22.0.nupkg.sha512",
     "C:\\Users\\Harish\\.nuget\\packages\\markdig.wpf\\0.5.0.1\\markdig.wpf.0.5.0.1.nupkg.sha512",
-    "C:\\Users\\Harish\\.nuget\\packages\\microsoft.bcl.asyncinterfaces\\9.0.8\\microsoft.bcl.asyncinterfaces.9.0.8.nupkg.sha512",
-    "C:\\Users\\Harish\\.nuget\\packages\\microsoft.extensions.ai.abstractions\\9.7.1\\microsoft.extensions.ai.abstractions.9.7.1.nupkg.sha512",
-    "C:\\Users\\Harish\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\9.0.8\\microsoft.extensions.dependencyinjection.abstractions.9.0.8.nupkg.sha512",
-    "C:\\Users\\Harish\\.nuget\\packages\\microsoft.extensions.logging.abstractions\\9.0.8\\microsoft.extensions.logging.abstractions.9.0.8.nupkg.sha512",
-    "C:\\Users\\Harish\\.nuget\\packages\\system.diagnostics.diagnosticsource\\9.0.8\\system.diagnostics.diagnosticsource.9.0.8.nupkg.sha512",
-    "C:\\Users\\Harish\\.nuget\\packages\\system.numerics.tensors\\9.0.8\\system.numerics.tensors.9.0.8.nupkg.sha512",
+    "C:\\Users\\Harish\\.nuget\\packages\\microsoft.bcl.asyncinterfaces\\10.0.2\\microsoft.bcl.asyncinterfaces.10.0.2.nupkg.sha512",
+    "C:\\Users\\Harish\\.nuget\\packages\\microsoft.extensions.ai.abstractions\\9.10.1\\microsoft.extensions.ai.abstractions.9.10.1.nupkg.sha512",
+    "C:\\Users\\Harish\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\10.0.2\\microsoft.extensions.dependencyinjection.abstractions.10.0.2.nupkg.sha512",
+    "C:\\Users\\Harish\\.nuget\\packages\\microsoft.extensions.logging.abstractions\\10.0.2\\microsoft.extensions.logging.abstractions.10.0.2.nupkg.sha512",
+    "C:\\Users\\Harish\\.nuget\\packages\\system.diagnostics.diagnosticsource\\10.0.2\\system.diagnostics.diagnosticsource.10.0.2.nupkg.sha512",
+    "C:\\Users\\Harish\\.nuget\\packages\\system.numerics.tensors\\9.0.9\\system.numerics.tensors.9.0.9.nupkg.sha512",
     "C:\\Users\\Harish\\.nuget\\packages\\uglytoad.pdfpig\\0.1.9-alpha001-patch1\\uglytoad.pdfpig.0.1.9-alpha001-patch1.nupkg.sha512",
     "C:\\Users\\Harish\\.nuget\\packages\\uglytoad.pdfpig.core\\1.7.0-custom-5\\uglytoad.pdfpig.core.1.7.0-custom-5.nupkg.sha512",
     "C:\\Users\\Harish\\.nuget\\packages\\uglytoad.pdfpig.fonts\\1.7.0-custom-5\\uglytoad.pdfpig.fonts.1.7.0-custom-5.nupkg.sha512",
     "C:\\Users\\Harish\\.nuget\\packages\\uglytoad.pdfpig.tokenization\\1.7.0-custom-5\\uglytoad.pdfpig.tokenization.1.7.0-custom-5.nupkg.sha512",
     "C:\\Users\\Harish\\.nuget\\packages\\uglytoad.pdfpig.tokens\\1.7.0-custom-5\\uglytoad.pdfpig.tokens.1.7.0-custom-5.nupkg.sha512",
-    "C:\\Users\\Harish\\.nuget\\packages\\microsoft.netcore.app.ref\\8.0.24\\microsoft.netcore.app.ref.8.0.24.nupkg.sha512",
     "C:\\Users\\Harish\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\8.0.24\\microsoft.windowsdesktop.app.ref.8.0.24.nupkg.sha512",
+    "C:\\Users\\Harish\\.nuget\\packages\\microsoft.netcore.app.ref\\8.0.24\\microsoft.netcore.app.ref.8.0.24.nupkg.sha512",
     "C:\\Users\\Harish\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\8.0.24\\microsoft.aspnetcore.app.ref.8.0.24.nupkg.sha512",
     "C:\\Users\\Harish\\.nuget\\packages\\microsoft.netcore.app.host.win-x64\\8.0.24\\microsoft.netcore.app.host.win-x64.8.0.24.nupkg.sha512"
   ],
@@ -36,7 +36,7 @@
       "filePath": "E:\\Git Repo\\LlamaChat-App1\\chat_app\\chat_app.csproj",
       "libraryId": "UglyToad.PdfPig.Core",
       "targetGraphs": [
-        "net8.0-windows7.0"
+        "net8.0-windows"
       ]
     },
     {
@@ -48,7 +48,7 @@
       "filePath": "E:\\Git Repo\\LlamaChat-App1\\chat_app\\chat_app.csproj",
       "libraryId": "UglyToad.PdfPig.Fonts",
       "targetGraphs": [
-        "net8.0-windows7.0"
+        "net8.0-windows"
       ]
     },
     {
@@ -60,7 +60,7 @@
       "filePath": "E:\\Git Repo\\LlamaChat-App1\\chat_app\\chat_app.csproj",
       "libraryId": "UglyToad.PdfPig.Tokenization",
       "targetGraphs": [
-        "net8.0-windows7.0"
+        "net8.0-windows"
       ]
     },
     {
@@ -72,7 +72,7 @@
       "filePath": "E:\\Git Repo\\LlamaChat-App1\\chat_app\\chat_app.csproj",
       "libraryId": "UglyToad.PdfPig.Tokens",
       "targetGraphs": [
-        "net8.0-windows7.0"
+        "net8.0-windows"
       ]
     }
   ]
