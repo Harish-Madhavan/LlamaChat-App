@@ -8,29 +8,36 @@
     ".NETCoreApp,Version=v8.0": {
       "chat_app/1.0.0": {
         "dependencies": {
-          "LLamaSharp": "0.26.0",
+          "LLamaSharp": "0.27.0",
           "Markdig.Wpf": "0.5.0.1",
-          "UglyToad.PdfPig": "0.1.9-alpha001-patch1"
+          "Microsoft.Extensions.DependencyInjection": "10.0.7",
+          "Microsoft.Extensions.Logging": "10.0.7",
+          "Microsoft.Extensions.Logging.Console": "10.0.7",
+          "Microsoft.Extensions.Logging.Debug": "10.0.7",
+          "PdfPig": "0.1.8"
         },
         "runtime": {
           "chat_app.dll": {}
         }
       },
-      "CommunityToolkit.HighPerformance/8.4.0": {
+      "CommunityToolkit.HighPerformance/8.4.2": {
         "runtime": {
           "lib/net8.0/CommunityToolkit.HighPerformance.dll": {
             "assemblyVersion": "8.4.0.0",
-            "fileVersion": "8.4.0.1"
+            "fileVersion": "8.4.2.1"
           }
         }
       },
-      "LLamaSharp/0.26.0": {
+      "LLamaSharp/0.27.0": {
         "dependencies": {
-          "CommunityToolkit.HighPerformance": "8.4.0",
-          "Microsoft.Bcl.AsyncInterfaces": "10.0.2",
-          "Microsoft.Extensions.AI.Abstractions": "9.10.1",
-          "Microsoft.Extensions.Logging.Abstractions": "10.0.2",
-          "System.Numerics.Tensors": "9.0.9"
+          "CommunityToolkit.HighPerformance": "8.4.2",
+          "Microsoft.Bcl.AsyncInterfaces": "10.0.5",
+          "Microsoft.Bcl.Memory": "10.0.5",
+          "Microsoft.Extensions.AI.Abstractions": "10.4.1",
+          "Microsoft.Extensions.Logging.Abstractions": "10.0.7",
+          "System.Linq.Async": "7.0.0",
+          "System.Linq.AsyncEnumerable": "10.0.2",
+          "System.Numerics.Tensors": "10.0.5"
         },
         "runtime": {
           "lib/net8.0/LLamaSharp.dll": {
@@ -58,113 +65,306 @@
           }
         }
       },
-      "Microsoft.Bcl.AsyncInterfaces/10.0.2": {
+      "Microsoft.Bcl.AsyncInterfaces/10.0.5": {
         "runtime": {
           "lib/netstandard2.1/Microsoft.Bcl.AsyncInterfaces.dll": {
-            "assemblyVersion": "10.0.0.2",
-            "fileVersion": "10.0.225.61305"
+            "assemblyVersion": "10.0.0.5",
+            "fileVersion": "10.0.526.15411"
           }
         }
       },
-      "Microsoft.Extensions.AI.Abstractions/9.10.1": {
+      "Microsoft.Bcl.Memory/10.0.5": {
+        "runtime": {
+          "lib/net8.0/Microsoft.Bcl.Memory.dll": {
+            "assemblyVersion": "10.0.0.5",
+            "fileVersion": "10.0.526.15411"
+          }
+        }
+      },
+      "Microsoft.Extensions.AI.Abstractions/10.4.1": {
+        "dependencies": {
+          "System.Text.Json": "10.0.7"
+        },
         "runtime": {
           "lib/net8.0/Microsoft.Extensions.AI.Abstractions.dll": {
-            "assemblyVersion": "9.10.0.0",
-            "fileVersion": "9.1000.125.52104"
+            "assemblyVersion": "10.4.0.0",
+            "fileVersion": "10.400.126.16803"
           }
         }
       },
-      "Microsoft.Extensions.DependencyInjection.Abstractions/10.0.2": {
+      "Microsoft.Extensions.Configuration/10.0.7": {
+        "dependencies": {
+          "Microsoft.Extensions.Configuration.Abstractions": "10.0.7",
+          "Microsoft.Extensions.Primitives": "10.0.7"
+        },
+        "runtime": {
+          "lib/net8.0/Microsoft.Extensions.Configuration.dll": {
+            "assemblyVersion": "10.0.0.0",
+            "fileVersion": "10.0.726.21808"
+          }
+        }
+      },
+      "Microsoft.Extensions.Configuration.Abstractions/10.0.7": {
+        "dependencies": {
+          "Microsoft.Extensions.Primitives": "10.0.7"
+        },
+        "runtime": {
+          "lib/net8.0/Microsoft.Extensions.Configuration.Abstractions.dll": {
+            "assemblyVersion": "10.0.0.0",
+            "fileVersion": "10.0.726.21808"
+          }
+        }
+      },
+      "Microsoft.Extensions.Configuration.Binder/10.0.7": {
+        "dependencies": {
+          "Microsoft.Extensions.Configuration": "10.0.7",
+          "Microsoft.Extensions.Configuration.Abstractions": "10.0.7"
+        },
+        "runtime": {
+          "lib/net8.0/Microsoft.Extensions.Configuration.Binder.dll": {
+            "assemblyVersion": "10.0.0.0",
+            "fileVersion": "10.0.726.21808"
+          }
+        }
+      },
+      "Microsoft.Extensions.DependencyInjection/10.0.7": {
+        "dependencies": {
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "10.0.7"
+        },
+        "runtime": {
+          "lib/net8.0/Microsoft.Extensions.DependencyInjection.dll": {
+            "assemblyVersion": "10.0.0.0",
+            "fileVersion": "10.0.726.21808"
+          }
+        }
+      },
+      "Microsoft.Extensions.DependencyInjection.Abstractions/10.0.7": {
         "runtime": {
           "lib/net8.0/Microsoft.Extensions.DependencyInjection.Abstractions.dll": {
             "assemblyVersion": "10.0.0.0",
-            "fileVersion": "10.0.225.61305"
+            "fileVersion": "10.0.726.21808"
           }
         }
       },
-      "Microsoft.Extensions.Logging.Abstractions/10.0.2": {
+      "Microsoft.Extensions.Logging/10.0.7": {
         "dependencies": {
-          "Microsoft.Extensions.DependencyInjection.Abstractions": "10.0.2",
-          "System.Diagnostics.DiagnosticSource": "10.0.2"
+          "Microsoft.Extensions.DependencyInjection": "10.0.7",
+          "Microsoft.Extensions.Logging.Abstractions": "10.0.7",
+          "Microsoft.Extensions.Options": "10.0.7"
+        },
+        "runtime": {
+          "lib/net8.0/Microsoft.Extensions.Logging.dll": {
+            "assemblyVersion": "10.0.0.0",
+            "fileVersion": "10.0.726.21808"
+          }
+        }
+      },
+      "Microsoft.Extensions.Logging.Abstractions/10.0.7": {
+        "dependencies": {
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "10.0.7",
+          "System.Diagnostics.DiagnosticSource": "10.0.7"
         },
         "runtime": {
           "lib/net8.0/Microsoft.Extensions.Logging.Abstractions.dll": {
             "assemblyVersion": "10.0.0.0",
-            "fileVersion": "10.0.225.61305"
+            "fileVersion": "10.0.726.21808"
           }
         }
       },
-      "System.Diagnostics.DiagnosticSource/10.0.2": {
+      "Microsoft.Extensions.Logging.Configuration/10.0.7": {
+        "dependencies": {
+          "Microsoft.Extensions.Configuration": "10.0.7",
+          "Microsoft.Extensions.Configuration.Abstractions": "10.0.7",
+          "Microsoft.Extensions.Configuration.Binder": "10.0.7",
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "10.0.7",
+          "Microsoft.Extensions.Logging": "10.0.7",
+          "Microsoft.Extensions.Logging.Abstractions": "10.0.7",
+          "Microsoft.Extensions.Options": "10.0.7",
+          "Microsoft.Extensions.Options.ConfigurationExtensions": "10.0.7"
+        },
+        "runtime": {
+          "lib/net8.0/Microsoft.Extensions.Logging.Configuration.dll": {
+            "assemblyVersion": "10.0.0.0",
+            "fileVersion": "10.0.726.21808"
+          }
+        }
+      },
+      "Microsoft.Extensions.Logging.Console/10.0.7": {
+        "dependencies": {
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "10.0.7",
+          "Microsoft.Extensions.Logging": "10.0.7",
+          "Microsoft.Extensions.Logging.Abstractions": "10.0.7",
+          "Microsoft.Extensions.Logging.Configuration": "10.0.7",
+          "Microsoft.Extensions.Options": "10.0.7",
+          "System.Text.Json": "10.0.7"
+        },
+        "runtime": {
+          "lib/net8.0/Microsoft.Extensions.Logging.Console.dll": {
+            "assemblyVersion": "10.0.0.0",
+            "fileVersion": "10.0.726.21808"
+          }
+        }
+      },
+      "Microsoft.Extensions.Logging.Debug/10.0.7": {
+        "dependencies": {
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "10.0.7",
+          "Microsoft.Extensions.Logging": "10.0.7",
+          "Microsoft.Extensions.Logging.Abstractions": "10.0.7"
+        },
+        "runtime": {
+          "lib/net8.0/Microsoft.Extensions.Logging.Debug.dll": {
+            "assemblyVersion": "10.0.0.0",
+            "fileVersion": "10.0.726.21808"
+          }
+        }
+      },
+      "Microsoft.Extensions.Options/10.0.7": {
+        "dependencies": {
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "10.0.7",
+          "Microsoft.Extensions.Primitives": "10.0.7"
+        },
+        "runtime": {
+          "lib/net8.0/Microsoft.Extensions.Options.dll": {
+            "assemblyVersion": "10.0.0.0",
+            "fileVersion": "10.0.726.21808"
+          }
+        }
+      },
+      "Microsoft.Extensions.Options.ConfigurationExtensions/10.0.7": {
+        "dependencies": {
+          "Microsoft.Extensions.Configuration.Abstractions": "10.0.7",
+          "Microsoft.Extensions.Configuration.Binder": "10.0.7",
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "10.0.7",
+          "Microsoft.Extensions.Options": "10.0.7",
+          "Microsoft.Extensions.Primitives": "10.0.7"
+        },
+        "runtime": {
+          "lib/net8.0/Microsoft.Extensions.Options.ConfigurationExtensions.dll": {
+            "assemblyVersion": "10.0.0.0",
+            "fileVersion": "10.0.726.21808"
+          }
+        }
+      },
+      "Microsoft.Extensions.Primitives/10.0.7": {
+        "runtime": {
+          "lib/net8.0/Microsoft.Extensions.Primitives.dll": {
+            "assemblyVersion": "10.0.0.0",
+            "fileVersion": "10.0.726.21808"
+          }
+        }
+      },
+      "PdfPig/0.1.8": {
+        "runtime": {
+          "lib/net6.0/UglyToad.PdfPig.Core.dll": {
+            "assemblyVersion": "0.1.8.0",
+            "fileVersion": "0.1.8.0"
+          },
+          "lib/net6.0/UglyToad.PdfPig.DocumentLayoutAnalysis.dll": {
+            "assemblyVersion": "0.1.8.0",
+            "fileVersion": "0.1.8.0"
+          },
+          "lib/net6.0/UglyToad.PdfPig.Fonts.dll": {
+            "assemblyVersion": "0.1.8.0",
+            "fileVersion": "0.1.8.0"
+          },
+          "lib/net6.0/UglyToad.PdfPig.Package.dll": {
+            "assemblyVersion": "0.1.8.0",
+            "fileVersion": "0.1.8.0"
+          },
+          "lib/net6.0/UglyToad.PdfPig.Tokenization.dll": {
+            "assemblyVersion": "0.1.8.0",
+            "fileVersion": "0.1.8.0"
+          },
+          "lib/net6.0/UglyToad.PdfPig.Tokens.dll": {
+            "assemblyVersion": "0.1.8.0",
+            "fileVersion": "0.1.8.0"
+          },
+          "lib/net6.0/UglyToad.PdfPig.dll": {
+            "assemblyVersion": "0.1.8.0",
+            "fileVersion": "0.1.8.0"
+          }
+        }
+      },
+      "System.Diagnostics.DiagnosticSource/10.0.7": {
         "runtime": {
           "lib/net8.0/System.Diagnostics.DiagnosticSource.dll": {
+            "assemblyVersion": "10.0.0.0",
+            "fileVersion": "10.0.726.21808"
+          }
+        }
+      },
+      "System.Interactive.Async/7.0.0": {
+        "dependencies": {
+          "System.Linq.AsyncEnumerable": "10.0.2"
+        },
+        "runtime": {
+          "lib/net6.0/System.Interactive.Async.dll": {
+            "assemblyVersion": "7.0.0.0",
+            "fileVersion": "7.0.0.45496"
+          }
+        }
+      },
+      "System.IO.Pipelines/10.0.7": {
+        "runtime": {
+          "lib/net8.0/System.IO.Pipelines.dll": {
+            "assemblyVersion": "10.0.0.0",
+            "fileVersion": "10.0.726.21808"
+          }
+        }
+      },
+      "System.Linq.Async/7.0.0": {
+        "dependencies": {
+          "System.Interactive.Async": "7.0.0",
+          "System.Linq.AsyncEnumerable": "10.0.2"
+        },
+        "runtime": {
+          "lib/netstandard2.1/System.Linq.Async.dll": {
+            "assemblyVersion": "7.0.0.0",
+            "fileVersion": "7.0.0.45496"
+          }
+        }
+      },
+      "System.Linq.AsyncEnumerable/10.0.2": {
+        "runtime": {
+          "lib/net8.0/System.Linq.AsyncEnumerable.dll": {
             "assemblyVersion": "10.0.0.0",
             "fileVersion": "10.0.225.61305"
           }
         }
       },
-      "System.Numerics.Tensors/9.0.9": {
+      "System.Numerics.Tensors/10.0.5": {
         "runtime": {
           "lib/net8.0/System.Numerics.Tensors.dll": {
-            "assemblyVersion": "9.0.0.9",
-            "fileVersion": "9.0.925.41916"
+            "assemblyVersion": "10.0.0.5",
+            "fileVersion": "10.0.526.15411"
           }
         }
       },
-      "UglyToad.PdfPig/0.1.9-alpha001-patch1": {
+      "System.Text.Encodings.Web/10.0.7": {
+        "runtime": {
+          "lib/net8.0/System.Text.Encodings.Web.dll": {
+            "assemblyVersion": "10.0.0.0",
+            "fileVersion": "10.0.726.21808"
+          }
+        },
+        "runtimeTargets": {
+          "runtimes/browser/lib/net8.0/System.Text.Encodings.Web.dll": {
+            "rid": "browser",
+            "assetType": "runtime",
+            "assemblyVersion": "10.0.0.0",
+            "fileVersion": "10.0.726.21808"
+          }
+        }
+      },
+      "System.Text.Json/10.0.7": {
         "dependencies": {
-          "UglyToad.PdfPig.Core": "1.7.0-custom-5",
-          "UglyToad.PdfPig.Fonts": "1.7.0-custom-5",
-          "UglyToad.PdfPig.Tokenization": "1.7.0-custom-5",
-          "UglyToad.PdfPig.Tokens": "1.7.0-custom-5"
+          "System.IO.Pipelines": "10.0.7",
+          "System.Text.Encodings.Web": "10.0.7"
         },
         "runtime": {
-          "lib/net6.0/UglyToad.PdfPig.dll": {
-            "assemblyVersion": "0.1.9.0",
-            "fileVersion": "0.1.9.0"
-          }
-        }
-      },
-      "UglyToad.PdfPig.Core/1.7.0-custom-5": {
-        "runtime": {
-          "lib/net6.0/UglyToad.PdfPig.Core.dll": {
-            "assemblyVersion": "0.1.8.0",
-            "fileVersion": "0.1.8.0"
-          }
-        }
-      },
-      "UglyToad.PdfPig.Fonts/1.7.0-custom-5": {
-        "dependencies": {
-          "UglyToad.PdfPig.Core": "1.7.0-custom-5",
-          "UglyToad.PdfPig.Tokenization": "1.7.0-custom-5",
-          "UglyToad.PdfPig.Tokens": "1.7.0-custom-5"
-        },
-        "runtime": {
-          "lib/net6.0/UglyToad.PdfPig.Fonts.dll": {
-            "assemblyVersion": "0.1.8.0",
-            "fileVersion": "0.1.8.0"
-          }
-        }
-      },
-      "UglyToad.PdfPig.Tokenization/1.7.0-custom-5": {
-        "dependencies": {
-          "UglyToad.PdfPig.Core": "1.7.0-custom-5",
-          "UglyToad.PdfPig.Tokens": "1.7.0-custom-5"
-        },
-        "runtime": {
-          "lib/net6.0/UglyToad.PdfPig.Tokenization.dll": {
-            "assemblyVersion": "0.1.8.0",
-            "fileVersion": "0.1.8.0"
-          }
-        }
-      },
-      "UglyToad.PdfPig.Tokens/1.7.0-custom-5": {
-        "dependencies": {
-          "UglyToad.PdfPig.Core": "1.7.0-custom-5"
-        },
-        "runtime": {
-          "lib/net6.0/UglyToad.PdfPig.Tokens.dll": {
-            "assemblyVersion": "0.1.8.0",
-            "fileVersion": "0.1.8.0"
+          "lib/net8.0/System.Text.Json.dll": {
+            "assemblyVersion": "10.0.0.0",
+            "fileVersion": "10.0.726.21808"
           }
         }
       }
@@ -176,19 +376,19 @@
       "serviceable": false,
       "sha512": ""
     },
-    "CommunityToolkit.HighPerformance/8.4.0": {
+    "CommunityToolkit.HighPerformance/8.4.2": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-flxspiBs0G/0GMp7IK2J2ijV9bTG6hEwFc/z6ekHqB6nwRJ4Ry2yLdx+TkbCUYFCl4XhABkAwomeKbT6zM2Zlg==",
-      "path": "communitytoolkit.highperformance/8.4.0",
-      "hashPath": "communitytoolkit.highperformance.8.4.0.nupkg.sha512"
+      "sha512": "sha512-2hmtrrU18x6NL3mbuAqwy0KpnoEEJOuK6sH5RKQfD/jHijn2pqvqBUC7WGy9dgNBL9BDA7eOC0kirsNPMp2f4Q==",
+      "path": "communitytoolkit.highperformance/8.4.2",
+      "hashPath": "communitytoolkit.highperformance.8.4.2.nupkg.sha512"
     },
-    "LLamaSharp/0.26.0": {
+    "LLamaSharp/0.27.0": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-saxMnaMMac9xYmQji8g6xZ+LN+xTJbElWsN5B8t1mZ/XmbPEz6ZefA09CqOUj6xUQlwsx4Zn/5oXqjtUv+TNYw==",
-      "path": "llamasharp/0.26.0",
-      "hashPath": "llamasharp.0.26.0.nupkg.sha512"
+      "sha512": "sha512-y/lkHRIiChk9lP1VGIH+bXUkx7CPFZiAqmmzLmKcphtDS1wk2utVemd5EsSXH6rvKYa/S68/6NzUItHmSrt/Ow==",
+      "path": "llamasharp/0.27.0",
+      "hashPath": "llamasharp.0.27.0.nupkg.sha512"
     },
     "Markdig/0.22.0": {
       "type": "package",
@@ -204,82 +404,180 @@
       "path": "markdig.wpf/0.5.0.1",
       "hashPath": "markdig.wpf.0.5.0.1.nupkg.sha512"
     },
-    "Microsoft.Bcl.AsyncInterfaces/10.0.2": {
+    "Microsoft.Bcl.AsyncInterfaces/10.0.5": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-qE5JhRoeJbAipLqpUCZyNfNwnpAvUttXgIQDnTiJ15d8ji+/bPgoPkB3xLzK5cQTobN2D2ditUesUlDHb7p3Pg==",
-      "path": "microsoft.bcl.asyncinterfaces/10.0.2",
-      "hashPath": "microsoft.bcl.asyncinterfaces.10.0.2.nupkg.sha512"
+      "sha512": "sha512-hQB3Hq1LlF0NkGVNyZIvwIQIY3LM7Cw1oYjNiTvdNqmzzipVAWEK1c5sj2H5aFX0udnjgPLxSYKq2fupueS8ow==",
+      "path": "microsoft.bcl.asyncinterfaces/10.0.5",
+      "hashPath": "microsoft.bcl.asyncinterfaces.10.0.5.nupkg.sha512"
     },
-    "Microsoft.Extensions.AI.Abstractions/9.10.1": {
+    "Microsoft.Bcl.Memory/10.0.5": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-e31P/WT7Pgx/9P6HNBUGEO0v9XyuZj6Dbekz4XeaP6v4GQ7jK1AllBiNTu1k2zx2x6upSeAmA6sRp6C2BgmMwQ==",
-      "path": "microsoft.extensions.ai.abstractions/9.10.1",
-      "hashPath": "microsoft.extensions.ai.abstractions.9.10.1.nupkg.sha512"
+      "sha512": "sha512-odTrIyDJPgqCKEo6sOOfMzh0TaPufY/SLHrrMkqGlxGWVc5NQbZD5h1fxf/Q+PrGnhct5VWmmfKREA4h6JtTng==",
+      "path": "microsoft.bcl.memory/10.0.5",
+      "hashPath": "microsoft.bcl.memory.10.0.5.nupkg.sha512"
     },
-    "Microsoft.Extensions.DependencyInjection.Abstractions/10.0.2": {
+    "Microsoft.Extensions.AI.Abstractions/10.4.1": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-zOIurr59+kUf9vNcsUkCvKWZv+fPosUZXURZesYkJCvl0EzTc9F7maAO4Cd2WEV7ZJJ0AZrFQvuH6Npph9wdBw==",
-      "path": "microsoft.extensions.dependencyinjection.abstractions/10.0.2",
-      "hashPath": "microsoft.extensions.dependencyinjection.abstractions.10.0.2.nupkg.sha512"
+      "sha512": "sha512-ZxhU/wg9BOc3ohibhLl18toPLWm96ysQoE+3OhCgrZ0TUPZd7bsUmGteeatz08yweyuPIEhtyUzEZTF+3bMWEQ==",
+      "path": "microsoft.extensions.ai.abstractions/10.4.1",
+      "hashPath": "microsoft.extensions.ai.abstractions.10.4.1.nupkg.sha512"
     },
-    "Microsoft.Extensions.Logging.Abstractions/10.0.2": {
+    "Microsoft.Extensions.Configuration/10.0.7": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-RZkez/JjpnO+MZ6efKkSynN6ZztLpw3WbxNzjLCPBd97wWj1S9ZYPWi0nmT4kWBRa6atHsdM1ydGkUr8GudyDQ==",
-      "path": "microsoft.extensions.logging.abstractions/10.0.2",
-      "hashPath": "microsoft.extensions.logging.abstractions.10.0.2.nupkg.sha512"
+      "sha512": "sha512-wZbGh7J8R1vXN525O6d8dlcDTxhRTnd5MyW4LdfP5S0tSnTwTCseYSrq6g0Mxh7W9xn8P/2xPuf0D/m6k2dy2w==",
+      "path": "microsoft.extensions.configuration/10.0.7",
+      "hashPath": "microsoft.extensions.configuration.10.0.7.nupkg.sha512"
     },
-    "System.Diagnostics.DiagnosticSource/10.0.2": {
+    "Microsoft.Extensions.Configuration.Abstractions/10.0.7": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-lYWBy8fKkJHaRcOuw30d67PrtVjR5754sz5Wl76s8P+vJ9FSThh9b7LIcTSODx1LY7NB3Srvg+JMnzd67qNZOw==",
-      "path": "system.diagnostics.diagnosticsource/10.0.2",
-      "hashPath": "system.diagnostics.diagnosticsource.10.0.2.nupkg.sha512"
+      "sha512": "sha512-t56nEgvECcyLPojZIUFWJknQQDAbgfTf9J+QMYJE1YYvVgz69vN6B/AKL8Grvj3Lcnp8kTpNqwmwFhb3YLJmtQ==",
+      "path": "microsoft.extensions.configuration.abstractions/10.0.7",
+      "hashPath": "microsoft.extensions.configuration.abstractions.10.0.7.nupkg.sha512"
     },
-    "System.Numerics.Tensors/9.0.9": {
+    "Microsoft.Extensions.Configuration.Binder/10.0.7": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-dItAWpchB6lM0oRan/UEFxRMsxq1fwkycjpRGQI/RMHYZVbS57H4LV6BSJF/Z5v+jre/CPW+PpesbGa/ytFByw==",
-      "path": "system.numerics.tensors/9.0.9",
-      "hashPath": "system.numerics.tensors.9.0.9.nupkg.sha512"
+      "sha512": "sha512-8bS1qIaRivny+WX+49pmeJ6iAylbtX8C0DLEcCQWZjdxQvLqaMssXiGD9P/6pYElrHbK5/nAHmjbQ8STqdMYeg==",
+      "path": "microsoft.extensions.configuration.binder/10.0.7",
+      "hashPath": "microsoft.extensions.configuration.binder.10.0.7.nupkg.sha512"
     },
-    "UglyToad.PdfPig/0.1.9-alpha001-patch1": {
+    "Microsoft.Extensions.DependencyInjection/10.0.7": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-dayc8urhJp129XPTzYQr00wQmbmOxcIVZRqh/lL1Z12qrwN9zRmNFQR92WOQy0y6eSEokfuN0tdOJw1+eQwTaA==",
-      "path": "uglytoad.pdfpig/0.1.9-alpha001-patch1",
-      "hashPath": "uglytoad.pdfpig.0.1.9-alpha001-patch1.nupkg.sha512"
+      "sha512": "sha512-91F/o3emPV/+xY/ip3s2LqDNF14kjttlVtq0BXgg6p4MnCzeSZxnUJm+t6WRrtD3JdGo88/oX+z7OwK4y8PZuw==",
+      "path": "microsoft.extensions.dependencyinjection/10.0.7",
+      "hashPath": "microsoft.extensions.dependencyinjection.10.0.7.nupkg.sha512"
     },
-    "UglyToad.PdfPig.Core/1.7.0-custom-5": {
+    "Microsoft.Extensions.DependencyInjection.Abstractions/10.0.7": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-bChQUAYApM6/vgBis0+fBTZyAVqjXdqshjZDCgI3dgwUplfLJxXRrnkCOdNj0a6JNcF32R4aLpnGpTc9QmmVmg==",
-      "path": "uglytoad.pdfpig.core/1.7.0-custom-5",
-      "hashPath": "uglytoad.pdfpig.core.1.7.0-custom-5.nupkg.sha512"
+      "sha512": "sha512-Z6mfFEaFcwCfSboxJwOLfu7/31npCY9q70WUamHW/vRQhDvBKOT4Vf9YkZj5J6hLvJpb0oDEYfHunQZj0xxvKw==",
+      "path": "microsoft.extensions.dependencyinjection.abstractions/10.0.7",
+      "hashPath": "microsoft.extensions.dependencyinjection.abstractions.10.0.7.nupkg.sha512"
     },
-    "UglyToad.PdfPig.Fonts/1.7.0-custom-5": {
+    "Microsoft.Extensions.Logging/10.0.7": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-Z6SBBAIL8wRkJNhXGYaz0CrHnNrNeuNtmwRbBtQUA1b3TDhRQppOmHCIuhjb6Vu/Rirp6FIOtzAU1lXsGik90w==",
-      "path": "uglytoad.pdfpig.fonts/1.7.0-custom-5",
-      "hashPath": "uglytoad.pdfpig.fonts.1.7.0-custom-5.nupkg.sha512"
+      "sha512": "sha512-hOeRIQ63GkgiYCB/MIFp+LQs8aXpJXpB55t6Aj37ab7t2/6WeFcPXxYM9hdy/o5tffzwf8mhqzLJP6mjGYCxjw==",
+      "path": "microsoft.extensions.logging/10.0.7",
+      "hashPath": "microsoft.extensions.logging.10.0.7.nupkg.sha512"
     },
-    "UglyToad.PdfPig.Tokenization/1.7.0-custom-5": {
+    "Microsoft.Extensions.Logging.Abstractions/10.0.7": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-U8VVH7VJjv6czP7qWyzDq6CRaiJQe7/sESUCL8H3kiEa3zi0l9TonIKlD/YidQ5DlgTumracii6zjLyKPEFKwA==",
-      "path": "uglytoad.pdfpig.tokenization/1.7.0-custom-5",
-      "hashPath": "uglytoad.pdfpig.tokenization.1.7.0-custom-5.nupkg.sha512"
+      "sha512": "sha512-tIEcQ2gvERrH2KiCjdsVcHGhXt9lIsuDStfOIeZWr7/fP8IXhGiYfx0/80PNI7WPO2IYuFtlZLSlnTS8+/Mchw==",
+      "path": "microsoft.extensions.logging.abstractions/10.0.7",
+      "hashPath": "microsoft.extensions.logging.abstractions.10.0.7.nupkg.sha512"
     },
-    "UglyToad.PdfPig.Tokens/1.7.0-custom-5": {
+    "Microsoft.Extensions.Logging.Configuration/10.0.7": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-m/j5RVfL4eF/OwX6ASprzK+yzD3l7xdgQ7zQPgENhjxfuXD+hj6FSeZlmxSTt9ywvWcTCjGKAILl9XTK9iQgCQ==",
-      "path": "uglytoad.pdfpig.tokens/1.7.0-custom-5",
-      "hashPath": "uglytoad.pdfpig.tokens.1.7.0-custom-5.nupkg.sha512"
+      "sha512": "sha512-7BBnoGF37USiu7j434put9mDp7EjdlNDIZsR4vHfC1FbLZeLqiWjgJbeEtF0p59Ryqt8AtraHawf0ZKbe5jibg==",
+      "path": "microsoft.extensions.logging.configuration/10.0.7",
+      "hashPath": "microsoft.extensions.logging.configuration.10.0.7.nupkg.sha512"
+    },
+    "Microsoft.Extensions.Logging.Console/10.0.7": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-DA++Es6v6W0HfrOrw+K8WyN6jNnZHp640PDdEvl8yfeVmgflKdn6vSSFvufNUSOuY+M2ZaSUgfY+jUKtNpXcCw==",
+      "path": "microsoft.extensions.logging.console/10.0.7",
+      "hashPath": "microsoft.extensions.logging.console.10.0.7.nupkg.sha512"
+    },
+    "Microsoft.Extensions.Logging.Debug/10.0.7": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-Y6DSt/JZApunYWKqTtqbdsR6iqAvHx3D0tavbNJ1rnC24MUpF+3XO/VKgFi+9PFqMyvQ2GHBBGb8H3cLSw7rDg==",
+      "path": "microsoft.extensions.logging.debug/10.0.7",
+      "hashPath": "microsoft.extensions.logging.debug.10.0.7.nupkg.sha512"
+    },
+    "Microsoft.Extensions.Options/10.0.7": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-00SHUGTh2jSMvIr6x9Xwd2nE+B5/qFCO/9hDwUDhJsjYRDlADmaBZ7tqehXzBDsfjHSXJzuRHJzPYPPjphBQ7Q==",
+      "path": "microsoft.extensions.options/10.0.7",
+      "hashPath": "microsoft.extensions.options.10.0.7.nupkg.sha512"
+    },
+    "Microsoft.Extensions.Options.ConfigurationExtensions/10.0.7": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-IT7f+EMXZtkjatEcF+o6aOw/7OE4etRrMiDGEWH/iiTu2R3uhC4NEQJCfHiibtX45U3sIQ5Fh6tbb1qaOz3YAg==",
+      "path": "microsoft.extensions.options.configurationextensions/10.0.7",
+      "hashPath": "microsoft.extensions.options.configurationextensions.10.0.7.nupkg.sha512"
+    },
+    "Microsoft.Extensions.Primitives/10.0.7": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-D5M0Jr551iTgwkZMN9rm0pSkgNLj5quUWQUmQPMZh7k/bnvZTnXRGfE2KuvXf1EEjt/ofD9yw9IumpgdP9QCnw==",
+      "path": "microsoft.extensions.primitives/10.0.7",
+      "hashPath": "microsoft.extensions.primitives.10.0.7.nupkg.sha512"
+    },
+    "PdfPig/0.1.8": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-lrqrQPAwziQV2E5uImAg1i3SpxDn5XdJ8q3sjRBgEdx1quq1ZftnKNyfp3sTY0J7OxpA14ryGBSSUdoGLGCHjw==",
+      "path": "pdfpig/0.1.8",
+      "hashPath": "pdfpig.0.1.8.nupkg.sha512"
+    },
+    "System.Diagnostics.DiagnosticSource/10.0.7": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-Fu6AxFf9bHz/Q7DQmxKC0o+UgFes8bs2Xh+PH/x31yExRAOASTwlzjZsISTtqVU5gQshKHLZopxEBTaIyfv0wg==",
+      "path": "system.diagnostics.diagnosticsource/10.0.7",
+      "hashPath": "system.diagnostics.diagnosticsource.10.0.7.nupkg.sha512"
+    },
+    "System.Interactive.Async/7.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-Ckj+tg2BVOZ0oLp7FAbjfvRyA/BMkUhVxROLd+x22zncRR6KD7CdFzAYp+9Mo2cedxAMo2X9ZNyhZu68jdDITw==",
+      "path": "system.interactive.async/7.0.0",
+      "hashPath": "system.interactive.async.7.0.0.nupkg.sha512"
+    },
+    "System.IO.Pipelines/10.0.7": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-LTxXYYKmRhPKWveYmfzuRTUnzsfY7CN+WOq6aTRgYE9vJ8BUvIWPCaSx4HxqBwXViTPSjR9cHDOVuVPuZGRR/Q==",
+      "path": "system.io.pipelines/10.0.7",
+      "hashPath": "system.io.pipelines.10.0.7.nupkg.sha512"
+    },
+    "System.Linq.Async/7.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-A2Wci92Oyuodi8YLMQCJJ0vHqzgRFgEUG1K6tQNcoxHd3w05B1LvGzXvxQnGYPIL4Cr4hicHytpk2F2Jx8TZHg==",
+      "path": "system.linq.async/7.0.0",
+      "hashPath": "system.linq.async.7.0.0.nupkg.sha512"
+    },
+    "System.Linq.AsyncEnumerable/10.0.2": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-W0iDxrcnNJAbm0WSSZ8Z6PtN27+ETwfj3HUtERP/sfLMjPFGAS79lZ0uPS/6OxsIy0MEjprPH2nERRhNMuddDw==",
+      "path": "system.linq.asyncenumerable/10.0.2",
+      "hashPath": "system.linq.asyncenumerable.10.0.2.nupkg.sha512"
+    },
+    "System.Numerics.Tensors/10.0.5": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-2Njj2ree91ur3lWNyQrjlVgxtOz8hV7f92ezTdQc//2S1TEQiNJ6DR9/gxM91Sca0Khk28QjYiCy7C2fPgqcCw==",
+      "path": "system.numerics.tensors/10.0.5",
+      "hashPath": "system.numerics.tensors.10.0.5.nupkg.sha512"
+    },
+    "System.Text.Encodings.Web/10.0.7": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-WUH+viO8VDG8NpFKvOBwpeyKUiPOMz3kQpA6AKCD4b2NG1pBhyC4AwTb357iZmTxZDnkM4IsFnvzN8W8OKmsHg==",
+      "path": "system.text.encodings.web/10.0.7",
+      "hashPath": "system.text.encodings.web.10.0.7.nupkg.sha512"
+    },
+    "System.Text.Json/10.0.7": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-F8Pu2QLUMeniVbtiyk7n7LCfFYxlcJ8ASaSwglJyq6dxa34iCQrikQszsgJClIJWuSWjcyhKkV7daAzYJqeVwA==",
+      "path": "system.text.json/10.0.7",
+      "hashPath": "system.text.json.10.0.7.nupkg.sha512"
     }
   }
 }

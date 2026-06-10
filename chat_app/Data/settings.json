@@ -1,0 +1,9 @@
+{
+  "LastModelPath": "D:\\models\\gemma-3n-E4B-it-Q4_K_M.gguf",
+  "Temperature": 2,
+  "TopP": 0.9,
+  "MaxTokens": 2048,
+  "GpuLayerCount": 100,
+  "ContextSize": 512,
+  "SystemPrompt": "your a useful assistent "
+}

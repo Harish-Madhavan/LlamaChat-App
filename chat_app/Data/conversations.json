@@ -1,0 +1,15 @@
+[
+  {
+    "Title": "Conversation 1",
+    "Messages": [
+      {
+        "Author": "System",
+        "Text": "Model gemma-3n-E4B-it-Q4_K_M.gguf loaded successfully."
+      }
+    ]
+  },
+  {
+    "Title": "Conversation 2",
+    "Messages": []
+  }
+]

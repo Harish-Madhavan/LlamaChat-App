@@ -1,0 +1,143 @@
+================================================================================
+                                PROJECT OVERVIEW
+================================================================================
+Project Name: LlamaChat on Windows
+Description:  A modern, local desktop chat application built with WPF (Windows 
+              Presentation Foundation) that allows users to interact with Large 
+              Language Models (LLMs) locally using GGUF model files.
+Platform:     Windows (x64)
+Framework:    .NET 8.0
+
+================================================================================
+                        KEY FEATURES & IMPLEMENTATION
+================================================================================
+
+1. Local Inference (Run LLMs Offline)
+   -----------------------------------------------------------------------------
+   How it works: 
+   The app loads GGUF model files directly into memory and performs inference 
+   using the CPU or GPU (via Vulkan).
+   
+   Code Implementation:
+   - File: chat_app/Services/LlamaService.cs
+   - Library: LLamaSharp (bindings for llama.cpp).
+   - Method: `LoadModelAsync` uses `LLamaWeights.LoadFromFile(params)` to load 
+     the model.
+   - Method: `GenerateResponseAsync` creates an `InteractiveExecutor` and yields 
+     text tokens via `IAsyncEnumerable` for streaming.
+   - Context: `LLamaContext` is managed to maintain the KV cache for the session.
+
+2. Chat Interface (UI & UX)
+   -----------------------------------------------------------------------------
+   How it works:
+   A scrolling list of chat bubbles (User vs. Assistant) with support for rich 
+   text (Markdown) rendering.
+   
+   Code Implementation:
+   - File: chat_app/MainWindow.xaml
+   - Control: `ItemsControl` bound to `ChatMessages` in the ViewModel.
+   - Styling: DataTemplates distinguish between User (Right/Blue) and Assistant 
+     (Left/Green) messages.
+   - Markdown: The `Markdig.Wpf` library renders the `MarkdownViewer` control 
+     inside the message templates.
+   - Updates: `MainViewModel.ChatMessages` (ObservableCollection) triggers UI 
+     updates automatically when messages are added.
+
+3. Streaming Responses
+   -----------------------------------------------------------------------------
+   How it works:
+   The UI updates character-by-character as the model "thinks", rather than 
+   waiting for the full response.
+   
+   Code Implementation:
+   - File: chat_app/ViewModels/MainViewModel.cs
+   - Method: `HandleUserPrompt` calls `_llamaService.GenerateResponseAsync`.
+   - Threading: Uses `Application.Current.Dispatcher.Invoke` to update the 
+     `assistantMessage.Text` property on the UI thread as each token arrives 
+     from the background thread.
+
+4. Conversation Management
+   -----------------------------------------------------------------------------
+   How it works:
+   Users can switch between different chat threads. The app remembers the context 
+   (what was said previously) for each thread.
+   
+   Code Implementation:
+   - File: chat_app/ViewModels/MainViewModel.cs
+   - Storage: `ObservableCollection<ChatConversation> Conversations`.
+   - Context Switching: When `CurrentConversation` changes, `RestoreContextFromConversation` 
+     is called.
+   - Service Logic: `LlamaService.RestoreSession` rebuilds the `ChatHistory` and 
+     feeds it back into the executor so the LLM "remembers" the specific chat.
+   - Persistence: `SaveConversations` / `LoadConversationsAsync` serialize the 
+     entire list to `Data/conversations.json` using `System.Text.Json`.
+
+5. Customization & Settings
+   -----------------------------------------------------------------------------
+   How it works:
+   Users configure model parameters (Temperature, Context Size) and System Prompts.
+   
+   Code Implementation:
+   - File: chat_app/AppSettings.cs & chat_app/ViewModels/MainViewModel.cs
+   - Model: `AppSettings` class holds the properties.
+   - Loading: `LoadAppSettingsAsync` reads `Data/settings.json` on startup.
+   - Application: When `LoadModel` is clicked, these settings are passed into 
+     `ModelParams` and `InferenceParams` within `LlamaService`.
+
+6. Theming (Light/Dark Mode)
+   -----------------------------------------------------------------------------
+   How it works:
+   Instant switching between visual themes.
+   
+   Code Implementation:
+   - Files: chat_app/Themes/LightMode.xaml & DarkMode.xaml.
+   - Method: `MainViewModel.ChangeTheme`.
+   - Logic: Dynamically removes the old `ResourceDictionary` from 
+     `Application.Current.Resources.MergedDictionaries` and adds the new one 
+     via Pack URI.
+
+================================================================================
+                                TECHNOLOGY STACK
+================================================================================
+Core Framework:
+- C# / .NET 8.0
+- WPF (Windows Presentation Foundation) for UI
+
+Libraries & Dependencies:
+- LLamaSharp (v0.25.0): .NET binding for llama.cpp, handling model inference.
+- LLamaSharp.Backend.Vulkan.Windows: Provides GPU acceleration.
+- Markdig.Wpf: Renders Markdown text within the WPF UI.
+- UglyToad.PdfPig: PDF content extraction (ready for future RAG features).
+- System.Text.Json: For high-performance JSON serialization/deserialization.
+
+================================================================================
+                             PROJECT STRUCTURE
+================================================================================
+Root Directory: E:\Git Repo\LlamaChat-App1
+
+chat_app/
+├── App.xaml / .cs           # Application entry point and resource merging
+├── MainWindow.xaml / .cs    # Main UI definition and code-behind
+├── AppConstants.cs          # Centralized constants (paths, defaults, messages)
+├── AppSettings.cs           # Data model for application settings
+├── ChatConversation.cs      # Data model for conversation structure
+├── ChatMessage.cs           # Data model for individual messages
+│
+├── Services/                # Core Business Logic & Abstractions
+│   ├── ILLamaService.cs     # Interface defining LoadModel, GenerateResponse
+│   └── LlamaService.cs      # Implementation using LLamaSharp
+│
+├── ViewModels/              # MVVM ViewModels
+│   ├── ViewModelBase.cs     # Base class (INotifyPropertyChanged)
+│   └── MainViewModel.cs     # Coordinates UI commands, Service calls, and State
+│
+├── Commands/                # ICommand Implementations
+│   └── RelayCommand.cs      # Reusable command class for binding buttons
+│
+├── Themes/                  # UI Styling
+│   ├── DarkTheme.xaml       # Dark mode colors/brushes
+│   └── LightTheme.xaml      # Light mode colors/brushes
+│
+└── Data/ (Generated)        # Local Storage
+    ├── settings.json        # Persisted user settings
+    └── conversations.json   # Persisted chat history

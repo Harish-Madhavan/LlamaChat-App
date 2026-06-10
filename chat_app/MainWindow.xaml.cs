@@ -1,4 +1,4 @@
-﻿// MainWindow.xaml.cs
+// MainWindow.xaml.cs
 using LlamaChatApp.ViewModels;
 using Microsoft.Win32;
 using System;
@@ -10,201 +10,171 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 
-namespace LlamaChatApp
+namespace LlamaChatApp;
+
+public partial class MainWindow : Window
 {
-    public partial class MainWindow : Window
+    private readonly MainViewModel _viewModel;
+    private INotifyCollectionChanged? _subscribedChatMessages;
+
+    public MainWindow(MainViewModel viewModel)
     {
-        private MainViewModel _viewModel;
+        InitializeComponent();
+        _viewModel = viewModel;
+        DataContext = _viewModel;
 
-        public MainWindow()
+        this.Loaded += MainWindow_Loaded;
+        this.Closing += MainWindow_Closing;
+
+        // Subscribe to property changes on the VM so we can react to ChatMessages swapping
+        _viewModel.PropertyChanged += ViewModel_PropertyChanged;
+        // Subscribe to the initial ChatMessages collection (if any)
+        SubscribeToChatMessages(_viewModel.ChatMessages);
+    }
+
+    private void ViewModel_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(MainViewModel.ChatMessages))
         {
-            InitializeComponent();
-            _viewModel = (MainViewModel)DataContext;
-            this.Loaded += MainWindow_Loaded;
-            this.Closing += MainWindow_Closing;
-
-            _viewModel.RequestFileDialog = () =>
-            {
-                var openFileDialog = new OpenFileDialog
-                {
-                    Filter = "GGUF Model Files (*.gguf)|*.gguf|All files (*.*)|*.*",
-                    Title = "Select a Llama Model File"
-                };
-                                return openFileDialog.ShowDialog() == true ? openFileDialog.FileName : null;      
-                            };
-                
-                            _viewModel.RequestSaveFileDialog = (filter, title) =>
-                            {
-                                var saveFileDialog = new SaveFileDialog
-                                {
-                                    Filter = filter,
-                                    Title = title
-                                };
-                                return saveFileDialog.ShowDialog() == true ? saveFileDialog.FileName : null;
-                            };
-                
-                            _viewModel.RequestOpenFileDialog = (filter, title) =>
-                            {
-                                var openFileDialog = new OpenFileDialog
-                                {
-                                    Filter = filter,
-                                    Title = title
-                                };
-                                return openFileDialog.ShowDialog() == true ? openFileDialog.FileName : null;
-                            };
-                
-                            _viewModel.ChatMessages.CollectionChanged += ChatMessages_CollectionChanged;
-            // Also respond to current conversation changes so we can re-subscribe
-            _viewModel.PropertyChanged += ViewModel_PropertyChanged;
+            // ChatMessages collection instance changed — update subscription to avoid duplicates
+            SubscribeToChatMessages(_viewModel.ChatMessages);
         }
+    }
 
-        private void ViewModel_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
-        {
-            if (e.PropertyName == nameof(MainViewModel.ChatMessages))
-            {
-                // Re-subscribe to the new collection
-                _viewModel.ChatMessages.CollectionChanged += ChatMessages_CollectionChanged;
-            }
-        }
-
-        private void MainWindow_Loaded(object sender, RoutedEventArgs e)
+    private void MainWindow_Loaded(object sender, RoutedEventArgs e)
+    {
+        if (_viewModel.LoadSettingsCommand.CanExecute(null))
         {
             _viewModel.LoadSettingsCommand.Execute(null);
         }
+    }
 
-        private void MainWindow_Closing(object? sender, CancelEventArgs e)
+    private void MainWindow_Closing(object? sender, CancelEventArgs e)
+    {
+        if (_viewModel.SaveSettingsCommand.CanExecute(null))
         {
             _viewModel.SaveSettingsCommand.Execute(null);
-            try
-            {
-                (_viewModel as IDisposable)?.Dispose();
-            }
-            catch { }
+        }
+        // Unsubscribe handlers to avoid leaks
+        _viewModel.PropertyChanged -= ViewModel_PropertyChanged;
+        SubscribeToChatMessages(null);
+
+        _viewModel.Dispose();
+    }
+
+    private void ChatMessages_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+    {
+        if (e.Action == NotifyCollectionChangedAction.Add)
+        {
+            ScrollToBottom(force: true);
+        }
+    }
+
+    private void SubscribeToChatMessages(INotifyCollectionChanged? collection)
+    {
+        if (_subscribedChatMessages != null)
+        {
+            _subscribedChatMessages.CollectionChanged -= ChatMessages_CollectionChanged;
+            _subscribedChatMessages = null;
         }
 
-        // This is the improved auto-scroll logic
-        private void ChatMessages_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+        if (collection != null)
         {
-            if (e.Action == NotifyCollectionChangedAction.Add)
+            _subscribedChatMessages = collection;
+            _subscribedChatMessages.CollectionChanged += ChatMessages_CollectionChanged;
+        }
+    }
+
+    private void ChatListView_LayoutUpdated(object? sender, EventArgs e)
+    {
+        if (_viewModel.IsGenerating)
+        {
+            ScrollToBottom(force: false);
+        }
+    }
+
+    private void ScrollToBottom(bool force = false)
+    {
+        Dispatcher.BeginInvoke(new Action(() =>
+        {
+            if (_viewModel.ChatMessages.Count == 0) return;
+
+            if (VisualTreeHelper.GetChild(ChatListView, 0) is Decorator border)
             {
-                // Delay allows the ListView to render the new item before we try to scroll
-                Dispatcher.BeginInvoke(new Action(() =>
+                var scrollViewer = border.Child as ScrollViewer;
+                if (scrollViewer != null)
                 {
-                    if (VisualTreeHelper.GetChild(ChatListView, 0) is Decorator border)
+                    if (force || scrollViewer.VerticalOffset >= scrollViewer.ScrollableHeight - 150)
                     {
-                        var scrollViewer = border.Child as ScrollViewer;
-                        // Auto-scroll only if the user is already near the bottom
-                        if (scrollViewer != null && scrollViewer.VerticalOffset >= scrollViewer.ScrollableHeight - 30)
-                        {
-                            ChatListView.ScrollIntoView(_viewModel.ChatMessages.Last());
-                        }
+                        ChatListView.ScrollIntoView(_viewModel.ChatMessages.Last());
                     }
-                }));
+                }
+            }
+        }));
+    }
+
+    private void UserInputTextBox_KeyDown(object sender, KeyEventArgs e)
+    {
+        if (e.Key == Key.Enter)
+        {
+            if (Keyboard.Modifiers == ModifierKeys.Control || Keyboard.Modifiers == ModifierKeys.Shift)
+            {
+                return;
+            }
+
+            e.Handled = true;
+            if (_viewModel.SendMessageCommand.CanExecute(null))
+            {
+                _viewModel.SendMessageCommand.Execute(null);
+                InputTextBox.Focus();
             }
         }
+    }
 
-        // Handle Enter key for sending message (Shift+Enter for newline)
-        private async void UserInputTextBox_KeyDown(object sender, KeyEventArgs e)
+    private void EditMessage_Click(object sender, RoutedEventArgs e)
+    {
+        if (sender is MenuItem mi && mi.CommandParameter is ChatMessage msg)
         {
-            if (e.Key == Key.Enter)
-            {
-                if (Keyboard.Modifiers == ModifierKeys.Control || Keyboard.Modifiers == ModifierKeys.Shift)
-                {
-                    // Allow newline for Ctrl+Enter or Shift+Enter
-                    return;
-                }
+            msg.BeginEdit();
+        }
+    }
 
-                // Plain Enter sends the message
+    private void SaveEdit_Click(object sender, RoutedEventArgs e)
+    {
+        if (sender is Button b && b.CommandParameter is ChatMessage msg)
+        {
+            msg.SaveEdit();
+            if (_viewModel.MessageEditedCommand.CanExecute(msg))
+            {
+                _viewModel.MessageEditedCommand.Execute(msg);
+            }
+        }
+    }
+
+    private void CancelEdit_Click(object sender, RoutedEventArgs e)
+    {
+        if (sender is Button b && b.CommandParameter is ChatMessage msg)
+        {
+            msg.CancelEdit();
+        }
+    }
+
+    private void ChatBubble_PreviewMouseRightButtonUp(object sender, MouseButtonEventArgs e)
+    {
+        if (sender is FrameworkElement fe)
+        {
+            var menu = (ContextMenu)this.Resources["MessageContextMenu"];
+            if (menu != null)
+            {
+                menu.PlacementTarget = fe;
+                menu.IsOpen = true;
                 e.Handled = true;
-                if (_viewModel.SendMessageCommand.CanExecute(null))
-                {
-                    _viewModel.SendMessageCommand.Execute(null);
-                }
             }
         }
+    }
 
-                private void EditMessage_Click(object sender, RoutedEventArgs e)
-
-                {
-
-                    if (sender is MenuItem mi && mi.CommandParameter is ChatMessage msg)
-
-                    {
-
-                        msg.BeginEdit();
-
-                    }
-
-                }
-
-        
-
-                private void SaveEdit_Click(object sender, RoutedEventArgs e)
-        {
-            if (sender is Button b && b.CommandParameter is ChatMessage msg)
-            {
-                msg.SaveEdit();
-                if (_viewModel.MessageEditedCommand.CanExecute(msg))
-                {
-                    _viewModel.MessageEditedCommand.Execute(msg);
-                }
-            }
-        }
-
-                        private void CancelEdit_Click(object sender, RoutedEventArgs e)
-
-                        {
-
-                            if (sender is Button b && b.CommandParameter is ChatMessage msg)
-
-                            {
-
-                                msg.CancelEdit();
-
-                            }
-
-                        }
-
-                
-
-                        private void ChatBubble_PreviewMouseRightButtonUp(object sender, MouseButtonEventArgs e)
-
-                        {
-
-                            if (sender is FrameworkElement fe)
-
-                            {
-
-                                // Find the context menu resource. Try finding in window resources first.
-
-                                var menu = (ContextMenu)this.Resources["MessageContextMenu"];
-
-                                if (menu != null)
-
-                                {
-
-                                    // Set the placement target to the element that was clicked (the Border)
-
-                                    menu.PlacementTarget = fe;
-
-                                    
-
-                                    // Important: Ensure the menu's DataContext is properly resolving relative to the target
-
-                                    // Our XAML binding uses PlacementTarget.Tag, so setting PlacementTarget is crucial.
-
-                                    
-
-                                    menu.IsOpen = true;
-
-                                    e.Handled = true; // Prevent the MarkdownViewer from showing its default menu
-
-                                }
-
-                            }
-
-                        }
-
-                    }
-
-                }
+    private void SendButton_Click(object sender, RoutedEventArgs e)
+    {
+        InputTextBox.Focus();
+    }
+}

@@ -1,0 +1,32 @@
+[
+  {
+    "Title": "New Chat",
+    "Messages": [
+      {
+        "Author": "System",
+        "Text": "Model gemma-3n-E4B-it-Q4_K_M.gguf loaded successfully."
+      },
+      {
+        "Author": "User",
+        "Text": "hello"
+      },
+      {
+        "Author": "Assistant",
+        "Text": "Assistant: Hi there! How can I help you today?\n"
+      }
+    ]
+  },
+  {
+    "Title": "Conversation 2",
+    "Messages": [
+      {
+        "Author": "User",
+        "Text": "whats my name"
+      },
+      {
+        "Author": "Assistant",
+        "Text": "Assistant: I am programmed to be a helpful assistant, but I do not have access to personal information about you. Therefore, I do not know your name. You would need to tell me your name.\n\n"
+      }
+    ]
+  }
+]
